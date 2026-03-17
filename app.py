@@ -1,9 +1,12 @@
 """Flask web app cho Epione B2B Sales Content Agent."""
 
+import functools
+import hmac
 import os
+import secrets
 
 from dotenv import load_dotenv
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, redirect, render_template, request, session
 
 from agent import EpioneSalesAgent
 from design_generator import DesignGenerator
@@ -12,6 +15,21 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB max upload
+app.secret_key = os.getenv("SECRET_KEY", secrets.token_hex(32))
+
+APP_PASSWORD = os.getenv("APP_PASSWORD", "")
+
+
+def login_required(f):
+    """Decorator kiểm tra đăng nhập."""
+    @functools.wraps(f)
+    def decorated(*args, **kwargs):
+        if APP_PASSWORD and not session.get("logged_in"):
+            if request.is_json or (request.content_type and "multipart" in request.content_type):
+                return jsonify({"error": "Chưa đăng nhập"}), 401
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated
 
 UPLOAD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "images", "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -24,12 +42,33 @@ agent = EpioneSalesAgent(api_key=api_key) if api_key else None
 design_gen = DesignGenerator()
 
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if not APP_PASSWORD or session.get("logged_in"):
+        return redirect("/")
+    if request.method == "POST":
+        password = request.form.get("password", "")
+        if hmac.compare_digest(password, APP_PASSWORD):
+            session["logged_in"] = True
+            return redirect("/")
+        return render_template("login.html", error="Sai mật khẩu")
+    return render_template("login.html", error=None)
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/login")
+
+
 @app.route("/")
+@login_required
 def index():
     return render_template("index.html")
 
 
 @app.route("/api/generate", methods=["POST"])
+@login_required
 def generate():
     """Tạo content từ text input."""
     if not agent:
@@ -54,6 +93,7 @@ def generate():
 
 
 @app.route("/api/research", methods=["POST"])
+@login_required
 def research():
     """Đọc bài từ URL và chuyển thể."""
     if not agent:
@@ -75,6 +115,7 @@ def research():
 
 
 @app.route("/api/image", methods=["POST"])
+@login_required
 def image_content():
     """Phân tích ảnh và tạo content + design."""
     if not agent:
@@ -118,6 +159,7 @@ def image_content():
 
 
 @app.route("/api/community", methods=["POST"])
+@login_required
 def community():
     """Tạo bài đăng cho cộng đồng Facebook."""
     if not agent:
@@ -148,6 +190,7 @@ def community():
 
 
 @app.route("/api/design", methods=["POST"])
+@login_required
 def create_design():
     """Tạo design HTML từ ảnh + text."""
     data = request.json
@@ -173,6 +216,7 @@ def create_design():
 
 
 @app.route("/api/upload-image", methods=["POST"])
+@login_required
 def upload_image():
     """Upload ảnh và trả về đường dẫn (không phân tích)."""
     if "image" not in request.files:
