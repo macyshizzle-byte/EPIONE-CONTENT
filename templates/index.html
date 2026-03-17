@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Epione — Content Agent</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<style>
+:root {
+  --accent: #10069F;
+  --accent-dark: #0A0470;
+  --black: #282828;
+  --white: #FFFFFF;
+  --gray: #F5F5F7;
+  --border: #E5E5EA;
+  --text-secondary: #888;
+  --radius: 12px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Nunito Sans',sans-serif; background:var(--gray); color:var(--black); min-height:100vh; }
+
+/* NAV */
+.nav {
+  position:sticky; top:0; z-index:100;
+  background:rgba(255,255,255,0.92); backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:12px 24px;
+  display:flex; align-items:center; gap:12px;
+}
+.nav svg { flex-shrink:0; }
+.nav-brand { font-size:14px; font-weight:700; letter-spacing:2px; color:var(--accent); }
+.nav-sub { font-size:10px; color:var(--text-secondary); letter-spacing:1px; }
+.nav-spacer { flex:1; }
+.role-selector { display:flex; gap:4px; background:var(--gray); border-radius:8px; padding:3px; }
+.role-btn {
+  padding:5px 12px; border-radius:6px; border:none;
+  font-size:11px; font-weight:600; cursor:pointer;
+  background:transparent; color:var(--text-secondary);
+  font-family:inherit; transition:all .2s; white-space:nowrap;
+}
+.role-btn:hover { color:var(--black); }
+.role-btn.active { background:var(--white); color:var(--accent); box-shadow:0 1px 3px rgba(0,0,0,0.1); }
+
+/* LAYOUT */
+.container { max-width:960px; margin:0 auto; padding:24px 16px; }
+
+/* TABS */
+.tabs {
+  display:flex; gap:8px; flex-wrap:wrap;
+  margin-bottom:24px;
+}
+.tab {
+  padding:10px 20px; border-radius:24px;
+  border:1px solid var(--border); background:var(--white);
+  font-size:13px; font-weight:600; color:var(--black);
+  cursor:pointer; transition:all .2s;
+  font-family:inherit;
+}
+.tab:hover { border-color:var(--accent); color:var(--accent); }
+.tab.active { background:var(--accent); color:var(--white); border-color:var(--accent); }
+
+/* CARD */
+.card {
+  background:var(--white);
+  border-radius:var(--radius); border:1px solid var(--border);
+  padding:28px; margin-bottom:20px;
+}
+.card h2 { font-size:18px; margin-bottom:6px; }
+.card p.desc { font-size:13px; color:var(--text-secondary); margin-bottom:20px; }
+
+/* INPUT */
+textarea {
+  width:100%; min-height:100px; padding:14px 16px;
+  border:1px solid var(--border); border-radius:10px;
+  font-family:inherit; font-size:14px; color:var(--black);
+  resize:vertical; outline:none; transition:border .2s;
+}
+textarea:focus { border-color:var(--accent); }
+input[type="text"] {
+  width:100%; padding:12px 16px;
+  border:1px solid var(--border); border-radius:10px;
+  font-family:inherit; font-size:14px; outline:none;
+}
+input[type="text"]:focus { border-color:var(--accent); }
+
+/* BUTTON */
+.btn {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:12px 28px; border-radius:24px;
+  font-family:inherit; font-size:14px; font-weight:600;
+  cursor:pointer; transition:all .2s; border:none;
+}
+.btn-primary { background:var(--accent); color:var(--white); }
+.btn-primary:hover { background:var(--accent-dark); }
+.btn-primary:disabled { opacity:0.5; cursor:not-allowed; }
+.btn-outline { background:transparent; border:1px solid var(--border); color:var(--black); }
+.btn-outline:hover { border-color:var(--accent); color:var(--accent); }
+
+/* DROPZONE */
+.dropzone {
+  border:2px dashed var(--border); border-radius:var(--radius);
+  padding:40px 20px; text-align:center;
+  cursor:pointer; transition:all .2s;
+  margin-bottom:16px;
+}
+.dropzone:hover, .dropzone.dragover {
+  border-color:var(--accent); background:rgba(16,6,159,0.04);
+}
+.dropzone .icon { font-size:36px; margin-bottom:8px; }
+.dropzone .label { font-size:14px; color:var(--text-secondary); }
+.dropzone .label strong { color:var(--accent); }
+.dropzone img.preview {
+  max-width:100%; max-height:300px; border-radius:8px;
+  object-fit:contain; margin-top:12px;
+}
+
+/* OUTPUT */
+.output {
+  background:#FAFAFA; border:1px solid var(--border); border-radius:var(--radius);
+  padding:24px; margin-top:20px;
+  white-space:pre-wrap; font-size:14px; line-height:1.7;
+  display:none;
+}
+.output.show { display:block; }
+.output h1,.output h2,.output h3 { margin:16px 0 8px; }
+.output hr { border:none; border-top:1px solid var(--border); margin:16px 0; }
+
+/* LOADING */
+.loading {
+  display:none; align-items:center; gap:8px;
+  font-size:13px; color:var(--accent); margin-top:12px;
+}
+.loading.show { display:flex; }
+.spinner {
+  width:18px; height:18px; border:2px solid var(--border);
+  border-top-color:var(--accent); border-radius:50%;
+  animation:spin .6s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* OUTPUT ACTIONS */
+.output-actions {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:16px; padding-bottom:12px;
+  border-bottom:1px solid var(--border); flex-wrap:wrap; gap:10px;
+}
+.platform-btns { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.platform-label { font-size:12px; font-weight:600; color:var(--text-secondary); margin-right:2px; }
+.platform-btn {
+  display:inline-flex; align-items:center; gap:4px;
+  padding:6px 12px; border-radius:8px;
+  font-size:11px; font-weight:600; cursor:pointer;
+  background:var(--white); border:1px solid var(--border);
+  color:var(--text-secondary); font-family:inherit; transition:all .2s;
+}
+.platform-btn:hover { border-color:var(--accent); color:var(--accent); }
+.platform-btn.copied { background:var(--accent); color:var(--white); border-color:var(--accent); }
+.platform-btn svg { width:14px; height:14px; flex-shrink:0; }
+.btn-download {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:8px 16px; border-radius:8px;
+  font-size:12px; font-weight:600; cursor:pointer;
+  background:var(--accent); border:none;
+  color:var(--white); font-family:inherit; transition:all .2s;
+}
+.btn-download:hover { background:var(--accent-dark); }
+.btn-download svg { width:16px; height:16px; }
+
+/* COMMUNITY */
+.community-header { display:flex; gap:8px; margin-bottom:12px; align-items:end; }
+.community-header > div { flex:1; }
+.saved-rules { font-size:11px; color:var(--accent); margin-top:4px; display:none; }
+.saved-rules.show { display:block; }
+
+/* TOPIC FLOW */
+.step-label {
+  display:block; font-size:11px; font-weight:700; color:var(--accent);
+  margin-bottom:8px; letter-spacing:1px; text-transform:uppercase;
+}
+.topic-grid { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+.topic-chip {
+  padding:8px 16px; border-radius:10px;
+  border:1px solid var(--border); background:var(--white);
+  font-size:13px; font-weight:500; color:var(--black);
+  cursor:pointer; transition:all .2s; font-family:inherit;
+}
+.topic-chip:hover { border-color:var(--accent); color:var(--accent); }
+.topic-chip.selected { background:var(--accent); color:var(--white); border-color:var(--accent); }
+.plat-select { display:flex; gap:6px; margin-bottom:16px; }
+.plat-chip {
+  padding:6px 14px; border-radius:8px;
+  border:1px solid var(--border); background:var(--white);
+  font-size:12px; font-weight:600; color:var(--text-secondary);
+  cursor:pointer; transition:all .2s; font-family:inherit;
+}
+.plat-chip:hover { border-color:var(--accent); color:var(--accent); }
+.plat-chip.selected { background:var(--accent); color:var(--white); border-color:var(--accent); }
+.content-box {
+  background:#FAFAFA; border:1px solid var(--border); border-radius:10px;
+  padding:16px; margin:8px 0; white-space:pre-wrap; font-size:14px; line-height:1.7;
+}
+.img-suggest {
+  background:#FFF8E1; border:1px solid #FFE082; border-radius:10px;
+  padding:12px 16px; font-size:13px; line-height:1.5; margin:12px 0;
+}
+
+/* DESIGN PREVIEW */
+.design-preview { display:none; }
+.design-preview.show { display:block; }
+.design-preview-frame {
+  border:1px solid var(--border); border-radius:var(--radius);
+  overflow:hidden; background:#1a1a2e;
+  position:relative;
+}
+.design-preview-frame iframe {
+  width:100%; border:none; display:block;
+  min-height:400px;
+}
+.design-preview-actions {
+  display:flex; gap:8px; align-items:center; margin-top:12px; flex-wrap:wrap;
+}
+
+/* DESIGN PREVIEW */
+.design-form { margin-top:16px; display:none; }
+.design-form.show { display:block; }
+.design-form .row { display:flex; gap:12px; margin-bottom:12px; }
+.design-form .row > * { flex:1; }
+.design-form label { font-size:12px; font-weight:600; color:var(--text-secondary); display:block; margin-bottom:4px; }
+
+/* RESPONSIVE */
+@media (max-width:640px) {
+  .tabs { gap:6px; }
+  .tab { padding:8px 14px; font-size:12px; }
+  .card { padding:20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <svg width="28" height="28" viewBox="0 0 120 120" fill="none">
+    <circle cx="60" cy="60" r="52" stroke="#10069F" stroke-width="1.5" opacity=".3"/>
+    <circle cx="60" cy="60" r="38" stroke="#10069F" stroke-width="2" opacity=".5"/>
+    <circle cx="60" cy="60" r="24" stroke="#10069F" stroke-width="2.5" opacity=".7"/>
+    <circle cx="60" cy="60" r="10" fill="#10069F"/>
+  </svg>
+  <div>
+    <div class="nav-brand">EPIONE</div>
+    <div class="nav-sub">Content Agent</div>
+  </div>
+  <div class="nav-spacer"></div>
+  <div class="role-selector">
+    <button class="role-btn active" data-role="sale_b2b">Sale B2B</button>
+    <button class="role-btn" data-role="sale_b2c">Sale B2C</button>
+    <button class="role-btn" data-role="ky_thuat">Kỹ thuật</button>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" data-type="content">Viết content</button>
+    <button class="tab" data-type="research">Chọn chủ đề</button>
+    <button class="tab" data-type="image">Ảnh → Content</button>
+    <button class="tab" data-type="outreach">Outreach</button>
+    <button class="tab" data-type="casestudy">Case Study</button>
+    <button class="tab" data-type="ideas">Lịch content</button>
+  </div>
+
+  <!-- CONTENT MODES -->
+
+  <!-- Viết content (gộp LinkedIn + Facebook + Cộng đồng) -->
+  <div class="card mode-card" id="mode-content">
+    <h2>Viết content</h2>
+    <p class="desc">Chọn kênh đăng → mô tả yêu cầu → AI viết content phù hợp</p>
+
+    <div class="step-label">Kênh đăng</div>
+    <div class="plat-select" style="margin-bottom:16px;">
+      <button class="content-plat-chip plat-chip selected" data-plat="linkedin">LinkedIn</button>
+      <button class="content-plat-chip plat-chip" data-plat="facebook">Facebook / IG</button>
+      <button class="content-plat-chip plat-chip" data-plat="community">Cộng đồng FB</button>
+    </div>
+
+    <div id="content-community-fields" style="display:none; margin-bottom:14px;">
+      <div class="community-header">
+        <div>
+          <input type="text" id="community-name" placeholder="Tên group FB... (VD: Hội HR Việt Nam)" onchange="loadCommunityRules()">
+        </div>
+      </div>
+      <div class="step-label" style="margin-top:12px;">Quy định cộng đồng <span style="font-weight:400;text-transform:none;letter-spacing:0;">(paste rule từ group)</span></div>
+      <textarea id="community-rules" placeholder="Paste quy định group vào đây... VD: Không spam, không quảng cáo trực tiếp, phải có giá trị cho cộng đồng..." style="min-height:80px; margin-bottom:4px;"></textarea>
+      <div class="saved-rules" id="saved-rules-note"></div>
+      <button class="btn btn-outline" onclick="saveCommunityRules()" style="font-size:12px; padding:6px 14px; margin-bottom:8px;">Lưu rules</button>
+    </div>
+
+    <div class="step-label" id="content-prompt-label">Yêu cầu</div>
+    <textarea id="prompt" placeholder="Mô tả yêu cầu... Ví dụ: Viết bài về pain point văn phòng open-plan thiếu chỗ riêng tư, hướng đến HR Manager"></textarea>
+    <div style="margin-top:14px; display:flex; gap:8px; align-items:center;">
+      <button class="btn btn-primary" id="btn-generate" onclick="generate()">
+        Viết content
+      </button>
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <span>Đang viết content...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Text-based modes (Outreach, Case Study, Lịch content) -->
+  <div class="card mode-card" id="mode-text" style="display:none">
+    <h2 id="mode-title">Viết tin nhắn Outreach</h2>
+    <p class="desc" id="mode-desc">Template email, Zalo, LinkedIn DM tiếp cận khách hàng B2B</p>
+    <textarea id="prompt-text" placeholder="Mô tả yêu cầu..."></textarea>
+    <div style="margin-top:14px; display:flex; gap:8px; align-items:center;">
+      <button class="btn btn-primary" id="btn-generate-text" onclick="generateText()">
+        Tạo content
+      </button>
+      <div class="loading" id="loading-text">
+        <div class="spinner"></div>
+        <span>Đang viết content...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Topic flow mode -->
+  <div class="card mode-card" id="mode-research" style="display:none">
+    <h2>Tạo Content theo Chủ đề</h2>
+    <p class="desc">Chọn chủ đề → AI viết content → Chọn ảnh phù hợp → Tạo design</p>
+
+    <div class="step-label">Chọn chủ đề</div>
+    <div class="topic-grid">
+      <button class="topic-chip" data-topic="Booth cách âm cho văn phòng open-plan, giải quyết nhu cầu riêng tư">Booth cách âm</button>
+      <button class="topic-chip" data-topic="Nội thất ergonomic - bàn nâng hạ, ghế công thái học cho sức khỏe nhân viên">Nội thất ergonomic</button>
+      <button class="topic-chip" data-topic="Giải pháp không gian làm việc cho hybrid work và họp online">Hybrid work</button>
+      <button class="topic-chip" data-topic="Sức khỏe nhân viên tại nơi làm việc, tư thế ngồi, ergonomic">Sức khỏe công sở</button>
+      <button class="topic-chip" data-topic="Setup văn phòng mới cho doanh nghiệp, lựa chọn nội thất và booth">Setup văn phòng</button>
+      <button class="topic-chip" data-topic="Nâng cấp coworking space với booth cách âm và nội thất hiện đại">Coworking space</button>
+      <button class="topic-chip" data-topic="Năng suất làm việc, không gian tập trung, giảm tiếng ồn văn phòng">Năng suất & tập trung</button>
+      <button class="topic-chip" data-topic="Xu hướng thiết kế workspace hiện đại 2025-2026">Workspace trends</button>
+    </div>
+    <input type="text" id="custom-topic" placeholder="Hoặc nhập chủ đề riêng..." style="margin-bottom:16px;">
+
+    <div class="step-label">Platform</div>
+    <div class="plat-select">
+      <button class="plat-chip selected" data-plat="linkedin">LinkedIn</button>
+      <button class="plat-chip" data-plat="facebook">Facebook</button>
+      <button class="plat-chip" data-plat="instagram">Instagram</button>
+      <button class="plat-chip" data-plat="community">Cộng đồng</button>
+    </div>
+
+    <div style="display:flex; gap:8px; align-items:center;">
+      <button class="btn btn-primary" id="btn-topic-gen" onclick="generateFromTopic()">Viết content</button>
+      <div class="loading" id="loading-topic">
+        <div class="spinner"></div>
+        <span>Đang viết content...</span>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="topic-results" style="display:none;">
+      <hr style="margin:24px 0;">
+
+      <div class="step-label">Content</div>
+      <div class="content-box" id="topic-content"></div>
+      <button class="platform-btn" onclick="copyTopicContent(this)" style="margin-top:8px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copy content
+      </button>
+
+      <div class="img-suggest" id="topic-img-suggest"></div>
+
+      <div class="step-label">Chọn ảnh phù hợp</div>
+      <div class="dropzone" id="topic-dropzone" onclick="document.getElementById('topic-file').click()">
+        <div class="icon">📸</div>
+        <div class="label">Kéo thả ảnh hoặc <strong>click để chọn</strong></div>
+      </div>
+      <input type="file" id="topic-file" accept="image/*" style="display:none" onchange="handleTopicFile(this.files[0])">
+
+      <div id="topic-design-section" style="display:none;">
+        <div class="step-label" style="margin-top:16px;">Tạo Design</div>
+        <div class="design-form show">
+          <div class="row">
+            <div>
+              <label>Headline</label>
+              <input type="text" id="topic-headline">
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label>Subtext</label>
+              <input type="text" id="topic-subtext">
+            </div>
+            <div>
+              <label>CTA</label>
+              <input type="text" id="topic-cta" value="Liên hệ tư vấn">
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <button class="btn btn-primary" onclick="createTopicDesign()">Tạo design</button>
+            <div class="loading" id="loading-topic-design">
+              <div class="spinner"></div>
+              <span>Đang tạo design...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="design-preview" id="topic-design-preview">
+        <hr style="margin:20px 0;">
+        <h3 style="margin-bottom:12px;">Preview Design</h3>
+        <div class="design-preview-frame">
+          <iframe id="topic-design-iframe" sandbox="allow-same-origin allow-scripts"></iframe>
+        </div>
+        <div class="design-preview-actions">
+          <button class="btn-download" onclick="downloadTopicPNG()" id="btn-topic-png">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Tải ảnh (PNG)
+          </button>
+          <button class="btn btn-outline" onclick="window.open('/'+topicDesignPath,'_blank')">
+            Mở tab mới ↗
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Image mode -->
+  <div class="card mode-card" id="mode-image" style="display:none">
+    <h2>Chụp ảnh → Viết content</h2>
+    <p class="desc">Chọn ảnh sản phẩm, văn phòng, dự án → viết caption luôn</p>
+
+    <div class="dropzone" id="dropzone" onclick="document.getElementById('file-input').click()">
+      <div class="icon">📸</div>
+      <div class="label">Kéo thả ảnh vào đây hoặc <strong>click để chọn file</strong></div>
+      <div class="label" style="font-size:12px; margin-top:4px;">JPG, PNG, WebP — tối đa 16MB</div>
+    </div>
+    <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleFile(this.files[0])">
+
+    <input type="text" id="image-note" placeholder="Ghi chú thêm (sản phẩm gì, dùng cho gì... hoặc để trống)" style="margin-bottom:14px;">
+
+    <div style="margin-bottom:14px;">
+      <div class="step-label">Chọn kênh đăng</div>
+      <div class="plat-select">
+        <button class="img-plat-chip plat-chip selected" data-plat="linkedin">LinkedIn</button>
+        <button class="img-plat-chip plat-chip" data-plat="facebook">Facebook</button>
+        <button class="img-plat-chip plat-chip" data-plat="instagram">Instagram</button>
+        <button class="img-plat-chip plat-chip" data-plat="community">Cộng đồng</button>
+      </div>
+    </div>
+
+    <div id="image-community-fields" style="display:none; margin-bottom:14px;">
+      <input type="text" id="image-community-name" placeholder="Tên cộng đồng / group Facebook" style="margin-bottom:8px;" oninput="loadImageCommunityRules()">
+      <textarea id="image-community-rules" rows="3" placeholder="Quy định group (tự động load nếu đã lưu trước đó)"></textarea>
+    </div>
+
+    <div style="display:flex; gap:8px; align-items:center;">
+      <button class="btn btn-primary" id="btn-image" onclick="analyzeImage()" disabled>
+        Viết content
+      </button>
+      <div class="loading" id="loading-image">
+        <div class="spinner"></div>
+        <span>Đang phân tích ảnh...</span>
+      </div>
+    </div>
+
+    <!-- Design form (hiện sau khi có content) -->
+    <div class="design-form" id="design-form">
+      <hr style="margin:20px 0;">
+      <h3 style="margin-bottom:12px;">Tạo Design Post</h3>
+      <div class="row">
+        <div>
+          <label>Headline</label>
+          <input type="text" id="design-headline" placeholder="Text chính trên ảnh">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Subtext</label>
+          <input type="text" id="design-subtext" placeholder="Text phụ (tùy chọn)">
+        </div>
+        <div>
+          <label>CTA Button</label>
+          <input type="text" id="design-cta" value="Liên hệ tư vấn">
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="createDesign()">Tạo design</button>
+      <div class="loading" id="loading-design" style="margin-top:8px;">
+        <div class="spinner"></div>
+        <span>Đang tạo design...</span>
+      </div>
+    </div>
+
+    <!-- Design Preview inline -->
+    <div class="design-preview" id="design-preview">
+      <hr style="margin:20px 0;">
+      <h3 style="margin-bottom:12px;">Preview Design</h3>
+      <div class="design-preview-frame">
+        <iframe id="design-iframe" sandbox="allow-same-origin allow-scripts"></iframe>
+      </div>
+      <div class="design-preview-actions">
+        <button class="btn-download" onclick="downloadDesignAsImage()" id="btn-download-png" title="Tải ảnh PNG">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Tải ảnh (PNG)
+        </button>
+        <button class="btn btn-outline" onclick="downloadDesign()" title="Tải file HTML">
+          Tải HTML
+        </button>
+        <button class="btn btn-outline" onclick="openDesign()" title="Mở tab mới">
+          Mở tab mới ↗
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="output" id="output">
+    <div class="output-actions">
+      <div class="platform-btns">
+        <span class="platform-label">Copy cho:</span>
+        <button class="platform-btn" data-platform="linkedin" onclick="copyForPlatform(this)" title="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </button>
+        <button class="platform-btn" data-platform="facebook" onclick="copyForPlatform(this)" title="Facebook">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Facebook
+        </button>
+        <button class="platform-btn" data-platform="instagram" onclick="copyForPlatform(this)" title="Instagram">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.805.249 2.228.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.058 1.265.07 1.645.07 4.848s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0-2.163C8.741 0 8.333.014 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405a1.441 1.441 0 11-2.882 0 1.441 1.441 0 012.882 0z"/></svg>
+          Instagram
+        </button>
+        <button class="platform-btn" data-platform="zalo" onclick="copyForPlatform(this)" title="Zalo">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 4.925 0 11c0 3.178 1.408 6.044 3.662 8.088l-1.022 3.568c-.165.585.408 1.074.936.8l4.292-2.156C9.174 21.756 10.563 22 12 22c6.627 0 12-4.925 12-11S18.627 0 12 0zm-3 15H7V7h2v8zm7-3H9.5v-1.5H16V12zm0-3H9.5V7.5H16V9z"/></svg>
+          Zalo
+        </button>
+        <button class="platform-btn" data-platform="email" onclick="copyForPlatform(this)" title="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 4 10 8 10-8"/></svg>
+          Email
+        </button>
+      </div>
+      <button class="btn-download" id="btn-download-img" onclick="downloadImage()" style="display:none;" title="Tải ảnh xuống">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Tải ảnh
+      </button>
+    </div>
+    <div id="output-content"></div>
+  </div>
+
+</div>
+
+<script>
+let currentType = 'content';
+let currentContentPlat = 'linkedin';
+let currentImagePath = '';
+let currentDesignPath = '';
+let currentImageUrl = '';
+let currentRole = 'sale_b2b';
+
+// Role selector
+document.querySelectorAll('.role-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentRole = btn.dataset.role;
+  });
+});
+
+const MODE_INFO = {
+  outreach:   { title:'Viết tin nhắn Outreach', desc:'Template email, Zalo, LinkedIn DM tiếp cận khách hàng B2B' },
+  casestudy:  { title:'Viết Case Study', desc:'Case study dự án đã triển khai — bối cảnh, thách thức, giải pháp, kết quả' },
+  ideas:      { title:'Lên Lịch content', desc:'Ý tưởng content theo tuần/tháng cho đội sale' },
+};
+
+// Content platform selector
+document.querySelectorAll('.content-plat-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.content-plat-chip').forEach(c => c.classList.remove('selected'));
+    chip.classList.add('selected');
+    currentContentPlat = chip.dataset.plat;
+    document.getElementById('content-community-fields').style.display = currentContentPlat === 'community' ? 'block' : 'none';
+  });
+});
+
+// Tab switching
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentType = tab.dataset.type;
+
+    // Show/hide mode cards
+    document.querySelectorAll('.mode-card').forEach(c => c.style.display = 'none');
+    document.getElementById('output').classList.remove('show');
+
+    if (currentType === 'content') {
+      document.getElementById('mode-content').style.display = 'block';
+    } else if (currentType === 'research') {
+      document.getElementById('mode-research').style.display = 'block';
+    } else if (currentType === 'image') {
+      document.getElementById('mode-image').style.display = 'block';
+    } else {
+      document.getElementById('mode-text').style.display = 'block';
+      document.getElementById('mode-title').textContent = MODE_INFO[currentType].title;
+      document.getElementById('mode-desc').textContent = MODE_INFO[currentType].desc;
+    }
+  });
+});
+
+// Generate content (Viết content tab)
+async function generate() {
+  const prompt = document.getElementById('prompt').value.trim();
+  if (!prompt) return;
+
+  setLoading('loading', true);
+  document.getElementById('btn-generate').disabled = true;
+
+  try {
+    if (currentContentPlat === 'community') {
+      // Community flow
+      const communityName = document.getElementById('community-name').value.trim();
+      const rules = document.getElementById('community-rules').value.trim();
+      const res = await fetch('/api/community', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ community: communityName, rules, topic: prompt, role: currentRole })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      showOutput(data.content);
+    } else {
+      // LinkedIn / Facebook
+      const type = currentContentPlat === 'facebook' ? 'facebook' : 'linkedin';
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ type, prompt, role: currentRole })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      showOutput(data.content);
+    }
+  } catch (e) {
+    showOutput('Lỗi: ' + e.message);
+  } finally {
+    setLoading('loading', false);
+    document.getElementById('btn-generate').disabled = false;
+  }
+}
+
+// Generate for text modes (Outreach, Case Study, Lịch content)
+async function generateText() {
+  const prompt = document.getElementById('prompt-text').value.trim();
+  if (!prompt) return;
+
+  setLoading('loading-text', true);
+  document.getElementById('btn-generate-text').disabled = true;
+
+  try {
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ type: currentType, prompt, role: currentRole })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    showOutput(data.content);
+  } catch (e) {
+    showOutput('Lỗi: ' + e.message);
+  } finally {
+    setLoading('loading-text', false);
+    document.getElementById('btn-generate-text').disabled = false;
+  }
+}
+
+// Topic flow
+let selectedTopic = '';
+let selectedPlat = 'linkedin';
+let topicImagePath = '';
+let topicDesignPath = '';
+
+document.querySelectorAll('.topic-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.topic-chip').forEach(c => c.classList.remove('selected'));
+    chip.classList.add('selected');
+    selectedTopic = chip.dataset.topic;
+    document.getElementById('custom-topic').value = '';
+  });
+});
+
+document.querySelectorAll('.plat-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.plat-chip').forEach(c => c.classList.remove('selected'));
+    chip.classList.add('selected');
+    selectedPlat = chip.dataset.plat;
+  });
+});
+
+document.getElementById('custom-topic').addEventListener('input', () => {
+  if (document.getElementById('custom-topic').value.trim()) {
+    document.querySelectorAll('.topic-chip').forEach(c => c.classList.remove('selected'));
+    selectedTopic = '';
+  }
+});
+
+async function generateFromTopic() {
+  const topic = selectedTopic || document.getElementById('custom-topic').value.trim();
+  if (!topic) return;
+
+  setLoading('loading-topic', true);
+  document.getElementById('btn-topic-gen').disabled = true;
+
+  try {
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ type: 'topic', prompt: 'Chủ đề: ' + topic + '\nPlatform: ' + selectedPlat, role: currentRole })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    const raw = data.content;
+    const parts = raw.split(/\n---\n/);
+    const caption = parts[0].trim();
+    const rest = parts.slice(1).join('\n');
+
+    document.getElementById('topic-content').textContent = caption;
+
+    const imgMatch = rest.match(/GỢI Ý HÌNH ẢNH:\s*(.+)/i);
+    document.getElementById('topic-img-suggest').textContent =
+      (imgMatch ? imgMatch[1].trim() : 'Chọn ảnh phù hợp với chủ đề trên');
+
+    const hlMatch = rest.match(/Headline:\s*[""\u201c](.+?)[""\u201d]/);
+    const stMatch = rest.match(/Subtext:\s*[""\u201c](.+?)[""\u201d]/);
+    const ctaMatch = rest.match(/CTA:\s*[""\u201c](.+?)[""\u201d]/);
+    if (hlMatch) document.getElementById('topic-headline').value = hlMatch[1];
+    if (stMatch) document.getElementById('topic-subtext').value = stMatch[1];
+    if (ctaMatch) document.getElementById('topic-cta').value = ctaMatch[1];
+
+    document.getElementById('topic-results').style.display = 'block';
+    document.getElementById('topic-results').scrollIntoView({ behavior:'smooth', block:'start' });
+  } catch (e) {
+    alert('Lỗi: ' + e.message);
+  } finally {
+    setLoading('loading-topic', false);
+    document.getElementById('btn-topic-gen').disabled = false;
+  }
+}
+
+function copyTopicContent(btn) {
+  const text = document.getElementById('topic-content').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    const svg = btn.querySelector('svg').outerHTML;
+    const orig = btn.innerHTML;
+    btn.innerHTML = svg + ' Copied!';
+    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 2000);
+  });
+}
+
+// Topic dropzone
+const topicDZ = document.getElementById('topic-dropzone');
+['dragenter','dragover'].forEach(e => {
+  topicDZ.addEventListener(e, ev => { ev.preventDefault(); topicDZ.classList.add('dragover'); });
+});
+['dragleave','drop'].forEach(e => {
+  topicDZ.addEventListener(e, ev => { ev.preventDefault(); topicDZ.classList.remove('dragover'); });
+});
+topicDZ.addEventListener('drop', ev => {
+  if (ev.dataTransfer.files[0]) handleTopicFile(ev.dataTransfer.files[0]);
+});
+
+function handleTopicFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    topicDZ.innerHTML = '<img class="preview" src="' + e.target.result + '" alt="Preview">' +
+      '<div class="label" style="margin-top:8px;"><strong>' + file.name + '</strong></div>';
+  };
+  reader.readAsDataURL(file);
+
+  const formData = new FormData();
+  formData.append('image', file);
+  fetch('/api/upload-image', { method: 'POST', body: formData })
+    .then(r => r.json())
+    .then(data => {
+      if (data.image_path) {
+        topicImagePath = data.image_path;
+        document.getElementById('topic-design-section').style.display = 'block';
+      }
+    });
+}
+
+async function createTopicDesign() {
+  if (!topicImagePath) return;
+  setLoading('loading-topic-design', true);
+  try {
+    const plat = selectedPlat === 'linkedin' ? 'linkedin' : 'instagram';
+    const res = await fetch('/api/design', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        image_path: topicImagePath,
+        headline: document.getElementById('topic-headline').value,
+        subtext: document.getElementById('topic-subtext').value,
+        cta: document.getElementById('topic-cta').value,
+        platform: plat,
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    topicDesignPath = data.design_path;
+
+    const preview = document.getElementById('topic-design-preview');
+    const iframe = document.getElementById('topic-design-iframe');
+    iframe.src = '/' + topicDesignPath;
+    preview.classList.add('show');
+    iframe.onload = () => {
+      try {
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+        iframe.style.height = doc.documentElement.scrollHeight + 'px';
+      } catch(e) { iframe.style.height = '600px'; }
+    };
+    preview.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  } catch (e) {
+    alert('Lỗi: ' + e.message);
+  } finally {
+    setLoading('loading-topic-design', false);
+  }
+}
+
+async function downloadTopicPNG() {
+  if (!topicDesignPath) return;
+  const btn = document.getElementById('btn-topic-png');
+  const orig = btn.innerHTML;
+  btn.innerHTML = '<div class="spinner" style="width:14px;height:14px;"></div> Đang xuất...';
+  btn.disabled = true;
+  try {
+    const iframe = document.getElementById('topic-design-iframe');
+    const iframeWin = iframe.contentWindow;
+    const iframeDoc = iframe.contentDocument;
+    if (!iframeWin.html2canvas) {
+      const script = iframeDoc.createElement('script');
+      script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+      iframeDoc.head.appendChild(script);
+      await new Promise((resolve, reject) => { script.onload = resolve; script.onerror = () => reject(new Error('Lỗi')); });
+    }
+    const postEl = iframeDoc.querySelector('.post');
+    if (!postEl) throw new Error('Không tìm thấy design');
+    const canvas = await iframeWin.html2canvas(postEl, { useCORS:true, scale:2, backgroundColor:null });
+    const link = document.createElement('a');
+    link.download = 'epione-design.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  } catch (e) { alert('Lỗi: ' + e.message); }
+  finally { btn.innerHTML = orig; btn.disabled = false; }
+}
+
+// Community flow
+function loadCommunityRules() {
+  const name = document.getElementById('community-name').value.trim();
+  if (!name) return;
+  const saved = localStorage.getItem('community_rules_' + name);
+  const note = document.getElementById('saved-rules-note');
+  if (saved) {
+    document.getElementById('community-rules').value = saved;
+    note.textContent = 'Rules đã lưu — tự động load';
+    note.classList.add('show');
+  } else {
+    note.classList.remove('show');
+  }
+}
+
+function saveCommunityRules() {
+  const name = document.getElementById('community-name').value.trim();
+  const rules = document.getElementById('community-rules').value.trim();
+  if (!name) return alert('Nhập tên group trước');
+  if (!rules) return alert('Nhập rules trước');
+  localStorage.setItem('community_rules_' + name, rules);
+  const note = document.getElementById('saved-rules-note');
+  note.textContent = 'Đã lưu rules cho "' + name + '"';
+  note.classList.add('show');
+}
+
+// Image handling
+const dropzone = document.getElementById('dropzone');
+let selectedFile = null;
+let selectedImagePlat = 'linkedin';
+
+document.querySelectorAll('.img-plat-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.img-plat-chip').forEach(c => c.classList.remove('selected'));
+    chip.classList.add('selected');
+    selectedImagePlat = chip.dataset.plat;
+    document.getElementById('image-community-fields').style.display = selectedImagePlat === 'community' ? 'block' : 'none';
+  });
+});
+
+function loadImageCommunityRules() {
+  const name = document.getElementById('image-community-name').value.trim();
+  if (!name) return;
+  const saved = localStorage.getItem('community_rules_' + name);
+  if (saved) document.getElementById('image-community-rules').value = saved;
+}
+
+['dragenter','dragover'].forEach(e => {
+  dropzone.addEventListener(e, ev => { ev.preventDefault(); dropzone.classList.add('dragover'); });
+});
+['dragleave','drop'].forEach(e => {
+  dropzone.addEventListener(e, ev => { ev.preventDefault(); dropzone.classList.remove('dragover'); });
+});
+dropzone.addEventListener('drop', ev => {
+  const file = ev.dataTransfer.files[0];
+  if (file) handleFile(file);
+});
+
+function handleFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  selectedFile = file;
+
+  // Show preview
+  const reader = new FileReader();
+  reader.onload = e => {
+    dropzone.innerHTML = `<img class="preview" src="${e.target.result}" alt="Preview">
+      <div class="label" style="margin-top:8px;"><strong>${file.name}</strong> (${(file.size/1024).toFixed(0)} KB)</div>`;
+  };
+  reader.readAsDataURL(file);
+  document.getElementById('btn-image').disabled = false;
+}
+
+async function analyzeImage() {
+  if (!selectedFile) return;
+
+  setLoading('loading-image', true);
+  document.getElementById('btn-image').disabled = true;
+
+  const formData = new FormData();
+  formData.append('image', selectedFile);
+  formData.append('role', currentRole);
+  formData.append('platform', selectedImagePlat);
+
+  let note = document.getElementById('image-note').value;
+  if (selectedImagePlat === 'community') {
+    const cName = document.getElementById('image-community-name').value.trim();
+    const cRules = document.getElementById('image-community-rules').value.trim();
+    if (cName) note += '\nCộng đồng: ' + cName;
+    if (cRules) note += '\nQuy định group:\n' + cRules;
+    // Lưu rules cho lần sau
+    if (cName && cRules) localStorage.setItem('community_rules_' + cName, cRules);
+  }
+  formData.append('prompt', note);
+
+  try {
+    const res = await fetch('/api/image', { method: 'POST', body: formData });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    currentImagePath = data.image_path;
+    currentImageUrl = data.image_url || '';
+    showOutput(data.content, true);
+
+    // Parse headline/subtext từ response và hiện design form
+    const hl = data.content.match(/Headline:\s*[""](.+?)[""\u201d]/);
+    const st = data.content.match(/Subtext:\s*[""](.+?)[""\u201d]/);
+    const ct = data.content.match(/CTA:\s*[""](.+?)[""\u201d]/);
+    if (hl) document.getElementById('design-headline').value = hl[1];
+    if (st) document.getElementById('design-subtext').value = st[1];
+    if (ct) document.getElementById('design-cta').value = ct[1];
+
+    document.getElementById('design-form').classList.add('show');
+  } catch (e) {
+    showOutput('❌ Lỗi: ' + e.message);
+  } finally {
+    setLoading('loading-image', false);
+    document.getElementById('btn-image').disabled = false;
+  }
+}
+
+async function createDesign() {
+  setLoading('loading-design', true);
+  try {
+    const res = await fetch('/api/design', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        image_path: currentImagePath,
+        headline: document.getElementById('design-headline').value,
+        subtext: document.getElementById('design-subtext').value,
+        cta: document.getElementById('design-cta').value,
+        platform: 'instagram',
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    currentDesignPath = data.design_path;
+
+    // Show inline preview
+    const preview = document.getElementById('design-preview');
+    const iframe = document.getElementById('design-iframe');
+    iframe.src = '/' + currentDesignPath;
+    preview.classList.add('show');
+
+    // Auto-resize iframe to fit content
+    iframe.onload = () => {
+      try {
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+        iframe.style.height = doc.documentElement.scrollHeight + 'px';
+      } catch(e) {
+        iframe.style.height = '600px';
+      }
+    };
+
+    preview.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  } catch (e) {
+    alert('Lỗi: ' + e.message);
+  } finally {
+    setLoading('loading-design', false);
+  }
+}
+
+function openDesign() {
+  if (currentDesignPath) {
+    window.open('/' + currentDesignPath, '_blank');
+  }
+}
+
+async function downloadDesignAsImage() {
+  if (!currentDesignPath) return;
+  const btn = document.getElementById('btn-download-png');
+  const originalText = btn.innerHTML;
+  btn.innerHTML = '<div class="spinner" style="width:14px;height:14px;"></div> Đang xuất ảnh...';
+  btn.disabled = true;
+
+  try {
+    const iframe = document.getElementById('design-iframe');
+    const iframeWin = iframe.contentWindow;
+    const iframeDoc = iframe.contentDocument;
+
+    // Inject html2canvas vào iframe nếu chưa có
+    if (!iframeWin.html2canvas) {
+      const script = iframeDoc.createElement('script');
+      script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+      iframeDoc.head.appendChild(script);
+      await new Promise((resolve, reject) => {
+        script.onload = resolve;
+        script.onerror = () => reject(new Error('Không tải được html2canvas'));
+      });
+    }
+
+    const postEl = iframeDoc.querySelector('.post');
+    if (!postEl) throw new Error('Không tìm thấy design');
+
+    const canvas = await iframeWin.html2canvas(postEl, {
+      useCORS: true,
+      scale: 2,
+      backgroundColor: null,
+    });
+
+    const link = document.createElement('a');
+    link.download = 'epione-design.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  } catch (e) {
+    alert('Lỗi xuất ảnh: ' + e.message);
+  } finally {
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  }
+}
+
+function downloadDesign() {
+  if (currentDesignPath) {
+    const a = document.createElement('a');
+    a.href = '/' + currentDesignPath;
+    a.download = currentDesignPath.split('/').pop();
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+}
+
+// Helpers
+function setLoading(id, show) {
+  document.getElementById(id).classList.toggle('show', show);
+}
+
+function showOutput(text, showDownload) {
+  const el = document.getElementById('output');
+  document.getElementById('output-content').textContent = text;
+  el.classList.add('show');
+
+  // Show/hide download button
+  const dlBtn = document.getElementById('btn-download-img');
+  dlBtn.style.display = showDownload && currentImageUrl ? 'inline-flex' : 'none';
+
+  // Reset platform button states
+  document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('copied'));
+
+  el.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+function copyForPlatform(btn) {
+  const text = document.getElementById('output-content').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    // Reset all buttons
+    document.querySelectorAll('.platform-btn').forEach(b => {
+      b.classList.remove('copied');
+    });
+    // Highlight clicked button
+    btn.classList.add('copied');
+    const svg = btn.querySelector('svg').outerHTML;
+    const platform = btn.dataset.platform;
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = svg + ' Copied!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = originalHTML;
+    }, 2000);
+  });
+}
+
+function downloadImage() {
+  if (currentImageUrl) {
+    const a = document.createElement('a');
+    a.href = currentImageUrl;
+    a.download = '';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+}
+
+// Enter to submit
+document.getElementById('prompt').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); generate(); }
+});
+document.getElementById('custom-topic').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); generateFromTopic(); }
+});
+</script>
+</body>
+</html>
