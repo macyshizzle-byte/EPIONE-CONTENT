@@ -129,9 +129,12 @@ body { font-family:'Nunito Sans',sans-serif; background:var(--gray); color:var(-
 
 /* TABS */
 .tabs {
-  display:flex; gap:8px; flex-wrap:wrap;
+  display:flex; gap:8px; flex-wrap:nowrap;
   margin-bottom:24px;
+  overflow-x:auto; -webkit-overflow-scrolling:touch;
+  scrollbar-width:none; -ms-overflow-style:none;
 }
+.tabs::-webkit-scrollbar { display:none; }
 .tab {
   padding:10px 20px; border-radius:24px;
   border:1px solid var(--border); background:var(--white);
@@ -207,6 +210,36 @@ input[type="text"]:focus { border-color:var(--accent); }
 .output.show { display:block; }
 .output h1,.output h2,.output h3 { margin:16px 0 8px; }
 .output hr { border:none; border-top:1px solid var(--border); margin:16px 0; }
+.output-content-md ul,.output-content-md ol { padding-left:20px; margin:8px 0; }
+.output-content-md li { margin:4px 0; }
+.output-content-md p { margin:6px 0; }
+.output-content-md strong { font-weight:700; }
+.output-content-md em { font-style:italic; }
+
+/* TOPIC SUGGESTIONS */
+.topic-suggestions {
+  display:flex; gap:6px; flex-wrap:wrap; margin-bottom:14px;
+}
+.suggest-chip {
+  padding:6px 14px; border-radius:20px;
+  border:1px solid var(--border); background:var(--white);
+  font-size:12px; font-weight:500; color:var(--text-secondary);
+  cursor:pointer; font-family:inherit; transition:all .2s;
+}
+.suggest-chip:hover { border-color:var(--accent); color:var(--accent); background:rgba(16,6,159,0.04); }
+
+/* RETRY BUTTON */
+.retry-btn {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:10px 22px; border-radius:20px; margin-top:14px;
+  border:1px solid var(--accent); background:rgba(16,6,159,0.06);
+  font-size:13px; font-weight:600; color:var(--accent);
+  cursor:pointer; font-family:inherit; transition:all .2s;
+}
+.retry-btn:hover { background:var(--accent); color:var(--white); }
+
+/* ERROR OUTPUT */
+.output-error { color:#c62828; }
 
 /* LOADING */
 .loading {
@@ -525,7 +558,10 @@ input[type="text"]:focus { border-color:var(--accent); }
       <button class="btn btn-outline" onclick="saveCommunityRules()" style="font-size:12px; padding:6px 14px; margin-bottom:8px;">Lưu rules</button>
     </div>
 
-    <div class="step-label" id="content-prompt-label">Yêu cầu</div>
+    <div class="step-label" id="content-prompt-label">Gợi ý nhanh</div>
+    <div class="topic-suggestions" id="topic-suggestions"></div>
+
+    <div class="step-label">Yêu cầu</div>
     <textarea id="prompt" placeholder="Mô tả yêu cầu... Ví dụ: Viết bài về pain point văn phòng open-plan thiếu chỗ riêng tư, hướng đến HR Manager"></textarea>
     <div class="input-footer">
       <div class="input-hint" id="content-hint">Enter để gửi &middot; Shift+Enter xuống dòng</div>
@@ -817,6 +853,105 @@ function toast(message, type = 'info', duration = 3000) {
   }, duration);
 }
 
+// Friendly error messages (Fix 1)
+function friendlyError(msg) {
+  if (!msg) return 'Có lỗi xảy ra, vui lòng thử lại.';
+  const s = msg.toLowerCase();
+  if (s.includes('rate limit') || s.includes('429') || s.includes('rate_limit'))
+    return 'Hệ thống đang bận, vui lòng thử lại sau 30 giây.';
+  if (s.includes('overloaded') || s.includes('529') || s.includes('503'))
+    return 'Server đang quá tải, thử lại sau vài phút.';
+  if (s.includes('timeout') || s.includes('timed out'))
+    return 'Yêu cầu quá lâu, vui lòng thử lại.';
+  if (s.includes('network') || s.includes('failed to fetch') || s.includes('networkerror'))
+    return 'Mất kết nối mạng, kiểm tra internet và thử lại.';
+  if (s.includes('401') || s.includes('unauthorized') || s.includes('authentication'))
+    return 'Lỗi xác thực API, liên hệ admin.';
+  if (s.includes('500') || s.includes('internal server'))
+    return 'Lỗi hệ thống, vui lòng thử lại.';
+  return msg;
+}
+
+// Simple markdown to HTML parser (Fix 2)
+function renderMarkdown(text) {
+  if (!text) return '';
+  let html = text
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    .replace(/^---$/gm, '<hr>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/g, m => '<ul>' + m + '</ul>')
+    .replace(/\n{2,}/g, '</p><p>')
+    .replace(/\n/g, '<br>');
+  return '<p>' + html + '</p>';
+}
+
+// Last action for retry (Fix 6)
+let lastAction = null;
+
+// Topic suggestions per role (Fix 5)
+const ROLE_SUGGESTIONS = {
+  sale_b2b: [
+    'Pain point văn phòng open-plan, hướng đến HR Manager',
+    'ROI khi đầu tư booth cách âm cho doanh nghiệp 50+ nhân viên',
+    'So sánh chi phí thuê phòng họp vs. booth di động',
+    'Case study: Doanh nghiệp giảm 40% chi phí phòng họp',
+    'Hybrid work: Setup workspace cho nhân viên linh hoạt',
+    'Bàn nâng hạ SmartDesk cho sức khỏe nhân viên',
+  ],
+  sale_b2c: [
+    'Setup góc làm việc tại nhà cho freelancer',
+    'Trải nghiệm 30 ngày dùng ghế công thái học',
+    'WFH: Đau lưng vì ngồi sai tư thế, giải pháp là gì?',
+    'Review bàn nâng hạ cho home office',
+    'Đầu tư bao nhiêu cho góc làm việc tại nhà?',
+    'Tư thế ngồi đúng: Hướng dẫn chỉnh ghế ergonomic',
+  ],
+  ky_thuat: [
+    'Hướng dẫn lắp đặt booth cách âm đúng cách',
+    'Thông số kỹ thuật booth PhoneBooth One',
+    'Tips bảo trì nội thất văn phòng hàng tháng',
+    'So sánh chất liệu gỗ MFC vs MDF cho bàn làm việc',
+    'Checklist nghiệm thu lắp đặt nội thất',
+    'Cách chỉnh bàn nâng hạ SmartDesk cho đúng tư thế',
+  ],
+};
+
+function renderSuggestions() {
+  const container = document.getElementById('topic-suggestions');
+  const suggestions = ROLE_SUGGESTIONS[currentRole] || ROLE_SUGGESTIONS.sale_b2b;
+  container.innerHTML = suggestions.map(s =>
+    '<button class="suggest-chip" onclick="useSuggestion(this)">' + s + '</button>'
+  ).join('');
+}
+
+function useSuggestion(btn) {
+  document.getElementById('prompt').value = btn.textContent;
+  saveDraft('prompt', btn.textContent);
+}
+
+// Auto-save drafts (Fix 3)
+function saveDraft(key, value) {
+  try { localStorage.setItem('draft_' + key, value); } catch(e) {}
+}
+function loadDraft(key) {
+  try { return localStorage.getItem('draft_' + key) || ''; } catch(e) { return ''; }
+}
+function initDrafts() {
+  const fields = ['prompt', 'prompt-text', 'custom-topic', 'image-note'];
+  fields.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const saved = loadDraft(id);
+    if (saved) el.value = saved;
+    el.addEventListener('input', () => saveDraft(id, el.value));
+  });
+}
+
 // Dynamic placeholders per channel
 const CHANNEL_PLACEHOLDERS = {
   linkedin: 'Ví dụ: Chia sẻ góc nhìn về việc đầu tư nội thất ergonomic cho nhân viên, hướng đến HR Manager. Mở bài bằng con số hoặc quan điểm trái chiều.',
@@ -849,6 +984,7 @@ document.querySelectorAll('.role-screen-card').forEach(card => {
     document.querySelectorAll('.role-dropdown-item').forEach(i => {
       i.classList.toggle('active', i.dataset.role === currentRole);
     });
+    renderSuggestions();
     // Hide role screen, show main app
     const screen = document.getElementById('role-screen');
     screen.classList.add('hidden');
@@ -872,6 +1008,7 @@ document.querySelectorAll('.role-dropdown-item').forEach(item => {
     currentRole = item.dataset.role;
     document.getElementById('role-dropdown-label').textContent = item.querySelector('.role-dropdown-item-title').textContent;
     document.getElementById('role-dropdown-menu').classList.remove('open');
+    renderSuggestions();
     toast('Vai trò: ' + item.querySelector('.role-dropdown-item-title').textContent, 'info', 2000);
   });
 });
@@ -927,6 +1064,7 @@ async function generate() {
   setLoading('loading', true);
   document.getElementById('btn-generate').disabled = true;
 
+  lastAction = generate;
   try {
     lastGeneratedType = currentContentPlat;
     lastGeneratedPrompt = prompt;
@@ -956,7 +1094,7 @@ async function generate() {
       showOutput(data.content);
     }
   } catch (e) {
-    showOutput('Lỗi: ' + e.message);
+    showOutput('Lỗi: ' + friendlyError(e.message));
   } finally {
     setLoading('loading', false);
     document.getElementById('btn-generate').disabled = false;
@@ -970,6 +1108,7 @@ async function generateText() {
   lastGeneratedType = currentType;
   lastGeneratedPrompt = prompt;
 
+  lastAction = generateText;
   setLoading('loading-text', true);
   document.getElementById('btn-generate-text').disabled = true;
 
@@ -983,7 +1122,7 @@ async function generateText() {
     if (data.error) throw new Error(data.error);
     showOutput(data.content);
   } catch (e) {
-    showOutput('Lỗi: ' + e.message);
+    showOutput('Lỗi: ' + friendlyError(e.message));
   } finally {
     setLoading('loading-text', false);
     document.getElementById('btn-generate-text').disabled = false;
@@ -1024,6 +1163,7 @@ async function generateFromTopic() {
   const topic = selectedTopic || document.getElementById('custom-topic').value.trim();
   if (!topic) return;
 
+  lastAction = generateFromTopic;
   setLoading('loading-topic', true);
   document.getElementById('btn-topic-gen').disabled = true;
 
@@ -1057,7 +1197,7 @@ async function generateFromTopic() {
     document.getElementById('topic-results').style.display = 'block';
     document.getElementById('topic-results').scrollIntoView({ behavior:'smooth', block:'start' });
   } catch (e) {
-    toast('Lỗi: ' + e.message, 'error');
+    toast(friendlyError(e.message), 'error');
   } finally {
     setLoading('loading-topic', false);
     document.getElementById('btn-topic-gen').disabled = false;
@@ -1248,6 +1388,7 @@ function handleFile(file) {
 
 async function analyzeImage() {
   if (!selectedFile) return;
+  lastAction = analyzeImage;
 
   setLoading('loading-image', true);
   document.getElementById('btn-image').disabled = true;
@@ -1287,7 +1428,7 @@ async function analyzeImage() {
 
     document.getElementById('design-form').classList.add('show');
   } catch (e) {
-    showOutput('❌ Lỗi: ' + e.message);
+    showOutput('Lỗi: ' + friendlyError(e.message));
   } finally {
     setLoading('loading-image', false);
     document.getElementById('btn-image').disabled = false;
@@ -1405,7 +1546,17 @@ function setLoading(id, state) {
 
 function showOutput(text, showDownload) {
   const el = document.getElementById('output');
-  document.getElementById('output-content').textContent = text;
+  const contentEl = document.getElementById('output-content');
+  const isError = text.startsWith('Lỗi:') || text.startsWith('❌');
+
+  if (isError) {
+    contentEl.innerHTML = '<div class="output-error">' + text.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</div>' +
+      (lastAction ? '<button class="retry-btn" onclick="retryLast()">↻ Thử lại</button>' : '');
+    contentEl.className = '';
+  } else {
+    contentEl.innerHTML = renderMarkdown(text);
+    contentEl.className = 'output-content-md';
+  }
   el.classList.add('show');
 
   // Show/hide download button
@@ -1418,14 +1569,19 @@ function showOutput(text, showDownload) {
   // Update character counter
   updateCharCounter(text);
 
-  // Show refine buttons
-  document.getElementById('output-refine').style.display = 'flex';
+  // Show/hide refine buttons
+  document.getElementById('output-refine').style.display = isError ? 'none' : 'flex';
 
   el.scrollIntoView({ behavior:'smooth', block:'nearest' });
 }
 
+// Retry last action (Fix 6)
+function retryLast() {
+  if (lastAction) lastAction();
+}
+
 function copyForPlatform(btn) {
-  const text = document.getElementById('output-content').textContent;
+  const text = document.getElementById('output-content').innerText;
   navigator.clipboard.writeText(text).then(() => {
     document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('copied'));
     btn.classList.add('copied');
@@ -1453,7 +1609,7 @@ function downloadImage() {
 
 // Refine content (Viết lại, Ngắn hơn, Dài hơn, etc.)
 async function refineContent(instruction) {
-  const currentOutput = document.getElementById('output-content').textContent;
+  const currentOutput = document.getElementById('output-content').innerText;
   if (!currentOutput) return;
 
   // Disable all refine buttons
@@ -1492,6 +1648,10 @@ document.getElementById('prompt').addEventListener('keydown', e => {
 document.getElementById('custom-topic').addEventListener('keydown', e => {
   if (e.key === 'Enter') { e.preventDefault(); generateFromTopic(); }
 });
+
+// Init: auto-save drafts + topic suggestions
+initDrafts();
+renderSuggestions();
 </script>
 </body>
 </html>
