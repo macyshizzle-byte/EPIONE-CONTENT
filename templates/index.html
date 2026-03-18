@@ -902,6 +902,18 @@ const ROLE_SUGGESTIONS = {
     'Case study: Doanh nghiệp giảm 40% chi phí phòng họp',
     'Hybrid work: Setup workspace cho nhân viên linh hoạt',
     'Bàn nâng hạ SmartDesk cho sức khỏe nhân viên',
+    'Tại sao CEO nên quan tâm đến nội thất văn phòng?',
+    'Booth họp online cho team hybrid — giải pháp nào tối ưu?',
+    'Chi phí ẩn của văn phòng thiếu không gian riêng tư',
+    '5 lý do doanh nghiệp FDI chọn booth Epione',
+    'Xu hướng thiết kế văn phòng 2026 cho doanh nghiệp Việt',
+    'Giải pháp tiết kiệm diện tích cho văn phòng dưới 200m²',
+    'Employee retention: Vai trò của môi trường làm việc',
+    'So sánh booth cách âm vs. phòng họp truyền thống',
+    'Nội thất ergonomic giúp giảm ngày nghỉ sick leave',
+    'Pitch deck: Thuyết phục sếp đầu tư booth và bàn nâng hạ',
+    'Kế hoạch nâng cấp văn phòng theo giai đoạn cho SME',
+    'Acoustic design: Xử lý tiếng ồn văn phòng không cần xây tường',
   ],
   sale_b2c: [
     'Setup góc làm việc tại nhà cho freelancer',
@@ -910,6 +922,18 @@ const ROLE_SUGGESTIONS = {
     'Review bàn nâng hạ cho home office',
     'Đầu tư bao nhiêu cho góc làm việc tại nhà?',
     'Tư thế ngồi đúng: Hướng dẫn chỉnh ghế ergonomic',
+    'Top 5 món nội thất WFH đáng đầu tư nhất',
+    'Góc làm việc aesthetic mà vẫn ergonomic',
+    'Standing desk: Đứng làm việc có thực sự tốt hơn?',
+    'Mẹo chống mỏi lưng cho dân văn phòng ngồi 8 tiếng',
+    'Gift guide: Quà tặng ergonomic cho người thân WFH',
+    'So sánh ghế gaming vs. ghế công thái học',
+    'Biến phòng ngủ thành home office chuyên nghiệp',
+    'Bàn nâng hạ có xứng đáng 10 triệu không?',
+    'Lộ trình nâng cấp góc làm việc từ 0 đến pro',
+    'Review thật: 1 năm dùng ghế Epione',
+    'Ergonomic cho gamer: Ngồi đúng, chơi lâu, không đau',
+    'Minimalist desk setup dưới 15 triệu',
   ],
   ky_thuat: [
     'Hướng dẫn lắp đặt booth cách âm đúng cách',
@@ -918,15 +942,34 @@ const ROLE_SUGGESTIONS = {
     'So sánh chất liệu gỗ MFC vs MDF cho bàn làm việc',
     'Checklist nghiệm thu lắp đặt nội thất',
     'Cách chỉnh bàn nâng hạ SmartDesk cho đúng tư thế',
+    'Hướng dẫn đi dây điện, mạng trong booth',
+    'Xử lý sự cố motor bàn nâng hạ thường gặp',
+    'Quy trình lắp booth từ A-Z cho thợ mới',
+    'Tiêu chuẩn cách âm: NRC, STC là gì?',
+    'So sánh hệ thống thông gió booth các hãng',
+    'Bảo trì ghế công thái học: Thay linh kiện gì, khi nào?',
+    'Tips đo đạc và khảo sát mặt bằng trước khi lắp',
+    'Cách test chất lượng cách âm sau khi lắp booth',
+    'Hướng dẫn reset và calibrate bàn nâng hạ điện',
+    'Vật liệu chống cháy trong booth: Tiêu chuẩn nào?',
+    'Lỗi thường gặp khi lắp nội thất và cách khắc phục',
+    'So sánh bánh xe ghế: PU vs nylon vs cao su',
   ],
 };
 
+function shuffleAndPick(arr, count) {
+  const shuffled = [...arr].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
+}
+
 function renderSuggestions() {
   const container = document.getElementById('topic-suggestions');
-  const suggestions = ROLE_SUGGESTIONS[currentRole] || ROLE_SUGGESTIONS.sale_b2b;
-  container.innerHTML = suggestions.map(s =>
+  const allSuggestions = ROLE_SUGGESTIONS[currentRole] || ROLE_SUGGESTIONS.sale_b2b;
+  const picked = shuffleAndPick(allSuggestions, 6);
+  container.innerHTML = picked.map(s =>
     '<button class="suggest-chip" onclick="useSuggestion(this)">' + s + '</button>'
-  ).join('');
+  ).join('') +
+  '<button class="suggest-chip" onclick="renderSuggestions()" style="border-style:dashed;color:var(--accent);">↻ Làm mới</button>';
 }
 
 function useSuggestion(btn) {
