@@ -317,58 +317,18 @@ CHANNEL_INSIGHTS = {
 - LinkedIn Carousel (PDF slide) vẫn là "vua" về tương tác.
 - Tiếp theo là bài viết dạng văn bản thuần túy có gắn một bức ảnh cá nhân mang tính chuyên nghiệp.
 
-### HOOK MẪU (50 câu — Tư duy Quản lý & Hiệu suất Doanh nghiệp):
-Lấy ý tưởng từ các hook dưới đây, KHÔNG copy nguyên văn. Biến tấu theo chủ đề được yêu cầu.
-1. Lãng phí lớn nhất của doanh nghiệp không phải là tiền, mà là 2 tiếng "mất tập trung" mỗi ngày của nhân sự.
-2. Tại sao các văn phòng Open-space (không gian mở) đang dần bị thay thế?
-3. Ghế công thái học không phải là chi phí, đó là khoản đầu tư vào bảo hiểm nhân sự.
-4. 90% nhân viên văn phòng đang tự hủy hoại cột sống vì những chiếc ghế "trông có vẻ đẹp".
-5. Cách Workpod giúp team mình tăng 40% hiệu suất làm việc Deep Work.
-6. Đừng tuyển thêm người nếu bạn chưa tối ưu được không gian làm việc hiện tại.
-7. Sự thật về hội chứng "Burn-out" và mối liên hệ mật thiết với môi trường vật lý.
-8. Tôi đã từng nghĩ Phonebooth là xa xỉ, cho đến khi thấy doanh thu tăng nhờ sự riêng tư.
-9. Tại sao những công ty lớn như Google, Meta lại cuồng nội thất công thái học đến thế?
-10. Lưng của bạn đáng giá bao nhiêu tiền sau 10 năm nữa?
-11. Đừng để tiếng ồn văn phòng "giết chết" những ý tưởng triệu đô.
-12. 3 tiêu chuẩn chọn ghế công thái học mà các HR thường bỏ qua.
-13. Làm sao để giữ chân nhân tài Gen Z? Hãy bắt đầu từ chiếc ghế họ ngồi.
-14. Văn phòng 0đ tiếng ồn: Giải pháp thực tế hay chỉ là lý thuyết?
-15. Cách tôi thoát khỏi cơn đau vai gáy kinh niên nhờ thay đổi tư duy ngồi.
-16. ROI (Tỷ suất lợi nhuận) từ việc trang bị Workpod cho bộ phận Sale.
-17. Sự khác biệt giữa ghế 2 triệu và ghế 20 triệu: Có thực sự đáng tiền?
-18. Workspace chuyên nghiệp: Yếu tố then chốt để chốt deal với đối tác lớn.
-19. Tại sao "ngồi" là kiểu hút thuốc mới của thế kỷ 21?
-20. 5 phút setup bàn làm việc để làm việc liên tục 4 tiếng không mỏi.
-21. Đừng để nhân viên của bạn phải ra quán cafe chỉ vì muốn có sự riêng tư.
-22. Xu hướng văn phòng năm 2026: Ưu tiên sức khỏe hay tối ưu diện tích?
-23. Bài học từ việc thiết kế lại văn phòng giúp giảm 30% tỷ lệ nghỉ việc.
-24. Bạn đang ngồi làm việc hay đang "hành hạ" đốt sống cổ?
-25. Cách chọn Workpod cách âm chuẩn cho các cuộc họp Zoom quan trọng.
-26. Tại sao ngồi sai tư duy làm bạn nhanh mệt hơn cả việc chạy bộ?
-27. Đừng đợi đến khi thoát vị đĩa đệm mới đi tìm ghế công thái học.
-28. Một giải pháp cho vấn đề "Họp hành quá nhiều làm gián đoạn công việc".
-29. Văn phòng thông minh: Không cần rộng, chỉ cần "đúng".
-30. 7 thói quen ngồi đang âm thầm làm giảm IQ của bạn.
-31. Tại sao sếp nên là người đầu tiên trải nghiệm ghế công thái học?
-32. Phonebooth: Giải pháp cho các văn phòng có diện tích nhỏ hẹp.
-33. Sự thật về các loại ghế "giả" công thái học trên thị trường.
-34. Cách tạo ra môi trường làm việc khiến nhân viên muốn đến công ty hơn là ở nhà.
-35. Tư duy đầu tư nội thất: Ngắn hạn hay bền vững?
-36. Làm sao để tập trung tuyệt đối giữa một văn phòng ồn ào?
-37. Nghệ thuật sắp đặt bàn ghế để tăng cường khả năng sáng tạo.
-38. Bạn có biết: 1 chiếc Workpod có thể thay thế 1 phòng họp 4 người?
-39. Tại sao dân IT lại là nhóm khách hàng khó tính nhất của ghế Ergonomic?
-40. 3 dấu hiệu cho thấy văn phòng của bạn đang "lỗi thời".
-41. Cách bảo vệ cột sống cho những người làm việc 12 tiếng mỗi ngày.
-42. Phonebooth cách âm: Bí quyết để có những cuộc gọi Sales chất lượng cao.
-43. Nội thất văn phòng: Thứ ngôn ngữ không lời khẳng định vị thế thương hiệu.
-44. Đừng tin vào lời quảng cáo, hãy tin vào cảm giác của sống lưng bạn.
-45. Tại sao chúng ta cần "văn phòng trong văn phòng"?
-46. Cách tối ưu ánh sáng và tư duy ngồi để tránh cận thị văn phòng.
-47. Sự trỗi dậy của phong cách làm việc "Agile" và vai trò của Workpod.
-48. Tại sao ghế công thái học là món quà tốt nhất cho nhân viên vào dịp cuối năm?
-49. 5 sai lầm khi tự mua nội thất văn phòng mà không có tư vấn chuyên môn.
-50. Lộ trình build một góc làm việc chuẩn Ergonomic từ A-Z.
+### HOOK MẪU (Tư duy Quản lý & Hiệu suất Doanh nghiệp):
+Lấy ý tưởng, KHÔNG copy nguyên văn. Biến tấu theo chủ đề được yêu cầu.
+- Lãng phí lớn nhất của doanh nghiệp không phải là tiền, mà là 2 tiếng "mất tập trung" mỗi ngày của nhân sự.
+- 90% nhân viên văn phòng đang tự hủy hoại cột sống vì những chiếc ghế "trông có vẻ đẹp".
+- Tôi đã từng nghĩ Phonebooth là xa xỉ, cho đến khi thấy doanh thu tăng nhờ sự riêng tư.
+- Lưng của bạn đáng giá bao nhiêu tiền sau 10 năm nữa?
+- Làm sao để giữ chân nhân tài Gen Z? Hãy bắt đầu từ chiếc ghế họ ngồi.
+- Sự khác biệt giữa ghế 2 triệu và ghế 20 triệu: Có thực sự đáng tiền?
+- Tại sao "ngồi" là kiểu hút thuốc mới của thế kỷ 21?
+- Đừng đợi đến khi thoát vị đĩa đệm mới đi tìm ghế công thái học.
+- 1 chiếc Workpod có thể thay thế 1 phòng họp 4 người?
+- Nội thất văn phòng: Thứ ngôn ngữ không lời khẳng định vị thế thương hiệu.
 """,
 
     "facebook": """
@@ -387,58 +347,18 @@ Lấy ý tưởng từ các hook dưới đây, KHÔNG copy nguyên văn. Biến
 ### Thời điểm đăng:
 - Đăng vào các khung giờ nghỉ ngơi (trưa hoặc tối muộn) — lúc người dùng lướt Facebook để giải trí.
 
-### HOOK MẪU (50 câu — Giải pháp & Trải nghiệm khách hàng):
-Lấy ý tưởng từ các hook dưới đây, KHÔNG copy nguyên văn. Biến tấu theo chủ đề được yêu cầu.
-1. Cảnh báo: Ngồi ghế gỗ quá lâu sẽ khiến bạn già đi nhanh hơn!
-2. Có ai giống mình không: Cứ ngồi vào bàn là thấy đau lưng, mỏi cổ?
-3. Bí mật đằng sau những chiếc "Hộp thần kỳ" (Workpod) đang gây sốt.
-4. Tag ngay đứa bạn chuyên ngồi "dáng tôm" vào đây để cứu lấy cột sống nó.
-5. Top 3 mẫu ghế công thái học dưới 5 triệu đáng mua nhất năm nay.
-6. Cách mình biến góc làm việc bừa bộn thành không gian chuẩn sếp.
-7. Mẹo nhỏ để ngồi làm việc cả ngày mà chiều vẫn đi gym khỏe re.
-8. Review thật lòng: Workpod cách âm có thực sự im lặng như lời đồn?
-9. Bạn chọn: Ghế đẹp sống ảo hay Ghế sướng sống khỏe?
-10. Cuối cùng cũng tìm ra chiếc ghế giúp mình hết đau lưng sau 3 năm chịu đựng.
-11. Đừng vứt chiếc ghế cũ đi, hãy nâng cấp nó bằng mẹo này (hoặc đổi ghế mới!).
-12. Nhìn cái "hộp" này tưởng chật nhưng bên trong là cả một thiên đường sáng tạo.
-13. 5 thói quen giúp dân văn phòng tránh xa bệnh thoát vị đĩa đệm.
-14. Phản ứng của mình khi lần đầu ngồi vào chiếc ghế giá 20 triệu.
-15. Cách thoát khỏi tiếng ồn đồng nghiệp buôn chuyện chỉ trong 1 nốt nhạc.
-16. Bạn có biết ngồi sai tư thế làm bụng to ra không? Xem ngay cách khắc phục.
-17. Review ghế Ergonomic: Đắt xắt ra miếng hay chỉ là làm màu?
-18. 3 phụ kiện "phải có" trên bàn làm việc của người tinh tế.
-19. Một ngày làm việc trong Workpod: Năng suất gấp đôi, mệt mỏi giảm nửa.
-20. Góc cảnh giác: Cách phân biệt ghế công thái học thật và hàng nhái.
-21. Đây là lý do tại sao bạn tập gym đều nhưng vẫn đau vai gáy.
-22. Thử thách 7 ngày ngồi đúng tư thế và cái kết bất ngờ.
-23. Món quà sức khỏe cho người thân làm văn phòng: Chọn gì cho ý nghĩa?
-24. Bạn thuộc team "Ghế đứng" hay team "Ghế nằm"?
-25. Cách mình decor góc Work-from-home chuyên nghiệp như ở studio.
-26. 5 bộ phim hay nhất để xem trong Workpod (vì cực kỳ riêng tư!).
-27. Tại sao người thành công thường đầu tư rất nhiều vào chiếc ghế họ ngồi?
-28. Một mẹo setup tay ghế để không bị mỏi cổ tay khi gõ phím.
-29. Đừng tin vào ảnh chụp, hãy đến ngồi thử để thấy sự khác biệt.
-30. 3 bước để biến văn phòng tại gia thành nơi làm việc lý tưởng.
-31. Câu nói thay đổi thói quen làm việc của mình: "Sức khỏe là gốc của tiền bạc".
-32. Cách để luôn tỉnh táo dù phải xử lý deadline xuyên đêm.
-33. 10 món đồ decor Workpod giúp bạn tăng cảm hứng sáng tạo.
-34. Bí kíp ngồi ghế công thái học đúng cách cho người thấp bé.
-35. Tại sao bạn nên ngừng ngồi bắt chéo chân ngay hôm nay?
-36. Cách xử lý khi văn phòng quá ồn mà bạn cần họp gấp với khách.
-37. Những mẫu Phonebooth màu sắc giúp văn phòng tràn đầy sức sống.
-38. 5 điều mình ước mình biết sớm hơn về nội thất công thái học.
-39. Cách tiết kiệm tiền đi vật lý trị liệu bằng cách đầu tư một chiếc ghế tốt.
-40. Review app nhắc nhở vận động kết hợp với bàn nâng hạ.
-41. Có gì bên trong một chiếc Phonebooth cao cấp?
-42. 3 bài tập giãn cơ ngay tại ghế cho dân văn phòng bận rộn.
-43. Cách mình vượt qua nỗi sợ đau lưng mỗi khi vào mùa deadline.
-44. Những thứ không nên tiết kiệm tiền: Giày, Đệm và Ghế làm việc.
-45. Một mẹo để Workpod luôn thơm tho và thông thoáng.
-46. Bạn có tin chiếc ghế có thể thay đổi tâm trạng của bạn không?
-47. 5 dấu hiệu cho thấy chiếc ghế hiện tại đang "hút cạn" năng lượng của bạn.
-48. Cách để có một tư thế ngồi "vạn người mê" và cực tốt cho dáng.
-49. Tại sao bạn nên đầu tư một chiếc Workpod cho team Sale của mình?
-50. Đố bạn biết chiếc ghế này có bao nhiêu điểm điều chỉnh?
+### HOOK MẪU (Giải pháp & Trải nghiệm khách hàng):
+Lấy ý tưởng, KHÔNG copy nguyên văn. Biến tấu theo chủ đề được yêu cầu.
+- Có ai giống mình không: Cứ ngồi vào bàn là thấy đau lưng, mỏi cổ?
+- Top 3 mẫu ghế công thái học dưới 5 triệu đáng mua nhất năm nay.
+- Review thật lòng: Workpod cách âm có thực sự im lặng như lời đồn?
+- Cuối cùng cũng tìm ra chiếc ghế giúp mình hết đau lưng sau 3 năm chịu đựng.
+- Review ghế Ergonomic: Đắt xắt ra miếng hay chỉ là làm màu?
+- Góc cảnh giác: Cách phân biệt ghế công thái học thật và hàng nhái.
+- Tại sao người thành công thường đầu tư rất nhiều vào chiếc ghế họ ngồi?
+- 5 điều mình ước mình biết sớm hơn về nội thất công thái học.
+- Những thứ không nên tiết kiệm tiền: Giày, Đệm và Ghế làm việc.
+- 5 dấu hiệu cho thấy chiếc ghế hiện tại đang "hút cạn" năng lượng của bạn.
 """,
 
     "instagram": """
@@ -456,58 +376,18 @@ Lấy ý tưởng từ các hook dưới đây, KHÔNG copy nguyên văn. Biến
 ### Stories:
 - Nơi chuyển đổi (convert) tốt nhất. Dùng sticker tương tác (Poll, Quiz, Add yours) để thuật toán đẩy Story lên đầu hàng đợi của follower.
 
-### HOOK MẪU (50 câu — Hình ảnh đẹp & Xu hướng):
-Lấy ý tưởng từ các hook dưới đây, KHÔNG copy nguyên văn. Biến tấu theo chủ đề được yêu cầu.
-1. Muốn ngồi sướng như chủ tịch? Thử ngay mẫu ghế này.
-2. Chờ đến cuối để thấy khả năng cách âm đỉnh cao của Phonebooth!
-3. Cách mình biến 1m2 góc phòng thành không gian làm việc triệu đô.
-4. Đừng ngồi ghế văn phòng bình thường nữa, cột sống của bạn đang kêu cứu đấy.
-5. Item "must-have" cho những ai làm việc Remote năm 2026.
-6. POV: Bạn đang ở trong không gian riêng tư nhất giữa văn phòng 100 người.
-7. Tone màu nội thất giúp bạn tập trung cao độ.
-8. My morning routine: Cafe và chiếc ghế chân ái.
-9. Cách mình setup góc quay clip cực chill trong Workpod.
-10. 3 mẫu ghế Ergonomic nhìn là muốn ngồi ngay.
-11. Sự lột xác của văn phòng: Trước và sau khi lắp Phonebooth.
-12. Món đồ nội thất đắt nhất phòng mình nhưng lại giúp mình kiếm ra nhiều tiền nhất.
-13. Đừng mua ghế công thái học cho đến khi check 3 điểm này.
-14. Cách mình dùng bàn nâng hạ để vừa làm việc vừa đốt calo.
-15. Một mẹo điều chỉnh tựa đầu cho người hay bị đau cổ.
-16. Outfits of the week: Phối đồ sao cho hợp với phong cách Minimalist văn phòng.
-17. Làm sao để làm việc tập trung giữa tiếng ồn? (Hint: Workpod).
-18. Địa điểm trải nghiệm nội thất công thái học "xịn" nhất Sài Gòn/Hà Nội.
-19. 3 bài tập lưng nhẹ nhàng ngay tại bàn làm việc.
-20. Cách mình "re-style" lại góc làm việc chỉ bằng một chiếc đèn và ghế mới.
-21. Một ngày làm việc trong chiếc "hộp kính" bí ẩn.
-22. Unboxing chiếc ghế Ergonomic được mong chờ nhất năm.
-23. Bí mật đằng sau những thước phim làm việc cực chill trên Insta.
-24. Cách tạo dáng chuẩn "boss" bên cạnh Phonebooth.
-25. Review màu ghế [X] cực sang cho văn phòng hiện đại.
-26. 5 phút thư giãn hoàn toàn với chế độ ngả lưng 135 độ.
-27. Cách mình chuẩn bị không gian họp online chuyên nghiệp.
-28. Bạn đã thử cảm giác đứng làm việc chưa?
-29. My night routine: Làm việc đêm không mỏi lưng.
-30. 3 mẹo để góc làm việc lên hình Reels nghìn like.
-31. Cách chọn kích thước Phonebooth phù hợp với diện tích nhà.
-32. Một ứng dụng đo độ ồn để kiểm tra chất lượng Workpod.
-33. Tại sao bạn nên thử chế độ "không trọng lực" trên ghế công thái học?
-34. Mini-vlog: Đi chọn nội thất cho văn phòng mới.
-35. Cách mình vượt qua cơn buồn ngủ chiều nhờ bàn nâng hạ.
-36. 3 thói quen nhỏ giúp dáng đứng của bạn thẳng hơn.
-37. Cách mình vừa họp vừa thư giãn với đệm massage tích hợp.
-38. Những thứ không thể thiếu bên trong một chiếc Workpod hiện đại.
-39. Review không gian làm việc của các Tech-startup hàng đầu.
-40. Cách để có bức ảnh "Work-mode" cực chất trên Instagram.
-41. Tip phối màu Workpod hợp phong thủy cho chủ doanh nghiệp.
-42. Cách mình tự lắp ráp ghế công thái học chỉ trong 15 phút.
-43. 3 thứ mình luôn mang vào Workpod để tập trung tối đa.
-44. Làm thế nào để chọn được màu lưới ghế không bị bẩn?
-45. Cách mình setup ánh sáng bên trong Phonebooth để lên hình đẹp nhất.
-46. Một mẹo nhỏ để bánh xe ghế không làm xước sàn gỗ của bạn.
-47. Tại sao bạn nên đầu tư vào trải nghiệm ngồi trước khi mua máy tính xịn?
-48. Review mẫu Workpod 1 người ngồi nhỏ gọn nhất thế giới.
-49. Cách mình xử lý đống dây điện lộn xộn nhờ bàn thông minh.
-50. Nhấn follow để cập nhật xu hướng văn phòng tương lai nhé!
+### HOOK MẪU (Hình ảnh đẹp & Xu hướng):
+Lấy ý tưởng, KHÔNG copy nguyên văn. Biến tấu theo chủ đề được yêu cầu.
+- Cách mình biến 1m2 góc phòng thành không gian làm việc triệu đô.
+- POV: Bạn đang ở trong không gian riêng tư nhất giữa văn phòng 100 người.
+- Sự lột xác của văn phòng: Trước và sau khi lắp Phonebooth.
+- Đừng mua ghế công thái học cho đến khi check 3 điểm này.
+- Cách mình dùng bàn nâng hạ để vừa làm việc vừa đốt calo.
+- Unboxing chiếc ghế Ergonomic được mong chờ nhất năm.
+- Bạn đã thử cảm giác đứng làm việc chưa?
+- Tại sao bạn nên thử chế độ "không trọng lực" trên ghế công thái học?
+- Cách mình xử lý đống dây điện lộn xộn nhờ bàn thông minh.
+- 3 mẹo để góc làm việc lên hình Reels nghìn like.
 """,
 
     "community": """
@@ -524,58 +404,18 @@ Lấy ý tưởng từ các hook dưới đây, KHÔNG copy nguyên văn. Biến
 - Tránh văn phong quảng cáo. Dùng văn phong kể chuyện (storytelling) và nhờ cộng đồng cho ý kiến.
 - Sự thảo luận ở comment chính là yếu tố giúp bài viết nổi (bump) liên tục trên feed của Group.
 
-### HOOK MẪU (50 câu — Chuyên môn & Chia sẻ thực tế):
-Lấy ý tưởng từ các hook dưới đây, KHÔNG copy nguyên văn. Biến tấu theo chủ đề được yêu cầu.
-1. Mình vừa tổng hợp tài liệu về "Tiêu chuẩn Ergonomic văn phòng 2026", ai cần mình gửi nhé.
-2. Case study: Cách mình tối ưu không gian 20m2 cho 10 người nhờ Workpod.
-3. Ở đây có ai đang đau lưng do ngồi ghế Gaming không? Chia sẻ thật lòng đi ạ.
-4. Mình xin lời khuyên: Nên mua ghế công thái học lưới hay đệm mút?
-5. Top những sai lầm khi chọn Phonebooth khiến văn phòng vừa nóng vừa bí.
-6. Review công tâm về các dòng ghế của Herman Miller vs các thương hiệu mới.
-7. Chia sẻ lộ trình setup văn phòng "Hybrid" tiết kiệm chi phí nhất.
-8. Mọi người thường dùng cách gì để cách âm cho phòng làm việc tại nhà?
-9. Một trải nghiệm "đau thương" khi mua ghế Ergonomic giá rẻ trên sàn S.
-10. Đừng bỏ qua yếu tố "lưu thông không khí" khi chọn Workpod.
-11. Cách mình "thuyết phục" sếp đầu tư ghế xịn cho cả phòng.
-12. Có nên lắp Phonebooth ngoài trời không mọi người?
-13. Cảnh báo các mẫu ghế quảng cáo "công thái học" nhưng thực chất là ghế nhựa.
-14. Bộ template tính toán diện tích văn phòng khi có thêm Workpod.
-15. Mình vừa rút ra bài học: Ghế đắt chưa chắc đã hợp, quan trọng là các điểm chạm.
-16. Mọi người đánh giá sao về bàn làm việc điều chỉnh độ cao bằng điện?
-17. Cách mình tự vệ sinh lưới ghế công thái học tại nhà cực sạch.
-18. Những "uẩn khúc" trong ngành nội thất văn phòng mà Sale ít khi nói.
-19. Một mẹo cực hay để test độ cách âm của Phonebooth bằng điện thoại.
-20. Hỏi đáp: Tất tần tật về thoát vị đĩa đệm văn phòng và cách phòng tránh.
-21. Tại sao mình lại chọn mua Phonebooth nhập khẩu thay vì tự đóng gỗ?
-22. Cách xử lý tiếng vang trong văn phòng rộng mà không cần dán mút xấu xí.
-23. 3 nguồn website nước ngoài cực chất để xem mẫu thiết kế Office hiện đại.
-24. Kinh nghiệm đi showroom ngồi thử ghế sao cho "chuẩn" nhất.
-25. Làm sao để nhân viên không biến Workpod thành chỗ... ngủ trưa?
-26. Mọi người có ai dùng bàn đạp chân kết hợp ghế Ergonomic chưa?
-27. Cách mình build góc làm việc 5 sao chỉ với ngân sách hạn hẹp.
-28. Sự khác biệt giữa Workpod khung nhôm và khung thép.
-29. Một kỹ thuật điều chỉnh kháng lực lưng ghế mà nhiều người bỏ qua.
-30. Check-list những việc cần làm khi setup lại nội thất văn phòng mới.
-31. Làm sao để chọn ghế phù hợp cho người nặng trên 100kg?
-32. Những kênh Youtube review nội thất công thái học uy tín nhất thế giới.
-33. Chia sẻ mẫu bản vẽ bố trí Phonebooth tối ưu cho văn phòng mở.
-34. Cách mình xử lý khi mua ghế về ngồi bị đau thêm (Do điều chỉnh sai).
-35. Tại sao nội thất văn phòng cũ lại khó thanh lý? (Và cách chọn đồ bền).
-36. 5 phút setup lại góc làm việc giúp giảm mỏi mắt tức thì.
-37. Làm thế nào để chọn màu sắc nội thất giúp nhân viên bớt stress?
-38. Những lầm tưởng về việc "Đứng làm việc cả ngày là tốt".
-39. Cách mình chuẩn bị bài thuyết trình về việc nâng cấp cơ sở vật chất.
-40. Mọi người thấy tích hợp cổng sạc USB vào ghế có thực sự cần thiết?
-41. Review những mẫu Workpod có khả năng di chuyển bằng bánh xe.
-42. Cách tìm kiếm ý tưởng thiết kế văn phòng xanh kết hợp Ergonomic.
-43. Những lưu ý về hệ thống điện và thông gió khi lắp Phonebooth.
-44. Làm sao để bảo quản da ghế cao cấp không bị bong tróc?
-45. Chia sẻ tips chọn ghế ngồi cho trẻ em để chống gù lưng sớm.
-46. Một website so sánh thông số các loại ghế công thái học cực chi tiết.
-47. Tại sao Personal Brand của chủ doanh nghiệp gắn liền với không gian họ ngồi?
-48. Cách mình vượt qua cảm giác mệt mỏi sau 8 tiếng tập trung cao độ.
-49. Mọi người thường ưu tiên tiêu chí nào nhất khi mua ghế: Giá, Thương hiệu hay Bảo hành?
-50. Chúc cả nhà tuần mới năng suất, mình tặng bộ tài liệu "Ergonomic Office Guide".
+### HOOK MẪU (Chuyên môn & Chia sẻ thực tế):
+Lấy ý tưởng, KHÔNG copy nguyên văn. Biến tấu theo chủ đề được yêu cầu.
+- Mình vừa tổng hợp tài liệu về "Tiêu chuẩn Ergonomic văn phòng 2026", ai cần mình gửi nhé.
+- Ở đây có ai đang đau lưng do ngồi ghế Gaming không? Chia sẻ thật lòng đi ạ.
+- Top những sai lầm khi chọn Phonebooth khiến văn phòng vừa nóng vừa bí.
+- Một trải nghiệm "đau thương" khi mua ghế Ergonomic giá rẻ trên sàn S.
+- Mình vừa rút ra bài học: Ghế đắt chưa chắc đã hợp, quan trọng là các điểm chạm.
+- Những "uẩn khúc" trong ngành nội thất văn phòng mà Sale ít khi nói.
+- Kinh nghiệm đi showroom ngồi thử ghế sao cho "chuẩn" nhất.
+- Một kỹ thuật điều chỉnh kháng lực lưng ghế mà nhiều người bỏ qua.
+- Cách mình xử lý khi mua ghế về ngồi bị đau thêm (Do điều chỉnh sai).
+- Mọi người thường ưu tiên tiêu chí nào nhất khi mua ghế: Giá, Thương hiệu hay Bảo hành?
 """,
 
     "outreach": """
@@ -592,58 +432,18 @@ Lấy ý tưởng từ các hook dưới đây, KHÔNG copy nguyên văn. Biến
 ### DM (Direct Message):
 - Quy tắc "Give - Give - Ask": Trao giá trị hoặc khen ngợi một thành tựu của họ trước khi đưa ra lời đề nghị hợp tác.
 
-### HOOK MẪU (50 câu — Bán hàng trực tiếp):
-Lấy ý tưởng từ các hook dưới đây, KHÔNG copy nguyên văn. Biến tấu theo chủ đề và tên khách hàng cụ thể.
-1. Chào [Tên], em có giải pháp giúp bên mình giảm 20% tỷ lệ phàn nàn về tiếng ồn văn phòng.
-2. Mình vừa xem văn phòng mới của bạn trên FB, rất hợp để đặt một chiếc Workpod màu [X] đấy!
-3. Anh/chị có đang tìm cách để nhân viên Sales tập trung gọi khách mà không làm phiền người khác?
-4. [Tên] ơi, mình gửi bạn bộ sưu tập ghế công thái học dành riêng cho vị trí lãnh đạo.
-5. Liệu 15 phút tuần tới em có thể qua demo chiếc ghế giúp giảm đau lưng tức thì cho anh/chị?
-6. Em thấy bên mình đang mở rộng quy mô, anh/chị đã có phương án phòng họp nhanh (Phonebooth) chưa?
-7. [Tên] đã nhận được báo cáo về hiệu suất làm việc khi thay đổi nội thất mình gửi chưa?
-8. Một ý tưởng giúp không gian văn phòng bên mình trông chuyên nghiệp hơn trong mắt đối tác.
-9. Chào bạn, mình thấy bạn quan tâm đến sức khỏe cột sống, mình tặng bạn voucher trải nghiệm ghế...
-10. Chúc mừng văn phòng mới của [Tên] nhé! Cần setup góc Ergonomic thì nhắn em hỗ trợ nhé.
-11. Em có một bản vẽ 3D phối cảnh Workpod vào đúng mặt bằng văn phòng bên mình.
-12. [Tiêu đề Email]: Giải pháp tăng 30% sự tập trung cho đội ngũ Creative của [Tên công ty].
-13. Bạn có muốn biết tại sao các đối thủ của bạn đang chuyển sang dùng bàn làm việc thông minh?
-14. Mình có tệp khách hàng VIP đang cần tìm mẫu ghế đẳng cấp như bên bạn.
-15. [Tên] ơi, mình thấy bạn vừa hỏi về ghế đau lưng trong Group, mình tư vấn cho bạn nhé?
-16. Liệu em có thể mời anh/chị qua showroom để nằm thử chiếc ghế "không trọng lực" này không?
-17. Đây là 3 điểm chưa tối ưu trong không gian làm việc của bên mình (Kèm giải pháp Ergonomic).
-18. [Tên] có đang đau đầu vì văn phòng quá ồn không thể họp Online với đối tác?
-19. Chào anh, em vừa đọc bài về văn phòng xanh của anh, bên em có mẫu Phonebooth rất hợp style đó.
-20. Giải pháp này đã giúp [Tên công ty tương đương] tiết kiệm hàng tỷ đồng tiền thuê mặt bằng.
-21. [Tiêu đề]: [Tên của họ] + [Tên của bạn] - Nâng tầm không gian làm việc.
-22. Em có thể gửi cho anh/chị bản so sánh tính năng giữa Phonebooth và phòng họp truyền thống?
-23. Đừng để dự án mới bị chậm tiến độ chỉ vì nhân viên mệt mỏi do ngồi sai ghế.
-24. [Tên] nghĩ sao về việc trang bị khu vực "Deep Work" riêng tư cho team Tech?
-25. Chào bạn, mình thấy chúng ta có chung đam mê về thiết kế văn phòng tối giản...
-26. Một món quà nhỏ là chiếc gối tựa lưng công thái học gửi đến [Tên] dùng thử.
-27. Em vừa hoàn thành khảo sát về nhu cầu Workpod tại Việt Nam, anh có muốn xem số liệu không?
-28. [Tên] ơi, liệu chúng ta có thể call 5 phút để bàn về chính sách bảo trì nội thất định kỳ?
-29. Cách để [Tên công ty] thu hút nhân tài nhờ môi trường làm việc chuẩn quốc tế.
-30. Mình có một lời mời trải nghiệm các dòng ghế cao cấp nhất tại Workshop tuần tới.
-31. [Tiêu đề]: Cột sống của nhân viên [Tên công ty] đang cần bạn hỗ trợ!
-32. Chào anh, em rất thích cách anh thiết kế ánh sáng văn phòng, em có mẫu ghế này hợp lắm...
-33. Một giải pháp giúp tối ưu hóa diện tích văn phòng lên đến 40%.
-34. Em có template hướng dẫn nhân viên tự chỉnh ghế công thái học tại chỗ, gửi anh nhé?
-35. [Tên] đã có kế hoạch nâng cấp trang thiết bị văn phòng cho quý tới chưa?
-36. Rất xin lỗi nếu tin nhắn làm phiền, nhưng em thấy văn phòng bên anh đang bị thiếu chỗ họp riêng.
-37. Một đánh giá về tính cách âm của các phòng họp bên bạn (Dựa trên feedback khách hàng).
-38. Chào bạn, cảm ơn bài chia sẻ về tầm quan trọng của sức khỏe văn phòng của bạn.
-39. [Tên] có muốn dùng thử Phonebooth trong 1 tuần hoàn toàn miễn phí không?
-40. Em có bản dự toán chi phí trang bị ghế Ergonomic cho toàn bộ nhân sự với chiết khấu tốt.
-41. [Tiêu đề]: Tặng [Tên] bản thiết kế góc làm việc chuẩn công thái học.
-42. Liệu [Tên] có đang tìm đơn vị cung cấp Workpod có khả năng tùy chỉnh màu sắc thương hiệu?
-43. Chào anh/chị, em có thông tin về dòng lưới ghế mới chống thấm và cực bền cho văn phòng.
-44. Một cách tiếp cận mới để giảm stress cho nhân viên thông qua "Cảm giác chạm" của nội thất.
-45. Em muốn thảo luận về gói bảo hành trọn đời cho các dự án nội thất bên anh.
-46. [Tên] có thể giúp em feedback về mẫu ghế mới này bên em vừa ra mắt không?
-47. Đây là lý do tại sao em tin Workpod là mảnh ghép còn thiếu cho văn phòng của anh/chị.
-48. Chúc mừng sinh nhật [Tên]! Voucher giảm giá 20% cho chiếc ghế mơ ước của bạn đây.
-49. [Tiêu đề]: Chỉ mất 30 giây để thay đổi cách làm việc của cả văn phòng.
-50. Rất mong được đón tiếp anh/chị tại Showroom để trải nghiệm thực tế giải pháp này.
+### HOOK MẪU (Bán hàng trực tiếp):
+Lấy ý tưởng, KHÔNG copy nguyên văn. Biến tấu theo tên khách hàng cụ thể.
+- Chào [Tên], em có giải pháp giúp bên mình giảm 20% tỷ lệ phàn nàn về tiếng ồn văn phòng.
+- Anh/chị có đang tìm cách để nhân viên Sales tập trung gọi khách mà không làm phiền người khác?
+- Liệu 15 phút tuần tới em có thể qua demo chiếc ghế giúp giảm đau lưng tức thì cho anh/chị?
+- Chúc mừng văn phòng mới của [Tên] nhé! Cần setup góc Ergonomic thì nhắn em hỗ trợ nhé.
+- [Tiêu đề Email]: Giải pháp tăng 30% sự tập trung cho đội ngũ Creative của [Tên công ty].
+- [Tên] ơi, mình thấy bạn vừa hỏi về ghế đau lưng trong Group, mình tư vấn cho bạn nhé?
+- Chào anh, em vừa đọc bài về văn phòng xanh của anh, bên em có mẫu Phonebooth rất hợp style đó.
+- [Tên] nghĩ sao về việc trang bị khu vực "Deep Work" riêng tư cho team Tech?
+- [Tên] có muốn dùng thử Phonebooth trong 1 tuần hoàn toàn miễn phí không?
+- [Tiêu đề]: Chỉ mất 30 giây để thay đổi cách làm việc của cả văn phòng.
 """,
 }
 
@@ -1066,7 +866,11 @@ def get_prompt(content_type: str, role: str = "sale_b2b") -> str:
         role: sale_b2b, sale_b2c, ky_thuat
     """
     role_context = ROLE_CONTEXTS.get(role, ROLE_CONTEXTS["sale_b2b"])
-    topic_insight = TOPIC_ROLE_INSIGHTS.get(role, TOPIC_ROLE_INSIGHTS["sale_b2b"])
+
+    # Chỉ inject topic insights cho content types cần đa dạng chủ đề
+    # Các loại khác dùng chuỗi rỗng để giảm kích thước prompt
+    topic_types = {"ideas", "topic", "linkedin", "casestudy"}
+    topic_insight = TOPIC_ROLE_INSIGHTS.get(role, TOPIC_ROLE_INSIGHTS["sale_b2b"]) if content_type in topic_types else ""
 
     # Mapping content_type → channel insight(s) phù hợp
     channel_insight_map = {
@@ -1074,10 +878,10 @@ def get_prompt(content_type: str, role: str = "sale_b2b") -> str:
         "facebook": CHANNEL_INSIGHTS["facebook"] + "\n" + CHANNEL_INSIGHTS["instagram"],
         "outreach": CHANNEL_INSIGHTS["outreach"],
         "community": CHANNEL_INSIGHTS["community"],
-        "image": CHANNEL_INSIGHTS["linkedin"] + "\n" + CHANNEL_INSIGHTS["facebook"] + "\n" + CHANNEL_INSIGHTS["instagram"] + "\n" + CHANNEL_INSIGHTS["community"],
-        "topic": CHANNEL_INSIGHTS["linkedin"] + "\n" + CHANNEL_INSIGHTS["facebook"] + "\n" + CHANNEL_INSIGHTS["instagram"],
-        "research": CHANNEL_INSIGHTS["linkedin"] + "\n" + CHANNEL_INSIGHTS["facebook"],
-        "ideas": CHANNEL_INSIGHTS["linkedin"] + "\n" + CHANNEL_INSIGHTS["facebook"] + "\n" + CHANNEL_INSIGHTS["instagram"] + "\n" + CHANNEL_INSIGHTS["community"],
+        "image": CHANNEL_INSIGHTS["facebook"],
+        "topic": CHANNEL_INSIGHTS["linkedin"],
+        "research": CHANNEL_INSIGHTS["linkedin"],
+        "ideas": CHANNEL_INSIGHTS["linkedin"],
         "casestudy": CHANNEL_INSIGHTS["linkedin"],
     }
     channel_insight = channel_insight_map.get(content_type, CHANNEL_INSIGHTS["linkedin"])
