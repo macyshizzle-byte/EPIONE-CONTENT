@@ -647,6 +647,142 @@ Lấy ý tưởng từ các hook dưới đây, KHÔNG copy nguyên văn. Biến
 """,
 }
 
+# ============================================================
+# TOPIC ROLE INSIGHTS — Góc tiếp cận theo chủ đề + vai trò
+# ============================================================
+
+TOPIC_ROLE_INSIGHTS = {
+    "sale_b2b": """
+## GÓC TIẾP CẬN THEO CHỦ ĐỀ — Sale B2B
+
+### 1. Booth Cách Âm (PhoneBooth One / PhoneBooth One Plus)
+- **Insight cốt lõi**: Họ không sợ tiếng ồn — họ sợ "rò rỉ thông tin" và "phòng họp lãng phí". Một phòng họp 10 chỗ thường chỉ có 2 người ngồi họp Zoom = lãng phí diện tích cực lớn.
+- **Góc tiếp cận**: "Giải phóng phòng họp lớn bằng PhoneBooth One cá nhân". 1 booth chiếm ~2m2 thay thế phòng họp 15m2. Tính ROI theo giá thuê mặt bằng/m2.
+- **Sản phẩm Epione**: PhoneBooth One (1 người, 80 triệu) — cuộc gọi Sales, họp Zoom riêng tư. PhoneBooth One Plus (120 triệu) — họp nhóm nhỏ 2 người.
+
+### 2. Nội thất Ergonomic (Ghế + Bàn công thái học)
+- **Insight cốt lõi**: "Chi phí thay thế nhân sự đắt hơn chi phí mua ghế xịn cho cả phòng." Ghế tốt giảm tỷ lệ nhân viên xin nghỉ phép vì đau lưng, mệt mỏi — tiết kiệm hàng trăm triệu/năm.
+- **Góc tiếp cận**: Tính chi phí 1 ngày nghỉ bệnh của nhân viên (lương + cơ hội mất) vs giá 1 ghế SynoChair (4.29tr) dùng 5 năm = 2.350đ/ngày. So sánh với ghế rẻ phải thay mỗi năm.
+- **Sản phẩm Epione**: Mua số lượng cho team — ElysChair (từ 2.69tr, entry) hoặc SynoChair (4.29tr, lưới Đức). Lãnh đạo — AliusChair (13.99tr, Clover-Fit). Bàn nâng hạ — SmartDesk Lite 2.0 (từ 4.89tr, Dual Motor, anti-collision).
+
+### 3. Hybrid Work (Làm việc linh hoạt)
+- **Insight cốt lõi**: Làm sao quản lý nhân sự khi họ không ở văn phòng? Cần module nội thất "di động" và linh hoạt để tối ưu diện tích khi nhân viên đến/đi theo lịch Hybrid.
+- **Góc tiếp cận**: "Văn phòng Hybrid = văn phòng biết co giãn". PhoneBooth cho ngày họp online nhiều, bàn nâng hạ Memory Preset cho hot-desking (mỗi người lưu vị trí riêng).
+- **Sản phẩm Epione**: SmartDesk Pro 3.0 (Memory Preset lưu vị trí, BLDC 40mm/s) — mỗi nhân viên 1 preset riêng khi hot-desking. PhoneBooth One cho ngày WFH-at-office.
+
+### 4. Sức khỏe Công sở (Wellness & Employer Branding)
+- **Insight cốt lõi**: Wellness là Employer Branding. Văn phòng có ghế thư giãn, khu vực nghỉ ngơi, bàn đứng sẽ thu hút Gen Z dễ hơn — họ chọn công ty có "quan tâm sức khỏe", không chỉ chọn lương.
+- **Góc tiếp cận**: "Ghế ergonomic + bàn nâng hạ = Gói phúc lợi không tốn chi phí hàng tháng". Đầu tư 1 lần, nhân viên hưởng lợi mỗi ngày.
+- **Sản phẩm Epione**: Combo ghế FortisChair 2.0 (4.79tr) + SmartDesk Lite 2.0 (4.89tr) + Footrest + Arm Monitor = gói Wellness cho mỗi workstation dưới 12 triệu.
+
+### 5. Setup Văn phòng (Office Transformation)
+- **Insight cốt lõi**: "Văn phòng phải đẻ ra tiền". Thiết kế luồng giao thông (flow) thúc đẩy tương tác giữa các bộ phận. PhoneBooth ở giao lộ để nhân viên dễ tiếp cận, bàn nâng hạ ở khu tập trung để khuyến khích đứng-ngồi xen kẽ.
+- **Góc tiếp cận**: Tư vấn layout theo diện tích thực tế. Epione cung cấp giải pháp tổng thể: booth + ghế + bàn + phụ kiện + lắp đặt chuyên nghiệp (đi dây gọn, căn chỉnh theo cơ thể từng người).
+- **Sản phẩm Epione**: Gói tổng thể: PhoneBooth One (họp) + SmartDesk Pro 3.0 (bàn cao cấp) + EasyChair 2.0 (ghế mid-high, Donati Ý) + Arm Monitor + Footrest. Miễn phí vận chuyển & lắp đặt tại HN/HCM.
+
+### 6. Coworking Space
+- **Insight cốt lõi**: Tối ưu tỷ lệ lấp đầy trên mỗi m2. PhoneBooth là "máy in tiền" — cho thuê theo giờ với giá cao (50-100k/giờ) mà chỉ tốn ~2m2 diện tích. ROI thu hồi vốn trong 18-24 tháng.
+- **Góc tiếp cận**: "1 PhoneBooth One = 1 nguồn doanh thu mới". Tính toán: 80 triệu ÷ 80k/giờ × 6h/ngày = thu hồi vốn trong ~167 ngày làm việc.
+- **Sản phẩm Epione**: PhoneBooth One (1 người, 80tr) cho thuê theo giờ. PhoneBooth One Plus (120tr) cho nhóm nhỏ. Ghế SynoChair (4.29tr) cho khu vực chung — bền, lưới Đức chịu tải tốt.
+
+### 7. Năng suất & Tập trung (Productivity / Deep Work)
+- **Insight cốt lõi**: "Flow State" — nội thất tốt là nội thất "vô hình", người ngồi không cảm thấy đau, mỏi, không bị phân tâm bởi tiếng ồn → tập trung 100% vào công việc.
+- **Góc tiếp cận**: "Nội thất ergonomic = cơ sở hạ tầng cho Deep Work". PhoneBooth chặn tiếng ồn, ghế ergonomic chặn đau lưng, bàn nâng hạ chặn mỏi mệt — cả 3 lớp bảo vệ năng suất.
+- **Sản phẩm Epione**: PhoneBooth One (cách âm tuyệt đối) + EasyChair 2.0 (cơ chế Donati Ý, tay ghế gập 90° tiết kiệm không gian) + SmartDesk Pro 3.0 (BLDC êm, Memory Preset).
+
+### 8. Workspace Trends 2026
+- **Insight cốt lõi**: Xu hướng "Hotelization" — văn phòng phải tiện nghi như khách sạn. Nhân viên kỳ vọng trải nghiệm làm việc ngang trải nghiệm ở nhà hoặc khách sạn 5 sao.
+- **Góc tiếp cận**: "Văn phòng không còn là nơi đến để ngồi, mà là nơi đến để trải nghiệm". Setup từng zone: Deep Work (PhoneBooth), Collaboration (bàn họp), Wellness (ghế thư giãn AliusChair ngả 135°).
+- **Sản phẩm Epione**: AliusChair (13.99tr, lưng kim loại premium, PPA tự fit) cho zone Leadership. DelightDesk (từ 9.99tr, khay Delight giấu dây, bo cong công thái học) cho zone Minimalist.
+""",
+
+    "sale_b2c": """
+## GÓC TIẾP CẬN THEO CHỦ ĐỀ — Sale B2C
+
+### 1. Booth Cách Âm (PhoneBooth / Workpod)
+- **Insight cốt lõi**: "Nỗi sợ bị con cái/tiếng ồn hàng xóm phá đám cuộc gọi với đối tác". Người làm remote cần một ranh giới vật lý để "bật" chế độ làm việc — bước vào booth = bắt đầu tập trung, bước ra = hết giờ.
+- **Góc tiếp cận**: Kể chuyện WFH thực tế: "Đang họp với khách thì con chạy vào khóc". PhoneBooth tại nhà = phòng làm việc riêng không cần xây thêm phòng.
+- **Cảm xúc chạm**: Sự yên tâm, chuyên nghiệp dù ở nhà, không xấu hổ khi bật cam.
+
+### 2. Nội thất Ergonomic (Ghế + Bàn công thái học)
+- **Insight cốt lõi**: "Sợ già và sợ xấu". Ngồi sai tư thế gây gù lưng, bụng mỡ, tàn phá cột sống. Họ mua ghế để "cứu vãn" ngoại hình và sức khỏe tương lai — không chỉ để ngồi thoải mái.
+- **Góc tiếp cận**: Storytelling — "Ngồi 8 tiếng mà lưng không đau, về nhà vẫn còn năng lượng chơi với con". Đừng bán ghế, hãy bán "phiên bản tốt hơn của cơ thể bạn sau 5 năm nữa".
+- **Sản phẩm gợi ý**: ElysChair (từ 2.69tr) cho người mới — ghế đầu tiên chuẩn mực, hỗ trợ L4-L5. FortisChair 2.0 (4.79tr) — "ghế tan biến dưới cơ thể". Bàn nâng hạ SmartDesk Mono (từ 3.23tr) cho WFH.
+
+### 3. Hybrid Work (Làm việc linh hoạt)
+- **Insight cốt lõi**: "Cảm giác bị cô lập" khi WFH. Họ cần nội thất mang lại cảm giác "Cozy" (ấm cúng) nhưng vẫn đủ chuyên nghiệp để bật cam họp bất cứ lúc nào.
+- **Góc tiếp cận**: "Góc làm việc tại nhà không phải góc bếp". Setup một workspace riêng dù nhà nhỏ — bàn nâng hạ 1m2 + ghế ergonomic = đủ chuyên nghiệp.
+- **Sản phẩm gợi ý**: SmartDesk Mono (từ 3.23tr, gọn gàng cho nhà nhỏ) + ElysChair (2.69tr) = combo WFH dưới 6 triệu. Upgrade: SmartDesk Lite 2.0 (Dual Motor, anti-collision an toàn nhà có trẻ nhỏ).
+
+### 4. Sức khỏe Công sở (Wellness)
+- **Insight cốt lõi**: Tìm kiếm sự cân bằng. Quan tâm đến phụ kiện bổ trợ: Footrest (kê chân) cho người thấp bé, Arm Monitor (tay đỡ màn hình) cho người đau cổ — đôi khi phụ kiện quan trọng hơn upgrade ghế đắt hơn.
+- **Góc tiếp cận**: "Footrest quan trọng hơn bạn nghĩ — nếu chân không chạm đất, mua kê chân thay vì nâng cấp ghế đắt hơn". Chia sẻ mẹo sức khỏe đơn giản, thiết thực.
+- **Sản phẩm gợi ý**: Footrest + Arm Monitor + ghế FortisChair 2.0. Combo Kids (AlphaDesk + RingoChair + AlphaLight = 9.5tr, tiết kiệm gần 3 triệu) cho phụ huynh.
+
+### 5. Setup Văn phòng (Home Office / WFH Setup)
+- **Insight cốt lõi**: Thích phong cách Minimalism hoặc Industrial. Họ muốn khoe góc làm việc lên mạng xã hội — "Instagrammable workspace". Setup đẹp = động lực làm việc.
+- **Góc tiếp cận**: "Biến góc phòng 2m2 thành studio làm việc triệu đô". Chia sẻ ảnh before/after, tips decor, cách đi dây gọn gàng.
+- **Sản phẩm gợi ý**: DelightDesk (từ 9.99tr, khay Delight giấu dây toàn diện — clean desk không tì vết) + EasyChair 2.0 (All Black 6.89tr, tone tối sang trọng). AnDesk (từ 2.29tr) cho setup tối giản chi phí thấp.
+
+### 6. Coworking Space (Góc nhìn thành viên)
+- **Insight cốt lõi**: "Sợ bị dòm ngó màn hình". Freelancer, startup chọn coworking có PhoneBooth vì cần riêng tư tuyệt đối khi xử lý dữ liệu nhạy cảm, gọi khách hàng, hay brainstorm ý tưởng.
+- **Góc tiếp cận**: "Tiền thuê PhoneBooth theo giờ < tiền mất hợp đồng vì cuộc gọi bị nghe trộm". Chia sẻ trải nghiệm dùng booth tại coworking.
+
+### 7. Năng suất & Tập trung (Productivity)
+- **Insight cốt lõi**: Chống xao nhãng. Workpod giống như một cái "kén" ngăn cách hoàn toàn với thế giới bên ngoài — điện thoại, đồng nghiệp, tiếng ồn đường phố đều biến mất.
+- **Góc tiếp cận**: "4 tiếng trong booth = 8 tiếng ở bàn thường". Kể chuyện thực tế về năng suất tăng vọt khi có không gian riêng.
+- **Sản phẩm gợi ý**: Bàn nâng hạ SmartDesk Pro 3.0 (nâng hạ 40mm/s, lưu Memory Preset) — đứng 30 phút mỗi 2 tiếng chống buồn ngủ chiều.
+
+### 8. Workspace Trends 2026
+- **Insight cốt lõi**: Đồ nội thất đa năng. Bàn làm việc ban ngày, bàn giải trí/gaming ban đêm. Ghế ergonomic vừa ngồi code vừa ngồi stream. Một sản phẩm phải "đáng đồng tiền" cho cả 2 nhu cầu.
+- **Góc tiếp cận**: "SmartDesk Pro ban ngày là bàn code, ban đêm là bàn gaming — chỉ cần nhấn 1 nút để chuyển độ cao". Xu hướng đầu tư 1 lần, dùng đa mục đích.
+- **Sản phẩm gợi ý**: SmartDesk Pro 3.0 (Memory Preset 4 vị trí: ngồi, đứng, gaming, đọc sách) + FortisChair 2.0 (Silent Operation, không tiếng cọt kẹt khi stream).
+""",
+
+    "ky_thuat": """
+## GÓC TIẾP CẬN THEO CHỦ ĐỀ — Kỹ thuật viên
+
+### 1. Booth Cách Âm (PhoneBooth One / PhoneBooth One Plus)
+- **Insight cốt lõi**: Quan tâm đến chỉ số STC (Sound Transmission Class) và hệ thống thông gió. Nỗi sợ #1: booth cách âm nhưng bí khí — ngồi 30 phút đã nóng, ngột ngạt, phải mở cửa = mất ý nghĩa cách âm.
+- **Góc kỹ thuật**: Hệ thống quạt thông gió tích hợp của FocusBooth, đo decibel thực tế trước/sau khi đóng cửa. Chia sẻ cách test STC bằng điện thoại (app đo dB).
+- **Cách chia sẻ**: "Anh em hay hỏi booth có bí không — tui đã đo nhiệt độ bên trong sau 2 tiếng liên tục, đây là kết quả..."
+
+### 2. Nội thất Ergonomic (Ghế + Bàn công thái học)
+- **Insight cốt lõi**: Quan tâm đến cơ chế (Mechanism). Lưới (mesh) có bị dão sau bao lâu? Piston (Gas lift) Class mấy? Độ hoàn thiện của khớp nối, tay vịn 4D có rơ không?
+- **Góc kỹ thuật**: So sánh lưới Đức (bền, đàn hồi, chống biến dạng) vs lưới Trung Quốc (rẻ, dão sau 6-12 tháng, nguy cơ formaldehyde). Piston Samhongsa Hàn Quốc Class 4 vs piston no-name (tụt áp, rủi ro nổ). Cơ chế Donati Ý (EasyChair) vs cơ chế thường.
+- **Sản phẩm Epione nổi bật**: SynoChair — 2 vùng lưng độc lập, tựa lưng 2D (ra vào + push), khung CasyCraft nhựa nguyên sinh. EasyChair 2.0 — cơ chế Donati (Ý), tay ghế gập 90°. AliusChair — nhựa PPA tự ôm cột sống, khung kim loại.
+
+### 3. Hybrid Work (Làm việc linh hoạt)
+- **Insight cốt lõi**: Sự tích hợp công nghệ (Smart Office). Bàn nâng hạ có nhớ vị trí (Memory Preset) không? Có tích hợp cổng sạc âm không? Có anti-collision (chống va chạm) không?
+- **Góc kỹ thuật**: SmartDesk Pro 3.0 — Dual Touch Controller cảm ứng, Memory Preset lưu 4 vị trí, anti-collision nâng cao (cảm biến tương tác, không chỉ áp lực). So sánh motor BLDC (không chổi than, bền gấp đôi, êm, không nóng máy) vs motor thường.
+- **Chia sẻ thực tế**: "Hot-desking mà mỗi người chiều cao khác nhau — Memory Preset giải quyết vấn đề này trong 2 giây".
+
+### 4. Sức khỏe Công sở (Wellness)
+- **Insight cốt lõi**: Tiêu chuẩn chứng chỉ an toàn. BIFMA (bền bỉ), GREENGUARD (an toàn hóa chất), E0/E1 (formaldehyde trong gỗ). Dân kỹ thuật đọc spec sheet trước khi đọc review.
+- **Góc kỹ thuật**: MFC chuẩn E1 chống formaldehyde (SmartDesk). Gỗ cao su nguyên khối E0 Châu Âu (AlphaDesk) — Paint-Free không sơn hóa chất. Lưới Đức không formaldehyde vs lưới rẻ có nguy cơ hóa chất.
+- **Chia sẻ thực tế**: "Cách test nhanh lưới ghế có formaldehyde: ngửi mùi nhựa khét khi mới bóc hộp. Lưới Đức gần như không mùi."
+
+### 5. Setup Văn phòng (Office Transformation)
+- **Insight cốt lõi**: Tiến độ và khả năng "Modular". Có thể tháo rời và tái lắp đặt dễ dàng khi chuyển văn phòng không? Hệ thống điện, data có cần đi lại không?
+- **Góc kỹ thuật**: Quy trình lắp đặt Epione: đi dây gọn gàng (sạch không thấy dây), căn chỉnh ghế theo cơ thể từng người (Fitting chuyên sâu). AnDesk — 2 thanh gầng chắc chắn, chân trụ tròn an toàn, ít ốc vít dễ tháo lắp.
+- **Chia sẻ thực tế**: "Ác mộng dây điện: góc làm việc đẹp = góc không thấy dây. Khay Delight (DelightDesk) giải quyết triệt để — tui không cần dùng thêm ống luồn dây nào."
+
+### 6. Coworking Space (Góc thi công)
+- **Insight cốt lõi**: Mật độ sử dụng cao = hao mòn nhanh. Cần chất liệu chịu tải, dễ vệ sinh, thay thế linh kiện nhanh. Booth phải có hệ thống thông gió đủ mạnh cho nhiều ca/ngày.
+- **Góc kỹ thuật**: Piston Class 4 Samhongsa — tải trọng ổn định dù nhiều người dùng/ngày. Lưới Đức chống biến dạng dù ngồi 12h liên tục. PhoneBooth — hệ thống quạt, đèn, ổ cắm tích hợp sẵn.
+
+### 7. Năng suất & Tập trung (Productivity)
+- **Insight cốt lõi**: "Nội thất tốt = nội thất không làm bạn nghĩ đến nó." Ghế Silent Operation (FortisChair 2.0) — không tiếng cọt kẹt khi xoay, piston êm. Bàn BLDC — nâng hạ êm ru, không ù motor.
+- **Góc kỹ thuật**: Cách chỉnh ghế đúng theo cơ thể để "quên" đang ngồi: đo khuỷu tay 90° → chỉnh tay vịn. Mắt ngang đỉnh màn hình → chỉnh Arm Monitor. Chân chạm đất vững → Footrest nếu cần.
+- **Chia sẻ thực tế**: "90% khách tui lắp đặt đang để tựa đầu (headrest) quá cao — đẩy đỉnh đầu thay vì đỡ hõm gáy → hội chứng rùa cổ. Chỉ cần hạ xuống 2cm là thấy khác biệt."
+
+### 8. Workspace Trends 2026
+- **Insight cốt lõi**: Vật liệu bền vững (Recycled plastic, gỗ tái chế) và Smart Integration. Xu hướng IoT — bàn nâng hạ kết nối app nhắc đứng/ngồi, ghế có cảm biến tư thế.
+- **Góc kỹ thuật**: SmartDesk Pro 3.0 — đã qua 3 đời nâng cấp (Mono → Lite → Pro), mỗi đời cải tiến motor và controller. BLDC không chổi than = tuổi thọ motor gấp đôi, tiêu thụ điện thấp hơn.
+- **Chia sẻ thực tế**: "Bảo hành 5-10 năm cho SmartDesk Pro — tui chưa gặp ca nào hỏng motor BLDC sau 3 năm sử dụng. Motor thường thì sau 2 năm bắt đầu ù và chậm."
+""",
+}
+
 WRITING_STYLE = """
 ## PHONG CÁCH VIẾT — BẮT BUỘC TUÂN THỦ
 
@@ -686,6 +822,8 @@ Bạn làm việc tại Epione, viết bài LinkedIn cá nhân.
 
 {channel_insight}
 
+{topic_insight}
+
 {writing_style}
 
 Viết bài LinkedIn đăng trang cá nhân. Chia sẻ từ góc nhìn của vai trò bạn.
@@ -701,6 +839,8 @@ Bạn làm việc tại Epione, viết caption Facebook/Instagram.
 {brand_context}
 
 {channel_insight}
+
+{topic_insight}
 
 {writing_style}
 
@@ -720,6 +860,8 @@ Bạn làm việc tại Epione, viết tin nhắn tiếp cận khách hàng.
 {brand_context}
 
 {channel_insight}
+
+{topic_insight}
 
 {writing_style}
 
@@ -744,14 +886,20 @@ Bạn là content strategist cho Epione.
 
 {channel_insight}
 
+{topic_insight}
+
 {writing_style}
 
-Lên ý tưởng content theo yêu cầu, phù hợp với vai trò người viết. Output dạng bảng đơn giản:
+Lên ý tưởng content theo yêu cầu, phù hợp với vai trò người viết.
 
-| Ngày | Kênh | Chủ đề | Ghi chú ngắn |
-|------|------|--------|-------------|
+QUAN TRỌNG: Sử dụng GÓC TIẾP CẬN THEO CHỦ ĐỀ ở trên để xoay vòng đa dạng chủ đề. Mỗi ý tưởng nên khai thác insight và sản phẩm khác nhau.
 
-Xen kẽ các chủ đề: workspace insight, sản phẩm, case study, behind the scenes.
+Output dạng bảng đơn giản:
+
+| Ngày | Kênh | Chủ đề | Góc tiếp cận | Ghi chú ngắn |
+|------|------|--------|-------------|-------------|
+
+Xen kẽ 8 chủ đề: Booth cách âm, Ergonomic, Hybrid Work, Wellness, Setup văn phòng, Coworking, Productivity, Trends 2026.
 Giữ bảng ngắn gọn, không kèm giải thích dài."""
 
 CASE_STUDY_PROMPT = """{role_context}
@@ -761,6 +909,8 @@ Bạn làm việc tại Epione, viết case study dự án.
 {brand_context}
 
 {channel_insight}
+
+{topic_insight}
 
 {writing_style}
 
@@ -780,6 +930,8 @@ Bạn làm việc tại Epione, chuyên chuyển thể nội dung từ nguồn q
 {brand_context}
 
 {channel_insight}
+
+{topic_insight}
 
 {writing_style}
 
@@ -805,6 +957,8 @@ Bạn làm việc tại Epione. Nhìn ảnh, viết caption social media.
 {brand_context}
 
 {channel_insight}
+
+{topic_insight}
 
 {writing_style}
 
@@ -833,9 +987,12 @@ Bạn làm việc tại Epione. Viết content theo chủ đề được cho.
 
 {channel_insight}
 
+{topic_insight}
+
 {writing_style}
 
 Viết caption cho platform được chỉ định trong yêu cầu. Ngắn gọn, tự nhiên, đúng giọng vai trò.
+Sử dụng GÓC TIẾP CẬN THEO CHỦ ĐỀ phù hợp để chọn insight và sản phẩm cụ thể cho bài viết.
 
 Sau caption, PHẢI kèm theo đúng format này (tách bằng dòng ---):
 
@@ -858,6 +1015,8 @@ Bạn làm việc tại Epione. Viết bài đăng trong CỘNG ĐỒNG FACEBOOK
 {brand_context}
 
 {channel_insight}
+
+{topic_insight}
 
 {writing_style}
 
@@ -907,6 +1066,7 @@ def get_prompt(content_type: str, role: str = "sale_b2b") -> str:
         role: sale_b2b, sale_b2c, ky_thuat
     """
     role_context = ROLE_CONTEXTS.get(role, ROLE_CONTEXTS["sale_b2b"])
+    topic_insight = TOPIC_ROLE_INSIGHTS.get(role, TOPIC_ROLE_INSIGHTS["sale_b2b"])
 
     # Mapping content_type → channel insight(s) phù hợp
     channel_insight_map = {
@@ -940,4 +1100,5 @@ def get_prompt(content_type: str, role: str = "sale_b2b") -> str:
         writing_style=WRITING_STYLE,
         role_context=role_context,
         channel_insight=channel_insight,
+        topic_insight=topic_insight,
     )
