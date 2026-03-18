@@ -32,15 +32,97 @@ body { font-family:'Nunito Sans',sans-serif; background:var(--gray); color:var(-
 .nav-brand { font-size:14px; font-weight:700; letter-spacing:2px; color:var(--accent); }
 .nav-sub { font-size:10px; color:var(--text-secondary); letter-spacing:1px; }
 .nav-spacer { flex:1; }
-.role-selector { display:flex; gap:4px; background:var(--gray); border-radius:8px; padding:3px; }
-.role-btn {
-  padding:5px 12px; border-radius:6px; border:none;
-  font-size:11px; font-weight:600; cursor:pointer;
-  background:transparent; color:var(--text-secondary);
-  font-family:inherit; transition:all .2s; white-space:nowrap;
+
+/* ROLE SELECTION SCREEN */
+.role-screen {
+  position:fixed; inset:0; z-index:1000;
+  background:var(--gray);
+  display:flex; align-items:center; justify-content:center;
+  animation:fadeIn .3s ease-out;
 }
-.role-btn:hover { color:var(--black); }
-.role-btn.active { background:var(--white); color:var(--accent); box-shadow:0 1px 3px rgba(0,0,0,0.1); }
+.role-screen.hidden {
+  animation:fadeOut .3s ease-in forwards;
+  pointer-events:none;
+}
+@keyframes fadeOut { from { opacity:1; } to { opacity:0; } }
+.role-screen-inner {
+  text-align:center; max-width:640px; padding:24px;
+}
+.role-screen-title {
+  font-size:28px; font-weight:700; color:var(--black); margin-bottom:6px;
+}
+.role-screen-desc {
+  font-size:15px; color:var(--text-secondary); margin-bottom:32px;
+}
+.role-screen-cards {
+  display:flex; gap:14px; justify-content:center;
+}
+.role-screen-card {
+  flex:1; max-width:200px; padding:28px 20px;
+  border-radius:16px; border:2px solid var(--border);
+  background:var(--white); cursor:pointer;
+  font-family:inherit; transition:all .2s;
+  text-align:center;
+}
+.role-screen-card:hover {
+  border-color:var(--accent); transform:translateY(-4px);
+  box-shadow:0 8px 24px rgba(16,6,159,0.1);
+}
+.role-screen-card-icon {
+  width:48px; height:48px; border-radius:12px;
+  background:rgba(16,6,159,0.08); color:var(--accent);
+  font-size:14px; font-weight:800; line-height:48px;
+  margin:0 auto 14px; letter-spacing:1px;
+}
+.role-screen-card:hover .role-screen-card-icon {
+  background:var(--accent); color:var(--white);
+}
+.role-screen-card-title {
+  font-size:16px; font-weight:700; color:var(--black); margin-bottom:8px;
+}
+.role-screen-card-desc {
+  font-size:12px; color:var(--text-secondary); line-height:1.5;
+}
+
+/* ROLE DROPDOWN */
+.role-dropdown-wrap { position:relative; }
+.role-dropdown-btn {
+  display:flex; align-items:center; gap:6px;
+  padding:7px 14px; border-radius:8px;
+  border:1px solid var(--border); background:var(--white);
+  font-size:13px; font-weight:600; color:var(--black);
+  cursor:pointer; font-family:inherit; transition:all .2s;
+}
+.role-dropdown-btn:hover { border-color:var(--accent); }
+.role-dropdown-dot {
+  width:8px; height:8px; border-radius:50%;
+  background:var(--accent); flex-shrink:0;
+}
+.role-dropdown-menu {
+  display:none; position:absolute; top:calc(100% + 6px); right:0;
+  background:var(--white); border:1px solid var(--border);
+  border-radius:12px; padding:6px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.12);
+  min-width:260px; z-index:200;
+  animation:fadeIn .15s ease-out;
+}
+.role-dropdown-menu.open { display:block; }
+.role-dropdown-item {
+  display:block; width:100%; text-align:left;
+  padding:10px 14px; border-radius:8px;
+  border:none; background:transparent;
+  cursor:pointer; font-family:inherit; transition:all .15s;
+}
+.role-dropdown-item:hover { background:var(--gray); }
+.role-dropdown-item.active { background:rgba(16,6,159,0.06); }
+.role-dropdown-item-title {
+  font-size:13px; font-weight:700; color:var(--black);
+  margin-bottom:1px;
+}
+.role-dropdown-item.active .role-dropdown-item-title { color:var(--accent); }
+.role-dropdown-item-desc {
+  font-size:11px; color:var(--text-secondary);
+}
 
 /* LAYOUT */
 .container { max-width:960px; margin:0 auto; padding:24px 16px; }
@@ -228,15 +310,146 @@ input[type="text"]:focus { border-color:var(--accent); }
 .design-form .row > * { flex:1; }
 .design-form label { font-size:12px; font-weight:600; color:var(--text-secondary); display:block; margin-bottom:4px; }
 
+/* TOAST */
+.toast-container {
+  position:fixed; top:20px; right:20px; z-index:9999;
+  display:flex; flex-direction:column; gap:8px;
+}
+.toast {
+  padding:12px 20px; border-radius:10px;
+  font-size:13px; font-weight:500; font-family:inherit;
+  color:var(--white); background:#333;
+  box-shadow:0 4px 20px rgba(0,0,0,0.15);
+  animation:toastIn .3s ease-out;
+  display:flex; align-items:center; gap:8px;
+  max-width:360px;
+}
+.toast.success { background:#2e7d32; }
+.toast.error { background:#c62828; }
+.toast.info { background:var(--accent); }
+.toast.out { animation:toastOut .25s ease-in forwards; }
+@keyframes toastIn { from { opacity:0; transform:translateX(40px); } to { opacity:1; transform:translateX(0); } }
+@keyframes toastOut { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(40px); } }
+
+/* ACTION BUTTONS after output */
+.output-refine {
+  display:flex; gap:6px; flex-wrap:wrap;
+  margin-top:16px; padding-top:14px;
+  border-top:1px solid var(--border);
+}
+.refine-btn {
+  padding:7px 16px; border-radius:20px;
+  border:1px solid var(--border); background:var(--white);
+  font-size:12px; font-weight:600; color:var(--text-secondary);
+  cursor:pointer; font-family:inherit; transition:all .2s;
+}
+.refine-btn:hover { border-color:var(--accent); color:var(--accent); background:rgba(16,6,159,0.04); }
+.refine-btn:disabled { opacity:0.5; cursor:not-allowed; }
+
+/* CHAR COUNTER */
+.char-counter {
+  display:flex; gap:16px; align-items:center;
+  font-size:11px; color:var(--text-secondary); margin-top:8px;
+  padding:8px 12px; background:var(--gray); border-radius:8px;
+}
+.char-counter span { font-weight:600; color:var(--black); }
+
+/* TYPING INDICATOR */
+.typing-indicator {
+  display:none; align-items:center; gap:10px;
+  font-size:13px; color:var(--accent); margin-top:12px;
+  padding:10px 16px; background:rgba(16,6,159,0.04);
+  border-radius:10px;
+}
+.typing-indicator.show { display:inline-flex; }
+.typing-dots { display:flex; gap:4px; align-items:center; }
+.typing-dots span {
+  width:6px; height:6px; border-radius:50%;
+  background:var(--accent); opacity:0.4;
+  animation:typingBounce 1.2s infinite;
+}
+.typing-dots span:nth-child(2) { animation-delay:0.2s; }
+.typing-dots span:nth-child(3) { animation-delay:0.4s; }
+@keyframes typingBounce {
+  0%,60%,100% { opacity:0.4; transform:translateY(0); }
+  30% { opacity:1; transform:translateY(-4px); }
+}
+
+/* SMOOTH TRANSITIONS */
+.mode-card { animation:fadeIn .25s ease-out; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.output { transition:all .3s ease; }
+.output.show { animation:fadeIn .3s ease-out; }
+
+/* TEXTAREA CHAR HINT */
+.input-footer {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-top:6px;
+}
+.input-hint {
+  font-size:11px; color:var(--text-secondary);
+  transition:color .2s;
+}
+.input-hint.warn { color:#e65100; }
+
 /* RESPONSIVE */
 @media (max-width:640px) {
   .tabs { gap:6px; }
   .tab { padding:8px 14px; font-size:12px; }
-  .card { padding:20px; }
+  .card { padding:16px; }
+  .nav { padding:10px 14px; }
+  .nav-brand { font-size:12px; }
+  .role-dropdown-menu { right:-10px; min-width:220px; }
+  .role-screen-cards { flex-direction:column; align-items:center; }
+  .role-screen-card { max-width:100%; width:100%; padding:20px 16px; }
+  .role-screen-title { font-size:22px; }
+  .container { padding:16px 12px; }
+  .output-actions { flex-direction:column; align-items:flex-start; }
+  .platform-btns { width:100%; overflow-x:auto; flex-wrap:nowrap; -webkit-overflow-scrolling:touch; }
+  .output-refine { gap:4px; }
+  .refine-btn { padding:6px 12px; font-size:11px; }
+  .toast-container { top:10px; right:10px; left:10px; }
+  .toast { max-width:100%; }
+  .plat-select { flex-wrap:wrap; }
+  .community-header { flex-direction:column; }
 }
 </style>
 </head>
 <body>
+
+<!-- TOAST -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ROLE SELECTION SCREEN -->
+<div class="role-screen" id="role-screen">
+  <div class="role-screen-inner">
+    <svg width="40" height="40" viewBox="0 0 120 120" fill="none" style="margin-bottom:8px;">
+      <circle cx="60" cy="60" r="52" stroke="#10069F" stroke-width="1.5" opacity=".3"/>
+      <circle cx="60" cy="60" r="38" stroke="#10069F" stroke-width="2" opacity=".5"/>
+      <circle cx="60" cy="60" r="24" stroke="#10069F" stroke-width="2.5" opacity=".7"/>
+      <circle cx="60" cy="60" r="10" fill="#10069F"/>
+    </svg>
+    <h1 class="role-screen-title">Chào bạn!</h1>
+    <p class="role-screen-desc">Chọn vai trò để bắt đầu viết content</p>
+    <div class="role-screen-cards">
+      <button class="role-screen-card" data-role="sale_b2b">
+        <div class="role-screen-card-icon">B2B</div>
+        <div class="role-screen-card-title">Sale B2B</div>
+        <div class="role-screen-card-desc">Tiếp cận doanh nghiệp, ngôn ngữ số liệu & logic, tìm Champion trong tổ chức</div>
+      </button>
+      <button class="role-screen-card" data-role="sale_b2c">
+        <div class="role-screen-card-icon">B2C</div>
+        <div class="role-screen-card-title">Sale B2C</div>
+        <div class="role-screen-card-desc">Tiếp cận cá nhân, ngôn ngữ cảm xúc & trải nghiệm, storytelling</div>
+      </button>
+      <button class="role-screen-card" data-role="ky_thuat">
+        <div class="role-screen-card-icon">KT</div>
+        <div class="role-screen-card-title">Kỹ thuật</div>
+        <div class="role-screen-card-desc">Thợ lắp chia sẻ thực chiến, ngôn ngữ chính xác, khách quan</div>
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- NAV -->
 <nav class="nav">
@@ -251,10 +464,26 @@ input[type="text"]:focus { border-color:var(--accent); }
     <div class="nav-sub">Content Agent</div>
   </div>
   <div class="nav-spacer"></div>
-  <div class="role-selector">
-    <button class="role-btn active" data-role="sale_b2b">Sale B2B</button>
-    <button class="role-btn" data-role="sale_b2c">Sale B2C</button>
-    <button class="role-btn" data-role="ky_thuat">Kỹ thuật</button>
+  <div class="role-dropdown-wrap">
+    <button class="role-dropdown-btn" id="role-dropdown-btn" onclick="toggleRoleDropdown()">
+      <span class="role-dropdown-dot"></span>
+      <span id="role-dropdown-label">Sale B2B</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="role-dropdown-menu" id="role-dropdown-menu">
+      <button class="role-dropdown-item active" data-role="sale_b2b">
+        <div class="role-dropdown-item-title">Sale B2B</div>
+        <div class="role-dropdown-item-desc">Doanh nghiệp &middot; Số liệu &middot; Logic</div>
+      </button>
+      <button class="role-dropdown-item" data-role="sale_b2c">
+        <div class="role-dropdown-item-title">Sale B2C</div>
+        <div class="role-dropdown-item-desc">Cá nhân &middot; Cảm xúc &middot; Trải nghiệm</div>
+      </button>
+      <button class="role-dropdown-item" data-role="ky_thuat">
+        <div class="role-dropdown-item-title">Kỹ thuật</div>
+        <div class="role-dropdown-item-desc">Thợ lắp &middot; Chính xác &middot; Thực chiến</div>
+      </button>
+    </div>
   </div>
 </nav>
 
@@ -262,11 +491,11 @@ input[type="text"]:focus { border-color:var(--accent); }
 
   <!-- TABS -->
   <div class="tabs">
-    <button class="tab active" data-type="content">Viết content</button>
-    <button class="tab" data-type="research">Chọn chủ đề</button>
-    <button class="tab" data-type="image">Ảnh → Content</button>
-    <button class="tab" data-type="outreach">Outreach</button>
-    <button class="tab" data-type="casestudy">Case Study</button>
+    <button class="tab active" data-type="content">Bài đăng</button>
+    <button class="tab" data-type="research">Chủ đề</button>
+    <button class="tab" data-type="image">Thiết kế</button>
+    <button class="tab" data-type="outreach">Email</button>
+    <button class="tab" data-type="casestudy">Hành trình dự án</button>
     <button class="tab" data-type="ideas">Lịch content</button>
   </div>
 
@@ -298,12 +527,15 @@ input[type="text"]:focus { border-color:var(--accent); }
 
     <div class="step-label" id="content-prompt-label">Yêu cầu</div>
     <textarea id="prompt" placeholder="Mô tả yêu cầu... Ví dụ: Viết bài về pain point văn phòng open-plan thiếu chỗ riêng tư, hướng đến HR Manager"></textarea>
-    <div style="margin-top:14px; display:flex; gap:8px; align-items:center;">
+    <div class="input-footer">
+      <div class="input-hint" id="content-hint">Enter để gửi &middot; Shift+Enter xuống dòng</div>
+    </div>
+    <div style="margin-top:10px; display:flex; gap:8px; align-items:center;">
       <button class="btn btn-primary" id="btn-generate" onclick="generate()">
         Viết content
       </button>
-      <div class="loading" id="loading">
-        <div class="spinner"></div>
+      <div class="typing-indicator" id="loading">
+        <div class="typing-dots"><span></span><span></span><span></span></div>
         <span>Đang viết content...</span>
       </div>
     </div>
@@ -318,8 +550,8 @@ input[type="text"]:focus { border-color:var(--accent); }
       <button class="btn btn-primary" id="btn-generate-text" onclick="generateText()">
         Tạo content
       </button>
-      <div class="loading" id="loading-text">
-        <div class="spinner"></div>
+      <div class="typing-indicator" id="loading-text">
+        <div class="typing-dots"><span></span><span></span><span></span></div>
         <span>Đang viết content...</span>
       </div>
     </div>
@@ -353,8 +585,8 @@ input[type="text"]:focus { border-color:var(--accent); }
 
     <div style="display:flex; gap:8px; align-items:center;">
       <button class="btn btn-primary" id="btn-topic-gen" onclick="generateFromTopic()">Viết content</button>
-      <div class="loading" id="loading-topic">
-        <div class="spinner"></div>
+      <div class="typing-indicator" id="loading-topic">
+        <div class="typing-dots"><span></span><span></span><span></span></div>
         <span>Đang viết content...</span>
       </div>
     </div>
@@ -400,8 +632,8 @@ input[type="text"]:focus { border-color:var(--accent); }
           </div>
           <div style="display:flex; gap:8px; align-items:center;">
             <button class="btn btn-primary" onclick="createTopicDesign()">Tạo design</button>
-            <div class="loading" id="loading-topic-design">
-              <div class="spinner"></div>
+            <div class="typing-indicator" id="loading-topic-design">
+              <div class="typing-dots"><span></span><span></span><span></span></div>
               <span>Đang tạo design...</span>
             </div>
           </div>
@@ -461,8 +693,8 @@ input[type="text"]:focus { border-color:var(--accent); }
       <button class="btn btn-primary" id="btn-image" onclick="analyzeImage()" disabled>
         Viết content
       </button>
-      <div class="loading" id="loading-image">
-        <div class="spinner"></div>
+      <div class="typing-indicator" id="loading-image">
+        <div class="typing-dots"><span></span><span></span><span></span></div>
         <span>Đang phân tích ảnh...</span>
       </div>
     </div>
@@ -488,8 +720,8 @@ input[type="text"]:focus { border-color:var(--accent); }
         </div>
       </div>
       <button class="btn btn-primary" onclick="createDesign()">Tạo design</button>
-      <div class="loading" id="loading-design" style="margin-top:8px;">
-        <div class="spinner"></div>
+      <div class="typing-indicator" id="loading-design" style="margin-top:8px;">
+        <div class="typing-dots"><span></span><span></span><span></span></div>
         <span>Đang tạo design...</span>
       </div>
     </div>
@@ -548,6 +780,16 @@ input[type="text"]:focus { border-color:var(--accent); }
       </button>
     </div>
     <div id="output-content"></div>
+    <div class="char-counter" id="char-counter" style="display:none;">
+      Ký tự: <span id="count-chars">0</span> &nbsp;|&nbsp; Từ: <span id="count-words">0</span> &nbsp;|&nbsp; Dòng: <span id="count-lines">0</span>
+    </div>
+    <div class="output-refine" id="output-refine" style="display:none;">
+      <button class="refine-btn" onclick="refineContent('Viết lại bài này với cách tiếp cận khác, hook khác, góc nhìn khác. Giữ nguyên chủ đề.')">Viết lại</button>
+      <button class="refine-btn" onclick="refineContent('Viết ngắn hơn, cô đọng hơn. Giữ ý chính, bỏ phần thừa.')">Ngắn hơn</button>
+      <button class="refine-btn" onclick="refineContent('Viết dài hơn, thêm chi tiết, ví dụ hoặc câu chuyện. Giữ nguyên tone.')">Dài hơn</button>
+      <button class="refine-btn" onclick="refineContent('Chỉnh tone chuyên nghiệp hơn, phù hợp B2B decision maker.')">Chuyên nghiệp hơn</button>
+      <button class="refine-btn" onclick="refineContent('Chỉnh tone gần gũi, đời thường hơn. Giảm bớt formal.')">Gần gũi hơn</button>
+    </div>
   </div>
 
 </div>
@@ -559,19 +801,84 @@ let currentImagePath = '';
 let currentDesignPath = '';
 let currentImageUrl = '';
 let currentRole = 'sale_b2b';
+let lastGeneratedType = '';
+let lastGeneratedPrompt = '';
 
-// Role selector
-document.querySelectorAll('.role-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentRole = btn.dataset.role;
+// Toast notification system
+function toast(message, type = 'info', duration = 3000) {
+  const container = document.getElementById('toast-container');
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.textContent = message;
+  container.appendChild(el);
+  setTimeout(() => {
+    el.classList.add('out');
+    setTimeout(() => el.remove(), 250);
+  }, duration);
+}
+
+// Dynamic placeholders per channel
+const CHANNEL_PLACEHOLDERS = {
+  linkedin: 'Ví dụ: Chia sẻ góc nhìn về việc đầu tư nội thất ergonomic cho nhân viên, hướng đến HR Manager. Mở bài bằng con số hoặc quan điểm trái chiều.',
+  facebook: 'Ví dụ: Viết caption về trải nghiệm setup góc làm việc tại nhà, tone thân thiện. Hook phải hấp dẫn trong 2 dòng đầu.',
+  community: 'Ví dụ: Chia sẻ kinh nghiệm chỉnh ghế ergonomic đúng cách cho group. Viết như thành viên, không quảng cáo.',
+};
+
+function updatePlaceholder() {
+  const textarea = document.getElementById('prompt');
+  textarea.placeholder = CHANNEL_PLACEHOLDERS[currentContentPlat] || CHANNEL_PLACEHOLDERS.linkedin;
+}
+
+// Character counter
+function updateCharCounter(text) {
+  const counter = document.getElementById('char-counter');
+  if (!text || !text.trim()) { counter.style.display = 'none'; return; }
+  counter.style.display = 'flex';
+  document.getElementById('count-chars').textContent = text.length.toLocaleString();
+  document.getElementById('count-words').textContent = text.trim().split(/\s+/).filter(w => w).length;
+  document.getElementById('count-lines').textContent = text.split('\n').filter(l => l.trim()).length;
+}
+
+// Role selection screen
+document.querySelectorAll('.role-screen-card').forEach(card => {
+  card.addEventListener('click', () => {
+    currentRole = card.dataset.role;
+    const title = card.querySelector('.role-screen-card-title').textContent;
+    // Update dropdown label to match
+    document.getElementById('role-dropdown-label').textContent = title;
+    document.querySelectorAll('.role-dropdown-item').forEach(i => {
+      i.classList.toggle('active', i.dataset.role === currentRole);
+    });
+    // Hide role screen, show main app
+    const screen = document.getElementById('role-screen');
+    screen.classList.add('hidden');
+    setTimeout(() => screen.style.display = 'none', 300);
+  });
+});
+
+// Role dropdown (switch role anytime from navbar)
+function toggleRoleDropdown() {
+  document.getElementById('role-dropdown-menu').classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.role-dropdown-wrap')) {
+    document.getElementById('role-dropdown-menu').classList.remove('open');
+  }
+});
+document.querySelectorAll('.role-dropdown-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.role-dropdown-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    currentRole = item.dataset.role;
+    document.getElementById('role-dropdown-label').textContent = item.querySelector('.role-dropdown-item-title').textContent;
+    document.getElementById('role-dropdown-menu').classList.remove('open');
+    toast('Vai trò: ' + item.querySelector('.role-dropdown-item-title').textContent, 'info', 2000);
   });
 });
 
 const MODE_INFO = {
-  outreach:   { title:'Viết tin nhắn Outreach', desc:'Template email, Zalo, LinkedIn DM tiếp cận khách hàng B2B' },
-  casestudy:  { title:'Viết Case Study', desc:'Case study dự án đã triển khai — bối cảnh, thách thức, giải pháp, kết quả' },
+  outreach:   { title:'Viết Email', desc:'Template email tiếp cận khách hàng B2B — cá nhân hóa, ngắn gọn, đúng tone' },
+  casestudy:  { title:'Hành trình dự án', desc:'Những dự án, sản phẩm đã triển khai: Bối cảnh, thách thức, giải pháp, kết quả' },
   ideas:      { title:'Lên Lịch content', desc:'Ý tưởng content theo tuần/tháng cho đội sale' },
 };
 
@@ -582,8 +889,10 @@ document.querySelectorAll('.content-plat-chip').forEach(chip => {
     chip.classList.add('selected');
     currentContentPlat = chip.dataset.plat;
     document.getElementById('content-community-fields').style.display = currentContentPlat === 'community' ? 'block' : 'none';
+    updatePlaceholder();
   });
 });
+updatePlaceholder();
 
 // Tab switching
 document.querySelectorAll('.tab').forEach(tab => {
@@ -613,12 +922,15 @@ document.querySelectorAll('.tab').forEach(tab => {
 // Generate content (Viết content tab)
 async function generate() {
   const prompt = document.getElementById('prompt').value.trim();
-  if (!prompt) return;
+  if (!prompt) return toast('Nhập yêu cầu trước', 'error');
 
   setLoading('loading', true);
   document.getElementById('btn-generate').disabled = true;
 
   try {
+    lastGeneratedType = currentContentPlat;
+    lastGeneratedPrompt = prompt;
+
     if (currentContentPlat === 'community') {
       // Community flow
       const communityName = document.getElementById('community-name').value.trim();
@@ -654,7 +966,9 @@ async function generate() {
 // Generate for text modes (Outreach, Case Study, Lịch content)
 async function generateText() {
   const prompt = document.getElementById('prompt-text').value.trim();
-  if (!prompt) return;
+  if (!prompt) return toast('Nhập yêu cầu trước', 'error');
+  lastGeneratedType = currentType;
+  lastGeneratedPrompt = prompt;
 
   setLoading('loading-text', true);
   document.getElementById('btn-generate-text').disabled = true;
@@ -743,7 +1057,7 @@ async function generateFromTopic() {
     document.getElementById('topic-results').style.display = 'block';
     document.getElementById('topic-results').scrollIntoView({ behavior:'smooth', block:'start' });
   } catch (e) {
-    alert('Lỗi: ' + e.message);
+    toast('Lỗi: ' + e.message, 'error');
   } finally {
     setLoading('loading-topic', false);
     document.getElementById('btn-topic-gen').disabled = false;
@@ -826,7 +1140,7 @@ async function createTopicDesign() {
     };
     preview.scrollIntoView({ behavior:'smooth', block:'nearest' });
   } catch (e) {
-    alert('Lỗi: ' + e.message);
+    toast('Lỗi: ' + e.message, 'error');
   } finally {
     setLoading('loading-topic-design', false);
   }
@@ -855,7 +1169,7 @@ async function downloadTopicPNG() {
     link.download = 'epione-design.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
-  } catch (e) { alert('Lỗi: ' + e.message); }
+  } catch (e) { toast('Lỗi: ' + e.message, 'error'); }
   finally { btn.innerHTML = orig; btn.disabled = false; }
 }
 
@@ -877,12 +1191,13 @@ function loadCommunityRules() {
 function saveCommunityRules() {
   const name = document.getElementById('community-name').value.trim();
   const rules = document.getElementById('community-rules').value.trim();
-  if (!name) return alert('Nhập tên group trước');
-  if (!rules) return alert('Nhập rules trước');
+  if (!name) return toast('Nhập tên group trước', 'error');
+  if (!rules) return toast('Nhập rules trước', 'error');
   localStorage.setItem('community_rules_' + name, rules);
   const note = document.getElementById('saved-rules-note');
   note.textContent = 'Đã lưu rules cho "' + name + '"';
   note.classList.add('show');
+  toast('Đã lưu rules cho "' + name + '"', 'success');
 }
 
 // Image handling
@@ -1016,7 +1331,7 @@ async function createDesign() {
 
     preview.scrollIntoView({ behavior:'smooth', block:'nearest' });
   } catch (e) {
-    alert('Lỗi: ' + e.message);
+    toast('Lỗi: ' + e.message, 'error');
   } finally {
     setLoading('loading-design', false);
   }
@@ -1065,7 +1380,7 @@ async function downloadDesignAsImage() {
     link.href = canvas.toDataURL('image/png');
     link.click();
   } catch (e) {
-    alert('Lỗi xuất ảnh: ' + e.message);
+    toast('Lỗi xuất ảnh: ' + e.message, 'error');
   } finally {
     btn.innerHTML = originalText;
     btn.disabled = false;
@@ -1084,8 +1399,8 @@ function downloadDesign() {
 }
 
 // Helpers
-function setLoading(id, show) {
-  document.getElementById(id).classList.toggle('show', show);
+function setLoading(id, state) {
+  document.getElementById(id).classList.toggle('show', state);
 }
 
 function showOutput(text, showDownload) {
@@ -1100,22 +1415,24 @@ function showOutput(text, showDownload) {
   // Reset platform button states
   document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('copied'));
 
+  // Update character counter
+  updateCharCounter(text);
+
+  // Show refine buttons
+  document.getElementById('output-refine').style.display = 'flex';
+
   el.scrollIntoView({ behavior:'smooth', block:'nearest' });
 }
 
 function copyForPlatform(btn) {
   const text = document.getElementById('output-content').textContent;
   navigator.clipboard.writeText(text).then(() => {
-    // Reset all buttons
-    document.querySelectorAll('.platform-btn').forEach(b => {
-      b.classList.remove('copied');
-    });
-    // Highlight clicked button
+    document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('copied'));
     btn.classList.add('copied');
     const svg = btn.querySelector('svg').outerHTML;
-    const platform = btn.dataset.platform;
     const originalHTML = btn.innerHTML;
     btn.innerHTML = svg + ' Copied!';
+    toast('Đã copy content', 'success', 2000);
     setTimeout(() => {
       btn.classList.remove('copied');
       btn.innerHTML = originalHTML;
@@ -1131,6 +1448,40 @@ function downloadImage() {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+  }
+}
+
+// Refine content (Viết lại, Ngắn hơn, Dài hơn, etc.)
+async function refineContent(instruction) {
+  const currentOutput = document.getElementById('output-content').textContent;
+  if (!currentOutput) return;
+
+  // Disable all refine buttons
+  document.querySelectorAll('.refine-btn').forEach(b => b.disabled = true);
+
+  // Show a mini loading state
+  const refineArea = document.getElementById('output-refine');
+  const originalHTML = refineArea.innerHTML;
+  refineArea.innerHTML = '<div class="typing-indicator show" style="margin:0;"><div class="typing-dots"><span></span><span></span><span></span></div><span>Đang chỉnh sửa...</span></div>';
+
+  try {
+    const type = lastGeneratedType || currentContentPlat || 'linkedin';
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        type: type,
+        prompt: instruction + '\n\nBài gốc:\n' + currentOutput,
+        role: currentRole
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    showOutput(data.content);
+    toast('Đã chỉnh sửa xong', 'success');
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+    refineArea.innerHTML = originalHTML;
   }
 }
 
