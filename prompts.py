@@ -671,6 +671,52 @@ Người viết là nhân viên Epione, chia sẻ từ trải nghiệm và góc 
 - Nhắc sản phẩm tự nhiên trong ngữ cảnh, KHÔNG liệt kê tính năng
 - Đọc lại bài — nếu nghe giống chatbot thì VIẾT LẠI
 
+### BÀI MẪU — HỌC GIỌNG VĂN TỪ ĐÂY (KHÔNG copy, chỉ học cách viết):
+
+**Mẫu 1 — LinkedIn, Nam, Sale B2B, Ngắn gọn:**
+Tuần trước mình ghé văn phòng một công ty fintech ~120 người ở Q7.
+
+Phòng họp kín lịch từ 8h sáng. Nhân viên họp online ngồi pantry, bịt tai, nói thì thầm.
+
+HR bảo: "Tháng nào cũng có người xin nghỉ vì không tập trung được."
+
+Mình để lại 1 booth demo. 3 ngày sau HR gọi lại đặt thêm 2 cái.
+
+Đôi khi giải pháp không phải thuê thêm mặt bằng.
+
+#workspace #focusbooth #ergonomic
+
+**Mẫu 2 — Facebook, Nữ, Sale B2C, Story telling:**
+Hôm qua có chị inbox hỏi: "Em ơi chị ngồi làm việc ở nhà mà đau lưng quá, mua ghế gì?"
+
+Mình hỏi lại: "Chị cao bao nhiêu, bàn cao bao nhiêu?"
+
+Chị gửi ảnh — bàn cao 75cm, chị cao 1m55. Chân không chạm đất.
+
+Mình bảo: "Chị ơi, chị mua kê chân trước đi, 300k thôi. Chưa cần đổi ghế đâu."
+
+Chị bất ngờ lắm. Ai đi bán hàng mà khuyên khách đừng mua?
+
+Nhưng thiệt mà. Ghế 15 triệu mà chân lơ lửng thì lưng vẫn đau.
+
+**Mẫu 3 — Cộng đồng, Nam, Kỹ thuật, Ngắn gọn:**
+90% khách mình lắp ghế đang để tựa đầu sai.
+
+Tựa đầu phải đỡ hõm gáy, không phải đỉnh đầu. Sai vị trí = cổ bị đẩy ra trước = hội chứng rùa cổ.
+
+Cách check: ngồi thẳng, thả lỏng cổ, tựa đầu phải chạm đúng chỗ lõm sau gáy.
+
+Nếu ghế bạn có tựa đầu mà vẫn mỏi cổ — thử hạ xuống 2-3cm rồi xem.
+
+Comment model ghế, tui chỉ cách chỉnh cho.
+
+### LƯU Ý KHI VIẾT:
+- Bài mẫu trên dùng chuyện CỤ THỂ (công ty fintech Q7, chị cao 1m55, kê chân 300k)
+- Người thật viết có chi tiết BẤT NGỜ (khuyên khách đừng mua, đưa giải pháp rẻ hơn)
+- Câu ngắn, xuống dòng nhiều, đọc như đang nói chuyện
+- KHÔNG có cấu trúc "vấn đề → giải pháp → CTA" rõ ràng như marketing
+- Kết bài TỰ NHIÊN, không ép buộc hành động
+
 ### OUTPUT:
 Chỉ viết NỘI DUNG bài đăng, sẵn sàng copy-paste.
 KHÔNG kèm ghi chú, phân tích, gợi ý, hay bất kỳ thứ gì ngoài bài viết.
