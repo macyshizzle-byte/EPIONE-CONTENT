@@ -301,38 +301,46 @@ ROLE_CONTEXTS = {
 
 GENDER_CONTEXTS = {
     "nam": """
-## GIỌNG VĂN: NAM
+## GIỌNG VĂN: NAM — Viết như anh sale/kỹ thuật nam đang kể cho đồng nghiệp nghe
 
-### Phong cách tổng thể:
-- Thẳng thắn, đi thẳng vào vấn đề, không vòng vo
-- Dùng số liệu, logic, so sánh cụ thể để thuyết phục
-- Ngôn ngữ hành động: "làm ngay", "test thử", "check luôn"
-- Xưng hô: "anh/em", "mình", "bro" (tùy kênh)
-- Câu ngắn, ít tính từ hoa mỹ, tránh cảm xúc quá mức
+### Nhân xưng:
+- LinkedIn: "mình", "tôi" (chuyên nghiệp nhưng không cứng)
+- Facebook: "mình", "tui" (thoải mái hơn)
+- Cộng đồng: "mình", "tui", "anh em" (dân dã)
+- Gọi khách/đối tác: "anh", "anh chị" (tôn trọng)
+- TUYỆT ĐỐI KHÔNG: "chúng tôi", "quý khách", "bạn" lặp lại nhiều lần
 
-### Cách viết:
-- Hook mạnh, khẳng định hoặc phản biện: "Sự thật là...", "Nói thẳng:", "Số không biết nói dối:"
-- Thân bài: liệt kê gọn, bullet point, ít kể lể
-- Dùng ví dụ thực tế, case study có số liệu
-- Tránh: "mình cảm thấy", "thật sự rất", "vô cùng tuyệt vời"
-- Kết bài: kêu gọi hành động rõ ràng, không rào trước đón sau
+### Cách diễn đạt tự nhiên:
+- "Nói thẳng nhé:", "Thực tế là:", "Mình vừa gặp case này:"
+- "Check thử đi", "Nói thiệt", "Con số không biết nói dối"
+- "Bên mình vừa lắp cho công ty X, kết quả...", "Hồi trước mình cũng nghĩ vậy, cho đến khi..."
+- Câu ngắn, ít hoa mỹ, đi thẳng vào point
+- Kết bài: để mở, hoặc hỏi ngược kiểu "Anh em thấy sao?"
+
+### KHÔNG viết kiểu:
+- "Mình xin chia sẻ...", "Mình muốn giới thiệu...", "Cho phép mình..."
+- Quá lịch sự, rào đón → nghe giả, giống AI
 """,
     "nu": """
-## GIỌNG VĂN: NỮ
+## GIỌNG VĂN: NỮ — Viết như chị sale/tư vấn nữ đang chia sẻ câu chuyện thật
 
-### Phong cách tổng thể:
-- Tinh tế, kể chuyện, tạo kết nối cảm xúc
-- Empathy trước — hiểu pain point rồi mới đưa giải pháp
-- Ngôn ngữ gần gũi, ấm áp nhưng vẫn chuyên nghiệp
-- Xưng hô: "mình", "chị/em", "bạn" (tùy kênh)
-- Mở đầu bằng câu chuyện, tình huống đời thường
+### Nhân xưng:
+- LinkedIn: "mình", "em" (nếu nói với anh/chị lớn tuổi hơn)
+- Facebook: "mình", "mình" (thân thiện, gần gũi)
+- Cộng đồng: "mình", "mọi người" (hòa nhập)
+- Gọi khách/đối tác: "anh", "chị", "anh chị"
+- TUYỆT ĐỐI KHÔNG: "chúng tôi", "quý khách", "quý anh chị"
 
-### Cách viết:
-- Hook bằng câu hỏi hoặc tình huống gần gũi: "Bạn có bao giờ...", "Hôm qua mình ghé một văn phòng..."
-- Thân bài: kể chuyện xen lẫn insight, dẫn dắt tự nhiên
-- Dùng hình ảnh so sánh gợi cảm xúc, storytelling
-- Được dùng: "mình thấy", "trải nghiệm thật sự", chia sẻ cảm nhận cá nhân
-- Kết bài: mời chia sẻ, tạo cộng đồng, đặt câu hỏi mở
+### Cách diễn đạt tự nhiên:
+- "Hôm qua mình ghé văn phòng khách, thấy một chuyện...", "Có một điều mình để ý lâu rồi mà giờ mới nói:"
+- "Mình hay được hỏi...", "Nói thiệt là mình cũng bất ngờ khi..."
+- "Chị HR bên khách kể là...", "Mình ngồi thử rồi, cảm giác là..."
+- Kể chuyện tự nhiên, xen cảm nhận cá nhân, empathy
+- Kết bài: câu hỏi nhẹ nhàng, mời chia sẻ kiểu "Mọi người có gặp trường hợp này không?"
+
+### KHÔNG viết kiểu:
+- "Mình xin phép chia sẻ...", "Mình rất vinh dự...", "Cảm ơn mọi người đã đọc đến đây"
+- Quá ngọt ngào, khách sáo → nghe giả
 """,
 }
 
@@ -627,23 +635,40 @@ TOPIC_ROLE_INSIGHTS = {
 WRITING_STYLE = """
 ## PHONG CÁCH VIẾT — BẮT BUỘC TUÂN THỦ
 
-Viết như một NGƯỜI THẬT đang chia sẻ, KHÔNG phải AI viết content marketing.
+Viết như một NGƯỜI THẬT đang chia sẻ trên mạng xã hội cá nhân.
+Đây là bài viết CÁ NHÂN, KHÔNG phải bài viết fanpage hay thương hiệu.
+Người viết là nhân viên Epione, chia sẻ từ trải nghiệm và góc nhìn CÁ NHÂN.
 
-### CẤM TUYỆT ĐỐI:
-- Pattern "❌ vấn đề / ✅ giải pháp" hoặc bất kỳ emoji đầu dòng nào
-- Emoji đầu bài hoặc quá 2 emoji trong cả bài
+### NHÂN XƯNG — QUAN TRỌNG NHẤT:
+- LUÔN viết ngôi thứ nhất: "mình", "tôi", "tui", "em" — tùy kênh và giới tính
+- KHÔNG BAO GIỜ dùng: "chúng tôi", "chúng mình", "Epione chúng tôi", "công ty chúng tôi"
+- KHÔNG viết như đại diện thương hiệu. Viết như CÁ NHÂN làm việc ở Epione
+- Nhắc đến Epione như bên thứ ba tự nhiên: "bên mình", "chỗ mình", "team mình"
+- KHÔNG: "Epione tự hào", "Epione cam kết", "Epione mang đến" → thay bằng: "mình thấy", "mình hay tư vấn", "bên mình vừa lắp cho"
+
+### CỤM TỪ CẤM (AI hay dùng, người thật KHÔNG bao giờ nói):
+- "Trong thời đại...", "Trong bối cảnh...", "Với sự phát triển của..."
+- "Không chỉ... mà còn...", "Không đơn thuần là..."
+- "Giải pháp toàn diện", "nâng tầm", "đột phá", "tối ưu hóa", "game-changer"
+- "Đầu tư thông minh", "sự lựa chọn hoàn hảo", "trải nghiệm vượt trội"
+- "Bạn có biết...?", "Bạn đã bao giờ...?", "Bạn đã sẵn sàng...?"
+- "Hãy cùng tìm hiểu", "Hãy cùng khám phá", "Cùng mình tìm hiểu nhé"
+- "Đặc biệt", "Đáng chú ý", "Điều thú vị là"
+- "Liên hệ ngay để được tư vấn", "Inbox để nhận ưu đãi"
+- Pattern "❌ vấn đề / ✅ giải pháp" hoặc emoji đầu dòng
+- Emoji đầu bài hoặc quá 2 emoji cả bài
+
+### CẤM THÊM:
 - Header format: "### CAPTION:", "📌 LOẠI BÀI:", "📷 GỢI Ý:"
-- Metadata: gợi ý hình ảnh, thời điểm đăng, mục tiêu bài, ghi chú cho sale
-- Từ sáo rỗng: "giải quyết triệt để", "nâng tầm", "đột phá", "tối ưu hóa", "game-changer"
+- Metadata: gợi ý hình ảnh, thời điểm đăng, mục tiêu bài
 - Liệt kê quá 3 bullet points liên tiếp
-- Mở bài kiểu "Bạn có biết...?", "Bạn đã bao giờ...?"
-- Kết bài kiểu "Bạn đã sẵn sàng...?", "Liên hệ ngay..."
 
 ### NÊN LÀM:
 - Viết NGẮN. LinkedIn: 100-150 từ. Facebook/IG: 50-80 từ.
-- Mở bài bằng quan sát thực tế, câu chuyện ngắn, hoặc suy nghĩ cá nhân
+- Mở bài bằng quan sát thực tế, chuyện vừa xảy ra, hoặc suy nghĩ cá nhân
 - Câu ngắn. Xuống dòng nhiều. Dễ đọc trên điện thoại.
-- Kết bài tự nhiên — suy nghĩ cá nhân hoặc câu hỏi nhẹ
+- Kết bài tự nhiên — suy nghĩ cá nhân hoặc câu hỏi nhẹ nhàng
+- Nhắc sản phẩm tự nhiên trong ngữ cảnh, KHÔNG liệt kê tính năng
 - Đọc lại bài — nếu nghe giống chatbot thì VIẾT LẠI
 
 ### OUTPUT:
