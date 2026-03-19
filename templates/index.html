@@ -659,10 +659,10 @@ input[type="text"]:focus { border-color:var(--accent); }
 
     <div class="step-label">Platform</div>
     <div class="plat-select">
-      <button class="plat-chip selected" data-plat="linkedin">LinkedIn</button>
-      <button class="plat-chip" data-plat="facebook">Facebook</button>
-      <button class="plat-chip" data-plat="instagram">Instagram</button>
-      <button class="plat-chip" data-plat="community">Cộng đồng</button>
+      <button class="topic-plat-chip plat-chip selected" data-plat="linkedin">LinkedIn</button>
+      <button class="topic-plat-chip plat-chip" data-plat="facebook">Facebook</button>
+      <button class="topic-plat-chip plat-chip" data-plat="instagram">Instagram</button>
+      <button class="topic-plat-chip plat-chip" data-plat="community">Cộng đồng</button>
     </div>
 
     <div style="display:flex; gap:8px; align-items:center;">
@@ -1288,9 +1288,9 @@ document.querySelectorAll('.topic-chip').forEach(chip => {
   });
 });
 
-document.querySelectorAll('.plat-chip').forEach(chip => {
+document.querySelectorAll('.topic-plat-chip').forEach(chip => {
   chip.addEventListener('click', () => {
-    document.querySelectorAll('.plat-chip').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('.topic-plat-chip').forEach(c => c.classList.remove('selected'));
     chip.classList.add('selected');
     selectedPlat = chip.dataset.plat;
   });
