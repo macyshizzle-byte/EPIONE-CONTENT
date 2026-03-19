@@ -700,11 +700,11 @@ Mở bài bằng con số gây sốc, sai lầm phổ biến, hoặc quan điể
 Độ dài 1,200–2,000 ký tự. Ngắt dòng rõ ràng (white space) để dễ đọc mobile.
 Đúng 3 hashtag cuối bài (1 chung + 2 ngách). Chỉ viết bài, không kèm gì khác."""
 
-FACEBOOK_PROMPT = """{role_context}
+FACEBOOK_SHORT_PROMPT = """{role_context}
 
 {gender_context}
 
-Bạn làm việc tại Epione, viết caption Facebook.
+Bạn làm việc tại Epione, viết caption Facebook NGẮN GỌN.
 
 {brand_context}
 
@@ -714,17 +714,41 @@ Bạn làm việc tại Epione, viết caption Facebook.
 
 {writing_style}
 
-Viết 1 caption Facebook. Hook đánh vào cảm xúc/tính cấp thiết ngay 2 dòng đầu (trước nút "Xem thêm").
-Kể chuyện ngắn, thân thiện, gần gũi. KHÔNG dẫn link trong bài — để link dưới comment.
-Độ dài 500–1,200 ký tự. Ngắt dòng rõ ràng để dễ đọc mobile.
+Viết 1 caption Facebook ngắn gọn, đúng trọng tâm.
+Hook mạnh ngay dòng đầu (trước nút "Xem thêm"). Đi thẳng vào point.
+Độ dài 200–500 ký tự. Tối đa 5-7 dòng.
+KHÔNG dẫn link trong bài — để link dưới comment.
+2-3 hashtag cuối bài.
+Chỉ viết caption, không header, không ghi chú."""
+
+FACEBOOK_STORY_PROMPT = """{role_context}
+
+{gender_context}
+
+Bạn làm việc tại Epione, viết caption Facebook dạng STORYTELLING.
+
+{brand_context}
+
+{channel_insight}
+
+{topic_insight}
+
+{writing_style}
+
+Viết 1 caption Facebook dạng kể chuyện.
+Mở bằng tình huống cụ thể, câu chuyện thật (hoặc dựa trên thật), dẫn dắt tự nhiên đến insight.
+Hook 2 dòng đầu phải tạo tò mò, muốn bấm "Xem thêm".
+Có nhân vật, bối cảnh, diễn biến, bài học. Viết như đang kể cho bạn bè nghe.
+Độ dài 600–1,500 ký tự. Ngắt dòng rõ ràng để dễ đọc mobile.
+KHÔNG dẫn link trong bài — để link dưới comment.
 3-5 hashtag cuối bài.
 Chỉ viết caption, không header, không ghi chú."""
 
-INSTAGRAM_PROMPT = """{role_context}
+INSTAGRAM_SHORT_PROMPT = """{role_context}
 
 {gender_context}
 
-Bạn làm việc tại Epione, viết caption Instagram.
+Bạn làm việc tại Epione, viết caption Instagram NGẮN GỌN.
 
 {brand_context}
 
@@ -734,10 +758,31 @@ Bạn làm việc tại Epione, viết caption Instagram.
 
 {writing_style}
 
-Viết 1 caption Instagram. Ngắn gọn, visual-first, viết cho ảnh/reel.
-Mở bài thu hút trong 1-2 dòng đầu. Tone trẻ trung, cá nhân.
+Viết 1 caption Instagram ngắn gọn, visual-first, viết cho ảnh/reel.
+Mở bài thu hút 1 dòng. Đi thẳng vào point. Tone trẻ trung.
+Độ dài 150–400 ký tự. Tối đa 4-5 dòng.
+5-10 hashtag cuối bài.
+Chỉ viết caption, không header, không ghi chú."""
+
+INSTAGRAM_STORY_PROMPT = """{role_context}
+
+{gender_context}
+
+Bạn làm việc tại Epione, viết caption Instagram dạng STORYTELLING.
+
+{brand_context}
+
+{channel_insight}
+
+{topic_insight}
+
+{writing_style}
+
+Viết 1 caption Instagram dạng kể chuyện, kèm ảnh/carousel.
+Mở bằng tình huống gần gũi, câu chuyện mini. Dẫn dắt nhẹ nhàng đến insight.
+Tone cá nhân, chân thật, như đang chia sẻ trên story cá nhân.
 Độ dài 300–800 ký tự.
-10-15 hashtag cuối bài để tối ưu SEO (mix hashtag lớn + hashtag ngách).
+10-15 hashtag cuối bài (mix hashtag lớn + ngách).
 Chỉ viết caption, không header, không ghi chú."""
 
 OUTREACH_PROMPT = """{role_context}
@@ -976,6 +1021,9 @@ def get_prompt(content_type: str, role: str = "sale_b2b", gender: str = "nam") -
     topic_insight = TOPIC_ROLE_INSIGHTS.get(role, TOPIC_ROLE_INSIGHTS["sale_b2b"]) if content_type in topic_types else ""
 
     # Mapping content_type → channel insight(s) phù hợp
+    # Base content type for channel insight (strip style suffix)
+    base_type = content_type.replace("_short", "").replace("_story", "")
+
     channel_insight_map = {
         "linkedin": CHANNEL_INSIGHTS["linkedin"],
         "facebook": CHANNEL_INSIGHTS["facebook"],
@@ -988,12 +1036,14 @@ def get_prompt(content_type: str, role: str = "sale_b2b", gender: str = "nam") -
         "ideas": CHANNEL_INSIGHTS["linkedin"],
         "casestudy": CHANNEL_INSIGHTS["linkedin"],
     }
-    channel_insight = channel_insight_map.get(content_type, CHANNEL_INSIGHTS["linkedin"])
+    channel_insight = channel_insight_map.get(base_type, CHANNEL_INSIGHTS["linkedin"])
 
     prompts = {
         "linkedin": LINKEDIN_PROMPT,
-        "facebook": FACEBOOK_PROMPT,
-        "instagram": INSTAGRAM_PROMPT,
+        "facebook_short": FACEBOOK_SHORT_PROMPT,
+        "facebook_story": FACEBOOK_STORY_PROMPT,
+        "instagram_short": INSTAGRAM_SHORT_PROMPT,
+        "instagram_story": INSTAGRAM_STORY_PROMPT,
         "outreach": OUTREACH_PROMPT,
         "ideas": CONTENT_IDEA_PROMPT,
         "casestudy": CASE_STUDY_PROMPT,
