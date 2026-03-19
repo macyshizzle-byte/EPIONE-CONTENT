@@ -572,17 +572,23 @@ input[type="text"]:focus { border-color:var(--accent); }
     <h2>Viết content</h2>
     <p class="desc">Chọn kênh đăng → mô tả yêu cầu → AI viết content phù hợp</p>
 
-    <div class="step-label">Kênh đăng</div>
-    <div class="plat-select" style="margin-bottom:8px;">
-      <button class="content-plat-chip plat-chip selected" data-plat="linkedin">LinkedIn</button>
-      <button class="content-plat-chip plat-chip" data-plat="facebook">Facebook</button>
-      <button class="content-plat-chip plat-chip" data-plat="instagram">Instagram</button>
-      <button class="content-plat-chip plat-chip" data-plat="community">Cộng đồng FB</button>
-    </div>
-    <div class="plat-select" id="content-style-btns" style="margin-bottom:16px;">
-      <span style="font-size:11px; font-weight:600; color:var(--text-secondary); margin-right:4px;">Phong cách:</span>
-      <button class="style-chip plat-chip selected" data-style="short" onclick="switchContentStyle('short')">Ngắn gọn</button>
-      <button class="style-chip plat-chip" data-style="story" onclick="switchContentStyle('story')">Story telling</button>
+    <div style="display:flex; gap:16px; margin-bottom:16px; flex-wrap:wrap;">
+      <div style="flex:1; min-width:140px;">
+        <div class="step-label">Kênh đăng</div>
+        <div class="plat-select" style="margin-bottom:0;">
+          <button class="content-plat-chip plat-chip selected" data-plat="linkedin">LinkedIn</button>
+          <button class="content-plat-chip plat-chip" data-plat="facebook">Facebook</button>
+          <button class="content-plat-chip plat-chip" data-plat="instagram">Instagram</button>
+          <button class="content-plat-chip plat-chip" data-plat="community">Cộng đồng FB</button>
+        </div>
+      </div>
+      <div style="min-width:140px;">
+        <div class="step-label">Phong cách</div>
+        <div class="plat-select" style="margin-bottom:0;">
+          <button class="style-chip plat-chip selected" data-style="short" onclick="switchContentStyle('short')">Ngắn gọn</button>
+          <button class="style-chip plat-chip" data-style="story" onclick="switchContentStyle('story')">Story telling</button>
+        </div>
+      </div>
     </div>
 
     <div id="content-community-fields" style="display:none; margin-bottom:14px;">
@@ -600,8 +606,8 @@ input[type="text"]:focus { border-color:var(--accent); }
     <div class="step-label" id="content-prompt-label">Gợi ý nhanh</div>
     <div class="topic-suggestions" id="topic-suggestions"></div>
 
-    <div class="step-label">Yêu cầu</div>
-    <textarea id="prompt" placeholder="Mô tả yêu cầu... Ví dụ: Viết bài về pain point văn phòng open-plan thiếu chỗ riêng tư, hướng đến HR Manager"></textarea>
+    <div class="step-label">Bạn muốn viết gì?</div>
+    <textarea id="prompt" placeholder="Ví dụ: Chia sẻ về trải nghiệm lắp booth cho văn phòng 200 người, HR khen vì nhân viên tập trung hơn"></textarea>
     <div class="input-footer">
       <div class="input-hint" id="content-hint">Enter để gửi &middot; Shift+Enter xuống dòng</div>
     </div>
@@ -1005,7 +1011,7 @@ function shuffleAndPick(arr, count) {
 function renderSuggestions() {
   const container = document.getElementById('topic-suggestions');
   const allSuggestions = ROLE_SUGGESTIONS[currentRole] || ROLE_SUGGESTIONS.sale_b2b;
-  const picked = shuffleAndPick(allSuggestions, 6);
+  const picked = shuffleAndPick(allSuggestions, 3);
   container.innerHTML = picked.map(s =>
     '<button class="suggest-chip" onclick="useSuggestion(this)">' + s + '</button>'
   ).join('') +
