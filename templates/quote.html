@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:title" content="Báo giá Epione — {{ quote.id }}">
+<meta property="og:description" content="Báo giá sản phẩm Epione cho {{ quote.customer.name or 'Quý khách' }}">
+<title>Báo giá {{ quote.id }} — Epione</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root { --accent:#10069F; --black:#1A1A1A; --gray:#F5F5F7; --border:#E5E5EA; --text-sec:#8E8E93; }
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito Sans',sans-serif;color:var(--black);background:var(--gray);padding:0;}
+.quote-page{max-width:600px;margin:0 auto;background:#fff;min-height:100vh;}
+.header{background:var(--accent);color:#fff;padding:24px 20px;text-align:center;}
+.header svg{margin-bottom:6px;}
+.header h1{font-size:13px;letter-spacing:2px;font-weight:700;opacity:.8;}
+.header .qid{font-size:22px;font-weight:700;margin-top:4px;}
+.header .date{font-size:12px;opacity:.7;margin-top:4px;}
+.section{padding:20px;}
+.section+.section{border-top:1px solid var(--border);}
+.section-title{font-size:11px;font-weight:700;color:var(--text-sec);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px;}
+.customer-name{font-size:16px;font-weight:700;}
+.customer-detail{font-size:13px;color:var(--text-sec);margin-top:2px;}
+.item{display:flex;justify-content:space-between;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);}
+.item:last-child{border-bottom:none;}
+.item-info{flex:1;}
+.item-name{font-size:14px;font-weight:700;}
+.item-variant{font-size:12px;color:var(--text-sec);}
+.item-qty{font-size:12px;color:var(--text-sec);margin-top:2px;}
+.item-price{text-align:right;font-size:14px;font-weight:700;white-space:nowrap;}
+.totals{background:var(--gray);border-radius:10px;padding:14px 16px;}
+.total-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;}
+.total-row.discount{color:#2e7d32;}
+.total-row.grand{font-size:17px;font-weight:700;color:var(--accent);border-top:2px solid var(--accent);padding-top:10px;margin-top:6px;}
+.note{font-size:13px;color:var(--text-sec);line-height:1.5;background:#FFF8E1;padding:12px 14px;border-radius:8px;}
+.footer{text-align:center;padding:20px;font-size:11px;color:var(--text-sec);}
+.validity{display:inline-block;background:var(--accent);color:#fff;padding:4px 12px;border-radius:12px;font-size:11px;font-weight:600;margin-bottom:8px;}
+@media print{
+  body{background:#fff;}
+  .quote-page{box-shadow:none;}
+  .no-print{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div class="quote-page">
+  <div class="header">
+    <svg width="36" height="36" viewBox="0 0 120 120" fill="none">
+      <circle cx="60" cy="60" r="52" stroke="#fff" stroke-width="1.5" opacity=".3"/>
+      <circle cx="60" cy="60" r="38" stroke="#fff" stroke-width="2" opacity=".5"/>
+      <circle cx="60" cy="60" r="24" stroke="#fff" stroke-width="2.5" opacity=".7"/>
+      <circle cx="60" cy="60" r="10" fill="#fff"/>
+    </svg>
+    <h1>EPIONE — BÁO GIÁ</h1>
+    <div class="qid">#{{ quote.id }}</div>
+    <div class="date">{{ quote.created_at[:10] }} · Hiệu lực đến {{ quote.valid_until }}</div>
+  </div>
+
+  {% if quote.customer.name or quote.customer.company %}
+  <div class="section">
+    <div class="section-title">Khách hàng</div>
+    {% if quote.customer.name %}<div class="customer-name">{{ quote.customer.name }}</div>{% endif %}
+    {% if quote.customer.company %}<div class="customer-detail">{{ quote.customer.company }}</div>{% endif %}
+    {% if quote.customer.phone %}<div class="customer-detail">{{ quote.customer.phone }}</div>{% endif %}
+    {% if quote.customer.email %}<div class="customer-detail">{{ quote.customer.email }}</div>{% endif %}
+  </div>
+  {% endif %}
+
+  <div class="section">
+    <div class="section-title">Sản phẩm</div>
+    {% for item in quote['items'] %}
+    <div class="item">
+      <div class="item-info">
+        <div class="item-name">{{ item.product_name }}</div>
+        <div class="item-variant">{{ item.variant_name }} · {{ item.sku }}</div>
+        <div class="item-qty">SL: {{ item.quantity }} × {{ "{:,.0f}".format(item.unit_price) }}đ</div>
+      </div>
+      <div class="item-price">{{ "{:,.0f}".format(item.subtotal) }}đ</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="section">
+    <div class="totals">
+      <div class="total-row">
+        <span>Tạm tính</span>
+        <span>{{ "{:,.0f}".format(quote.subtotal) }}đ</span>
+      </div>
+      {% if quote.discount_percent > 0 %}
+      <div class="total-row discount">
+        <span>Chiết khấu ({{ quote.discount_percent }}%)</span>
+        <span>-{{ "{:,.0f}".format(quote.discount_amount) }}đ</span>
+      </div>
+      {% endif %}
+      <div class="total-row grand">
+        <span>Tổng cộng</span>
+        <span>{{ "{:,.0f}".format(quote.total) }}đ</span>
+      </div>
+    </div>
+  </div>
+
+  {% if quote.note %}
+  <div class="section">
+    <div class="section-title">Ghi chú</div>
+    <div class="note">{{ quote.note }}</div>
+  </div>
+  {% endif %}
+
+  <div class="section">
+    <div class="section-title">Điều khoản</div>
+    <div style="font-size:12px;color:var(--text-sec);line-height:1.6;">
+      <div><span class="validity">Hiệu lực {{ quote.valid_until }}</span></div>
+      Giá đã bao gồm VAT. Bảo hành theo chính sách Epione. Giá đã bao gồm phí lắp đặt tại TP.HCM.<br>
+      Thanh toán: Chuyển khoản hoặc COD. Giao hàng trong 3-7 ngày làm việc.
+    </div>
+  </div>
+
+  {% if quote.created_by %}
+  <div class="section">
+    <div class="section-title">Người tư vấn</div>
+    <div style="font-size:14px;font-weight:600;">{{ quote.created_by }}</div>
+    <div style="font-size:12px;color:var(--text-sec);">Epione — Nội thất Ergonomic</div>
+  </div>
+  {% endif %}
+
+  <div class="footer">
+    Epione — Nội thất Ergonomic & Acoustic Solutions<br>
+    epione.vn
+  </div>
+</div>
+</body>
+</html>

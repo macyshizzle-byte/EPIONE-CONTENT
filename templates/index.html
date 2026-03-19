@@ -2,420 +2,261 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#FFFFFF">
 <title>Epione — Content Agent</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 :root {
   --accent: #10069F;
   --accent-dark: #0A0470;
-  --black: #282828;
+  --accent-light: rgba(16,6,159,0.08);
+  --accent-glow: rgba(16,6,159,0.12);
+  --black: #1A1A1A;
   --white: #FFFFFF;
   --gray: #F5F5F7;
+  --gray-2: #EBEBF0;
   --border: #E5E5EA;
-  --text-secondary: #888;
-  --radius: 12px;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Nunito Sans',sans-serif; background:var(--gray); color:var(--black); min-height:100vh; }
-
-/* NAV */
-.nav {
-  position:sticky; top:0; z-index:100;
-  background:rgba(255,255,255,0.92); backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-  padding:12px 24px;
-  display:flex; align-items:center; gap:12px;
-}
-.nav svg { flex-shrink:0; }
-.nav-brand { font-size:14px; font-weight:700; letter-spacing:2px; color:var(--accent); }
-.nav-sub { font-size:10px; color:var(--text-secondary); letter-spacing:1px; }
-.nav-spacer { flex:1; }
-
-/* ROLE SELECTION SCREEN */
-.role-screen {
-  position:fixed; inset:0; z-index:1000;
-  background:var(--gray);
-  display:flex; align-items:center; justify-content:center;
-  animation:fadeIn .3s ease-out;
-}
-.role-screen.hidden {
-  animation:fadeOut .3s ease-in forwards;
-  pointer-events:none;
-}
-@keyframes fadeOut { from { opacity:1; } to { opacity:0; } }
-.role-screen-inner {
-  text-align:center; max-width:640px; padding:24px;
-}
-.role-screen-title {
-  font-size:28px; font-weight:700; color:var(--black); margin-bottom:6px;
-}
-.role-screen-desc {
-  font-size:15px; color:var(--text-secondary); margin-bottom:32px;
-}
-.role-screen-cards {
-  display:flex; gap:14px; justify-content:center;
-}
-.role-screen-card {
-  flex:1; max-width:200px; padding:28px 20px;
-  border-radius:16px; border:2px solid var(--border);
-  background:var(--white); cursor:pointer;
-  font-family:inherit; transition:all .2s;
-  text-align:center;
-}
-.role-screen-card:hover {
-  border-color:var(--accent); transform:translateY(-4px);
-  box-shadow:0 8px 24px rgba(16,6,159,0.1);
-}
-.role-screen-card-icon {
-  width:48px; height:48px; border-radius:12px;
-  background:rgba(16,6,159,0.08); color:var(--accent);
-  font-size:14px; font-weight:800; line-height:48px;
-  margin:0 auto 14px; letter-spacing:1px;
-}
-.role-screen-card:hover .role-screen-card-icon {
-  background:var(--accent); color:var(--white);
-}
-.role-screen-card-title {
-  font-size:16px; font-weight:700; color:var(--black); margin-bottom:8px;
-}
-.role-screen-card-desc {
-  font-size:12px; color:var(--text-secondary); line-height:1.5;
+  --text-secondary: #8E8E93;
+  --text-tertiary: #AEAEB2;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --bottomnav-h: 56px;
+  --topbar-h: 52px;
 }
 
-/* ROLE DROPDOWN */
-.role-dropdown-wrap { position:relative; }
-.role-dropdown-btn {
+/* RESET */
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { height:100%; -webkit-text-size-adjust:100%; }
+body {
+  font-family:'Nunito Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--gray); color:var(--black);
+  height:100dvh; height:100vh;
+  overflow:hidden;
+  overscroll-behavior:none;
+}
+button { font-family:inherit; border:none; background:none; cursor:pointer; touch-action:manipulation; }
+input, textarea { font-family:inherit; touch-action:manipulation; }
+
+/* APP SHELL */
+.app {
+  display:flex; flex-direction:column;
+  height:100dvh; height:100vh;
+  padding-top:var(--safe-top);
+  padding-bottom:var(--safe-bottom);
+}
+
+/* TOP BAR */
+.topbar {
+  flex-shrink:0;
+  height:var(--topbar-h);
+  display:flex; align-items:center; gap:10px;
+  padding:0 16px;
+  background:rgba(255,255,255,0.92); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border-bottom:0.5px solid var(--border);
+  z-index:100;
+}
+.topbar-logo {
+  display:flex; align-items:center; gap:8px;
+}
+.topbar-logo svg { flex-shrink:0; }
+.topbar-title { font-size:15px; font-weight:700; letter-spacing:1.5px; color:var(--accent); }
+.topbar-spacer { flex:1; }
+.topbar-badge {
   display:flex; align-items:center; gap:6px;
-  padding:7px 14px; border-radius:8px;
-  border:1px solid var(--border); background:var(--white);
-  font-size:13px; font-weight:600; color:var(--black);
-  cursor:pointer; font-family:inherit; transition:all .2s;
+  padding:6px 12px; border-radius:20px;
+  background:var(--accent-light);
+  font-size:12px; font-weight:600; color:var(--accent);
+  min-height:32px;
+  transition:background .15s;
 }
-.role-dropdown-btn:hover { border-color:var(--accent); }
-.role-dropdown-dot {
-  width:8px; height:8px; border-radius:50%;
-  background:var(--accent); flex-shrink:0;
+.topbar-badge:active { background:var(--accent-glow); }
+.topbar-badge .dot {
+  width:6px; height:6px; border-radius:50%;
+  background:var(--accent);
 }
-.role-dropdown-menu {
-  display:none; position:absolute; top:calc(100% + 6px); right:0;
-  background:var(--white); border:1px solid var(--border);
-  border-radius:12px; padding:6px;
-  box-shadow:0 8px 30px rgba(0,0,0,0.12);
-  min-width:260px; z-index:200;
-  animation:fadeIn .15s ease-out;
+.topbar-badge svg { width:12px; height:12px; flex-shrink:0; }
+
+/* MAIN SCROLL AREA */
+.main {
+  flex:1; overflow-y:auto; overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-y:contain;
+  scroll-behavior:smooth;
 }
-.role-dropdown-menu.open { display:block; }
-.role-dropdown-item {
-  display:block; width:100%; text-align:left;
-  padding:10px 14px; border-radius:8px;
-  border:none; background:transparent;
-  cursor:pointer; font-family:inherit; transition:all .15s;
-}
-.role-dropdown-item:hover { background:var(--gray); }
-.role-dropdown-item.active { background:rgba(16,6,159,0.06); }
-.role-dropdown-item-title {
-  font-size:13px; font-weight:700; color:var(--black);
-  margin-bottom:1px;
-}
-.role-dropdown-item.active .role-dropdown-item-title { color:var(--accent); }
-.role-dropdown-item-desc {
-  font-size:11px; color:var(--text-secondary);
+.main-inner {
+  padding:16px 16px calc(16px + var(--bottomnav-h));
+  max-width:680px;
+  margin:0 auto;
 }
 
-/* LAYOUT */
-.container { max-width:960px; margin:0 auto; padding:24px 16px; }
-
-/* TABS */
-.tabs {
-  display:flex; gap:8px; flex-wrap:nowrap;
-  margin-bottom:24px;
-  overflow-x:auto; -webkit-overflow-scrolling:touch;
-  scrollbar-width:none; -ms-overflow-style:none;
+/* BOTTOM NAVIGATION */
+.bottomnav {
+  flex-shrink:0;
+  height:calc(var(--bottomnav-h) + var(--safe-bottom));
+  padding-bottom:var(--safe-bottom);
+  display:flex; align-items:center; justify-content:space-around;
+  background:rgba(255,255,255,0.96); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border-top:0.5px solid var(--border);
+  z-index:100;
+  position:relative;
 }
-.tabs::-webkit-scrollbar { display:none; }
-.tab {
-  padding:10px 20px; border-radius:24px;
-  border:1px solid var(--border); background:var(--white);
-  font-size:13px; font-weight:600; color:var(--black);
-  cursor:pointer; transition:all .2s;
-  font-family:inherit;
+.nav-item {
+  flex:1; display:flex; flex-direction:column; align-items:center;
+  gap:2px; padding:6px 0;
+  font-size:10px; font-weight:600; color:var(--text-tertiary);
+  transition:color .15s;
+  position:relative;
 }
-.tab:hover { border-color:var(--accent); color:var(--accent); }
-.tab.active { background:var(--accent); color:var(--white); border-color:var(--accent); }
+.nav-item svg { width:22px; height:22px; transition:color .15s; }
+.nav-item.active { color:var(--accent); }
+.nav-item.active svg { color:var(--accent); }
+.nav-item:active { transform:scale(0.92); }
 
-/* CARD */
+/* CARDS */
 .card {
   background:var(--white);
-  border-radius:var(--radius); border:1px solid var(--border);
-  padding:28px; margin-bottom:20px;
+  border-radius:var(--radius);
+  padding:20px;
+  margin-bottom:14px;
+  box-shadow:0 0.5px 0 var(--border);
 }
-.card h2 { font-size:18px; margin-bottom:6px; }
-.card p.desc { font-size:13px; color:var(--text-secondary); margin-bottom:20px; }
+.card-title {
+  font-size:17px; font-weight:700; color:var(--black);
+  margin-bottom:4px;
+}
+.card-desc {
+  font-size:13px; color:var(--text-secondary);
+  margin-bottom:16px; line-height:1.4;
+}
 
-/* INPUT */
+/* STEP LABELS */
+.step-label {
+  display:block; font-size:11px; font-weight:700; color:var(--text-secondary);
+  margin-bottom:6px; letter-spacing:0.3px; text-transform:uppercase;
+}
+
+/* PILL CHIPS (platform, style, topic) */
+.chip-row {
+  display:flex; gap:6px; flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.chip {
+  padding:8px 16px; border-radius:20px;
+  border:1.5px solid var(--border); background:var(--white);
+  font-size:13px; font-weight:600; color:var(--text-secondary);
+  transition:all .15s;
+  min-height:36px;
+  display:inline-flex; align-items:center;
+}
+.chip:active { transform:scale(0.96); }
+.chip.selected {
+  background:var(--accent); color:var(--white); border-color:var(--accent);
+}
+.chip-sm {
+  padding:6px 12px; font-size:12px; min-height:32px;
+  border-radius:16px;
+}
+
+/* STYLE SUBPANEL */
+.style-subpanel {
+  margin-bottom:4px;
+  animation:slideDown .2s ease;
+}
+@keyframes slideDown {
+  from { opacity:0; transform:translateY(-6px); }
+  to { opacity:1; transform:translateY(0); }
+}
+.combo-tag { display:none; }
+
+/* TEXTAREA */
 textarea {
   width:100%; min-height:100px; padding:14px 16px;
-  border:1px solid var(--border); border-radius:10px;
-  font-family:inherit; font-size:14px; color:var(--black);
+  border:1.5px solid var(--border); border-radius:var(--radius-sm);
+  font-family:inherit; font-size:15px; color:var(--black);
   resize:vertical; outline:none; transition:border .2s;
+  -webkit-appearance:none; appearance:none;
+  line-height:1.5;
 }
-textarea:focus { border-color:var(--accent); }
+textarea:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(16,6,159,0.08); }
+
+/* TEXT INPUT */
 input[type="text"] {
   width:100%; padding:12px 16px;
-  border:1px solid var(--border); border-radius:10px;
-  font-family:inherit; font-size:14px; outline:none;
+  border:1.5px solid var(--border); border-radius:var(--radius-sm);
+  font-family:inherit; font-size:15px; color:var(--black);
+  outline:none; -webkit-appearance:none; appearance:none;
 }
-input[type="text"]:focus { border-color:var(--accent); }
+input[type="text"]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(16,6,159,0.08); }
 
-/* BUTTON */
-.btn {
-  display:inline-flex; align-items:center; gap:6px;
-  padding:12px 28px; border-radius:24px;
-  font-family:inherit; font-size:14px; font-weight:600;
-  cursor:pointer; transition:all .2s; border:none;
+/* PRIMARY BUTTON */
+.btn-primary {
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  padding:14px 28px; border-radius:24px;
+  background:var(--accent); color:var(--white);
+  font-size:15px; font-weight:700;
+  min-height:48px;
+  transition:all .15s;
+  box-shadow:0 2px 12px rgba(16,6,159,0.25);
 }
-.btn-primary { background:var(--accent); color:var(--white); }
-.btn-primary:hover { background:var(--accent-dark); }
-.btn-primary:disabled { opacity:0.5; cursor:not-allowed; }
-.btn-outline { background:transparent; border:1px solid var(--border); color:var(--black); }
-.btn-outline:hover { border-color:var(--accent); color:var(--accent); }
+.btn-primary:active { transform:scale(0.97); background:var(--accent-dark); }
+.btn-primary:disabled { opacity:0.4; cursor:not-allowed; box-shadow:none; }
+.btn-outline {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:12px 20px; border-radius:20px;
+  background:transparent; border:1.5px solid var(--border); color:var(--black);
+  font-size:13px; font-weight:600;
+  min-height:44px;
+  transition:all .15s;
+}
+.btn-outline:active { background:var(--gray); }
+
+/* SUGGESTIONS */
+.suggest-row {
+  display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;
+}
+.suggest-chip {
+  padding:8px 14px; border-radius:18px;
+  border:1px solid var(--border); background:var(--white);
+  font-size:12px; font-weight:500; color:var(--text-secondary);
+  transition:all .15s; min-height:36px;
+  display:inline-flex; align-items:center;
+}
+.suggest-chip:active { transform:scale(0.96); background:var(--gray); }
 
 /* DROPZONE */
 .dropzone {
   border:2px dashed var(--border); border-radius:var(--radius);
-  padding:40px 20px; text-align:center;
-  cursor:pointer; transition:all .2s;
-  margin-bottom:16px;
+  padding:32px 16px; text-align:center;
+  transition:all .2s; margin-bottom:14px;
+  min-height:120px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
 }
-.dropzone:hover, .dropzone.dragover {
-  border-color:var(--accent); background:rgba(16,6,159,0.04);
+.dropzone:active, .dropzone.dragover {
+  border-color:var(--accent); background:rgba(16,6,159,0.03);
 }
-.dropzone .icon { font-size:36px; margin-bottom:8px; }
-.dropzone .label { font-size:14px; color:var(--text-secondary); }
+.dropzone .icon { font-size:32px; margin-bottom:6px; }
+.dropzone .label { font-size:13px; color:var(--text-secondary); }
 .dropzone .label strong { color:var(--accent); }
 .dropzone img.preview {
-  max-width:100%; max-height:300px; border-radius:8px;
-  object-fit:contain; margin-top:12px;
+  max-width:100%; max-height:240px; border-radius:10px;
+  object-fit:contain;
 }
-
-/* OUTPUT */
-.output {
-  background:#FAFAFA; border:1px solid var(--border); border-radius:var(--radius);
-  padding:24px; margin-top:20px;
-  white-space:pre-wrap; font-size:14px; line-height:1.7;
-  display:none;
-}
-.output.show { display:block; }
-.output h1,.output h2,.output h3 { margin:16px 0 8px; }
-.output hr { border:none; border-top:1px solid var(--border); margin:16px 0; }
-.output-content-md ul,.output-content-md ol { padding-left:20px; margin:8px 0; }
-.output-content-md li { margin:4px 0; }
-.output-content-md p { margin:6px 0; }
-.output-content-md strong { font-weight:700; }
-.output-content-md em { font-style:italic; }
-
-/* TOPIC SUGGESTIONS */
-.topic-suggestions {
-  display:flex; gap:6px; flex-wrap:wrap; margin-bottom:14px;
-}
-.suggest-chip {
-  padding:6px 14px; border-radius:20px;
-  border:1px solid var(--border); background:var(--white);
-  font-size:12px; font-weight:500; color:var(--text-secondary);
-  cursor:pointer; font-family:inherit; transition:all .2s;
-}
-.suggest-chip:hover { border-color:var(--accent); color:var(--accent); background:rgba(16,6,159,0.04); }
-
-/* RETRY BUTTON */
-.retry-btn {
-  display:inline-flex; align-items:center; gap:6px;
-  padding:10px 22px; border-radius:20px; margin-top:14px;
-  border:1px solid var(--accent); background:rgba(16,6,159,0.06);
-  font-size:13px; font-weight:600; color:var(--accent);
-  cursor:pointer; font-family:inherit; transition:all .2s;
-}
-.retry-btn:hover { background:var(--accent); color:var(--white); }
-
-/* ERROR OUTPUT */
-.output-error { color:#c62828; }
-
-/* LOADING */
-.loading {
-  display:none; align-items:center; gap:8px;
-  font-size:13px; color:var(--accent); margin-top:12px;
-}
-.loading.show { display:flex; }
-.spinner {
-  width:18px; height:18px; border:2px solid var(--border);
-  border-top-color:var(--accent); border-radius:50%;
-  animation:spin .6s linear infinite;
-}
-@keyframes spin { to { transform:rotate(360deg); } }
-
-/* OUTPUT ACTIONS */
-.output-actions {
-  display:flex; justify-content:space-between; align-items:center;
-  margin-bottom:16px; padding-bottom:12px;
-  border-bottom:1px solid var(--border); flex-wrap:wrap; gap:10px;
-}
-.platform-btns { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
-.platform-label { font-size:12px; font-weight:600; color:var(--text-secondary); margin-right:2px; }
-.platform-btn {
-  display:inline-flex; align-items:center; gap:4px;
-  padding:6px 12px; border-radius:8px;
-  font-size:11px; font-weight:600; cursor:pointer;
-  background:var(--white); border:1px solid var(--border);
-  color:var(--text-secondary); font-family:inherit; transition:all .2s;
-}
-.platform-btn:hover { border-color:var(--accent); color:var(--accent); }
-.platform-btn.copied { background:var(--accent); color:var(--white); border-color:var(--accent); }
-.platform-btn svg { width:14px; height:14px; flex-shrink:0; }
-.btn-download {
-  display:inline-flex; align-items:center; gap:5px;
-  padding:8px 16px; border-radius:8px;
-  font-size:12px; font-weight:600; cursor:pointer;
-  background:var(--accent); border:none;
-  color:var(--white); font-family:inherit; transition:all .2s;
-}
-.btn-download:hover { background:var(--accent-dark); }
-.btn-download svg { width:16px; height:16px; }
-
-/* COMMUNITY */
-.community-header { display:flex; gap:8px; margin-bottom:12px; align-items:end; }
-.community-header > div { flex:1; }
-.saved-rules { font-size:11px; color:var(--accent); margin-top:4px; display:none; }
-.saved-rules.show { display:block; }
-
-/* TOPIC FLOW */
-.step-label {
-  display:block; font-size:11px; font-weight:700; color:var(--accent);
-  margin-bottom:8px; letter-spacing:1px; text-transform:uppercase;
-}
-.topic-grid { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
-.topic-chip {
-  padding:8px 16px; border-radius:10px;
-  border:1px solid var(--border); background:var(--white);
-  font-size:13px; font-weight:500; color:var(--black);
-  cursor:pointer; transition:all .2s; font-family:inherit;
-}
-.topic-chip:hover { border-color:var(--accent); color:var(--accent); }
-.topic-chip.selected { background:var(--accent); color:var(--white); border-color:var(--accent); }
-.plat-select { display:flex; gap:6px; margin-bottom:16px; }
-.plat-chip {
-  padding:6px 14px; border-radius:8px;
-  border:1px solid var(--border); background:var(--white);
-  font-size:12px; font-weight:600; color:var(--text-secondary);
-  cursor:pointer; transition:all .2s; font-family:inherit;
-}
-.plat-chip:hover { border-color:var(--accent); color:var(--accent); }
-.plat-chip.selected { background:var(--accent); color:var(--white); border-color:var(--accent); }
-.style-subpanel {
-  margin-left:8px; padding-left:12px;
-  border-left:2px solid var(--accent);
-  margin-bottom:16px;
-  animation:slideDown .2s ease;
-}
-@keyframes slideDown {
-  from { opacity:0; transform:translateY(-8px); }
-  to { opacity:1; transform:translateY(0); }
-}
-.combo-tag {
-  display:inline-block;
-  font-size:11px; font-weight:600; color:var(--accent);
-  background:rgba(16,6,159,0.06);
-  border:1px solid rgba(16,6,159,0.15);
-  border-radius:6px; padding:3px 10px; margin-top:8px;
-}
-.combo-tag:empty { display:none; }
-.content-box {
-  background:#FAFAFA; border:1px solid var(--border); border-radius:10px;
-  padding:16px; margin:8px 0; white-space:pre-wrap; font-size:14px; line-height:1.7;
-}
-.img-suggest {
-  background:#FFF8E1; border:1px solid #FFE082; border-radius:10px;
-  padding:12px 16px; font-size:13px; line-height:1.5; margin:12px 0;
-}
-
-/* DESIGN PREVIEW */
-.design-preview { display:none; }
-.design-preview.show { display:block; }
-.design-preview-frame {
-  border:1px solid var(--border); border-radius:var(--radius);
-  overflow:hidden; background:#1a1a2e;
-  position:relative;
-}
-.design-preview-frame iframe {
-  width:100%; border:none; display:block;
-  min-height:400px;
-}
-.design-preview-actions {
-  display:flex; gap:8px; align-items:center; margin-top:12px; flex-wrap:wrap;
-}
-
-/* DESIGN PREVIEW */
-.design-form { margin-top:16px; display:none; }
-.design-form.show { display:block; }
-.design-form .row { display:flex; gap:12px; margin-bottom:12px; }
-.design-form .row > * { flex:1; }
-.design-form label { font-size:12px; font-weight:600; color:var(--text-secondary); display:block; margin-bottom:4px; }
-
-/* TOAST */
-.toast-container {
-  position:fixed; top:20px; right:20px; z-index:9999;
-  display:flex; flex-direction:column; gap:8px;
-}
-.toast {
-  padding:12px 20px; border-radius:10px;
-  font-size:13px; font-weight:500; font-family:inherit;
-  color:var(--white); background:#333;
-  box-shadow:0 4px 20px rgba(0,0,0,0.15);
-  animation:toastIn .3s ease-out;
-  display:flex; align-items:center; gap:8px;
-  max-width:360px;
-}
-.toast.success { background:#2e7d32; }
-.toast.error { background:#c62828; }
-.toast.info { background:var(--accent); }
-.toast.out { animation:toastOut .25s ease-in forwards; }
-@keyframes toastIn { from { opacity:0; transform:translateX(40px); } to { opacity:1; transform:translateX(0); } }
-@keyframes toastOut { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(40px); } }
-
-/* ACTION BUTTONS after output */
-.output-refine {
-  display:flex; gap:8px; flex-wrap:wrap;
-  margin-top:20px; padding:16px;
-  background:var(--gray); border-radius:12px;
-}
-.output-refine-label {
-  width:100%; font-size:11px; font-weight:700; color:var(--text-secondary);
-  letter-spacing:1px; text-transform:uppercase; margin-bottom:4px;
-}
-.refine-btn {
-  padding:9px 18px; border-radius:10px;
-  border:1px solid var(--border); background:var(--white);
-  font-size:13px; font-weight:600; color:var(--black);
-  cursor:pointer; font-family:inherit; transition:all .2s;
-  box-shadow:0 1px 3px rgba(0,0,0,0.04);
-}
-.refine-btn:hover { border-color:var(--accent); color:var(--white); background:var(--accent); box-shadow:0 2px 8px rgba(16,6,159,0.15); }
-.refine-btn:disabled { opacity:0.5; cursor:not-allowed; }
-
-/* CHAR COUNTER */
-.char-counter {
-  display:flex; gap:16px; align-items:center;
-  font-size:11px; color:var(--text-secondary); margin-top:8px;
-  padding:8px 12px; background:var(--gray); border-radius:8px;
-}
-.char-counter span { font-weight:600; color:var(--black); }
 
 /* TYPING INDICATOR */
 .typing-indicator {
   display:none; align-items:center; gap:10px;
-  font-size:13px; color:var(--accent); margin-top:12px;
-  padding:10px 16px; background:rgba(16,6,159,0.04);
-  border-radius:10px;
+  font-size:13px; color:var(--accent);
+  padding:10px 14px; background:var(--accent-light);
+  border-radius:var(--radius-sm);
 }
 .typing-indicator.show { display:inline-flex; }
 .typing-dots { display:flex; gap:4px; align-items:center; }
@@ -431,44 +272,652 @@ input[type="text"]:focus { border-color:var(--accent); }
   30% { opacity:1; transform:translateY(-4px); }
 }
 
-/* SMOOTH TRANSITIONS */
-.mode-card { animation:fadeIn .25s ease-out; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-.output { transition:all .3s ease; }
-.output.show { animation:fadeIn .3s ease-out; }
+/* OUTPUT */
+.output {
+  background:var(--white); border-radius:var(--radius);
+  padding:20px; margin-top:14px;
+  box-shadow:0 0.5px 0 var(--border);
+  display:none;
+  animation:fadeUp .3s ease-out;
+}
+.output.show { display:block; }
 
-/* TEXTAREA CHAR HINT */
+.output-actions {
+  display:flex; gap:8px; align-items:center;
+  margin-bottom:14px; padding-bottom:12px;
+  border-bottom:0.5px solid var(--border);
+  overflow-x:auto; -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.output-actions::-webkit-scrollbar { display:none; }
+
+.platform-btns { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+.platform-label { font-size:11px; font-weight:600; color:var(--text-secondary); margin-right:2px; white-space:nowrap; }
+.platform-btn {
+  display:inline-flex; align-items:center; gap:4px;
+  padding:8px 12px; border-radius:8px;
+  font-size:11px; font-weight:600;
+  background:var(--white); border:1px solid var(--border);
+  color:var(--text-secondary); transition:all .15s;
+  min-height:36px; white-space:nowrap;
+}
+.platform-btn:active { background:var(--gray); }
+.platform-btn.copied { background:var(--accent); color:var(--white); border-color:var(--accent); }
+.platform-btn svg { width:14px; height:14px; flex-shrink:0; }
+
+.btn-download {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:10px 16px; border-radius:10px;
+  font-size:12px; font-weight:600;
+  background:var(--accent); color:var(--white);
+  min-height:40px; transition:all .15s;
+}
+.btn-download:active { background:var(--accent-dark); }
+.btn-download svg { width:16px; height:16px; }
+
+.output-content-md ul,.output-content-md ol { padding-left:20px; margin:8px 0; }
+.output-content-md li { margin:4px 0; }
+.output-content-md p { margin:6px 0; }
+.output-content-md strong { font-weight:700; }
+.output-content-md em { font-style:italic; }
+.output-content-md { font-size:14px; line-height:1.7; white-space:pre-wrap; }
+.output-error { color:#c62828; font-size:14px; }
+
+/* CHAR COUNTER */
+.char-counter {
+  display:flex; gap:14px; align-items:center;
+  font-size:11px; color:var(--text-secondary); margin-top:10px;
+  padding:8px 12px; background:var(--gray); border-radius:8px;
+}
+.char-counter span { font-weight:700; color:var(--black); }
+
+/* REFINE BUTTONS */
+.output-refine {
+  display:none; gap:8px; flex-wrap:wrap;
+  margin-top:16px; padding:14px;
+  background:var(--gray); border-radius:var(--radius-sm);
+}
+.output-refine-label {
+  width:100%; font-size:11px; font-weight:700; color:var(--text-secondary);
+  letter-spacing:0.5px; text-transform:uppercase; margin-bottom:4px;
+}
+.refine-btn {
+  padding:10px 16px; border-radius:var(--radius-sm);
+  border:1.5px solid var(--border); background:var(--white);
+  font-size:13px; font-weight:600; color:var(--black);
+  transition:all .15s; min-height:40px;
+}
+.refine-btn:active { background:var(--accent); color:var(--white); border-color:var(--accent); }
+.refine-btn:disabled { opacity:0.4; }
+
+/* RETRY */
+.retry-btn {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:10px 20px; border-radius:20px; margin-top:12px;
+  border:1.5px solid var(--accent); background:var(--accent-light);
+  font-size:13px; font-weight:600; color:var(--accent);
+  min-height:40px;
+}
+.retry-btn:active { background:var(--accent); color:var(--white); }
+
+/* INPUT FOOTER */
 .input-footer {
   display:flex; justify-content:space-between; align-items:center;
   margin-top:6px;
 }
 .input-hint {
-  font-size:11px; color:var(--text-secondary);
-  transition:color .2s;
+  font-size:11px; color:var(--text-tertiary);
 }
 .input-hint.warn { color:#e65100; }
 
-/* RESPONSIVE */
-@media (max-width:640px) {
-  .tabs { gap:6px; }
-  .tab { padding:8px 14px; font-size:12px; }
-  .card { padding:16px; }
-  .nav { padding:10px 14px; }
-  .nav-brand { font-size:12px; }
-  .role-dropdown-menu { right:-10px; min-width:220px; }
-  .role-screen-cards { flex-direction:column; align-items:center; }
-  .role-screen-card { max-width:100%; width:100%; padding:20px 16px; }
-  .role-screen-title { font-size:22px; }
-  .container { padding:16px 12px; }
-  .output-actions { flex-direction:column; align-items:flex-start; }
-  .platform-btns { width:100%; overflow-x:auto; flex-wrap:nowrap; -webkit-overflow-scrolling:touch; }
-  .output-refine { gap:6px; padding:12px; }
-  .refine-btn { padding:7px 14px; font-size:12px; }
-  .toast-container { top:10px; right:10px; left:10px; }
-  .toast { max-width:100%; }
-  .plat-select { flex-wrap:wrap; }
-  .community-header { flex-direction:column; }
+/* ACTION ROW */
+.action-row {
+  margin-top:12px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;
 }
+
+/* TOPIC GRID */
+.topic-grid { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+.topic-chip {
+  padding:10px 16px; border-radius:var(--radius-sm);
+  border:1.5px solid var(--border); background:var(--white);
+  font-size:13px; font-weight:500; color:var(--black);
+  transition:all .15s; min-height:40px;
+}
+.topic-chip:active { transform:scale(0.97); }
+.topic-chip.selected { background:var(--accent); color:var(--white); border-color:var(--accent); }
+
+/* COMMUNITY */
+.community-header { display:flex; gap:8px; margin-bottom:12px; flex-direction:column; }
+.saved-rules { font-size:11px; color:var(--accent); margin-top:4px; display:none; }
+.saved-rules.show { display:block; }
+
+/* CONTENT BOX */
+.content-box {
+  background:var(--gray); border:1px solid var(--border); border-radius:var(--radius-sm);
+  padding:16px; margin:8px 0; white-space:pre-wrap; font-size:14px; line-height:1.7;
+}
+.img-suggest {
+  background:#FFF8E1; border:1px solid #FFE082; border-radius:var(--radius-sm);
+  padding:12px 16px; font-size:13px; line-height:1.5; margin:12px 0;
+}
+
+/* DESIGN PREVIEW */
+.design-preview { display:none; }
+.design-preview.show { display:block; }
+.design-preview-frame {
+  border:1px solid var(--border); border-radius:var(--radius);
+  overflow:hidden; background:#1a1a2e;
+}
+.design-preview-frame iframe {
+  width:100%; border:none; display:block; min-height:350px;
+}
+.design-preview-actions {
+  display:flex; gap:8px; align-items:center; margin-top:12px; flex-wrap:wrap;
+}
+
+.design-form { margin-top:16px; display:none; }
+.design-form.show { display:block; }
+.design-form .row { display:flex; gap:10px; margin-bottom:10px; }
+.design-form .row > * { flex:1; }
+.design-form label { font-size:12px; font-weight:600; color:var(--text-secondary); display:block; margin-bottom:4px; }
+
+/* TOAST */
+.toast-container {
+  position:fixed; top:calc(8px + var(--safe-top)); left:16px; right:16px; z-index:9999;
+  display:flex; flex-direction:column; gap:8px;
+  pointer-events:none;
+}
+.toast {
+  padding:12px 16px; border-radius:var(--radius-sm);
+  font-size:13px; font-weight:600;
+  color:var(--white); background:#333;
+  box-shadow:0 4px 20px rgba(0,0,0,0.15);
+  animation:toastIn .3s ease-out;
+  display:flex; align-items:center; gap:8px;
+  pointer-events:auto;
+}
+.toast.success { background:#2e7d32; }
+.toast.error { background:#c62828; }
+.toast.info { background:var(--accent); }
+.toast.out { animation:toastOut .25s ease-in forwards; }
+@keyframes toastIn { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
+@keyframes toastOut { from { opacity:1; } to { opacity:0; transform:translateY(-10px); } }
+
+/* BOTTOM SHEET */
+.sheet-overlay {
+  position:fixed; inset:0; z-index:500;
+  background:rgba(0,0,0,0.3);
+  opacity:0; pointer-events:none;
+  transition:opacity .25s;
+}
+.sheet-overlay.open { opacity:1; pointer-events:auto; }
+.sheet {
+  position:absolute; bottom:0; left:0; right:0;
+  background:var(--white);
+  border-radius:16px 16px 0 0;
+  padding:8px 20px calc(20px + var(--safe-bottom));
+  transform:translateY(100%);
+  transition:transform .3s cubic-bezier(0.32, 0.72, 0, 1);
+  max-height:80dvh; max-height:80vh;
+  overflow-y:auto;
+}
+.sheet-overlay.open .sheet { transform:translateY(0); }
+.sheet-handle {
+  width:36px; height:4px; border-radius:2px;
+  background:var(--gray-2); margin:0 auto 16px;
+}
+.sheet-title {
+  font-size:17px; font-weight:700; margin-bottom:16px; text-align:center;
+}
+.sheet-section-label {
+  font-size:11px; font-weight:700; color:var(--text-secondary);
+  letter-spacing:0.5px; text-transform:uppercase;
+  margin:16px 0 8px; padding:0 4px;
+}
+.sheet-item {
+  display:flex; align-items:center; gap:12px;
+  padding:14px 16px; border-radius:var(--radius-sm);
+  width:100%; text-align:left;
+  transition:background .1s; min-height:52px;
+}
+.sheet-item:active { background:var(--gray); }
+.sheet-item.active { background:var(--accent-light); }
+.sheet-item-icon {
+  width:36px; height:36px; border-radius:10px;
+  background:var(--gray); color:var(--accent);
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:800; flex-shrink:0;
+}
+.sheet-item.active .sheet-item-icon { background:var(--accent); color:var(--white); }
+.sheet-item-text { flex:1; }
+.sheet-item-title { font-size:14px; font-weight:700; color:var(--black); }
+.sheet-item.active .sheet-item-title { color:var(--accent); }
+.sheet-item-desc { font-size:11px; color:var(--text-secondary); margin-top:1px; }
+.sheet-item-check { color:var(--accent); opacity:0; }
+.sheet-item.active .sheet-item-check { opacity:1; }
+
+/* MORE SHEET (for extra tabs) */
+.more-grid {
+  display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;
+  padding:8px 0;
+}
+.more-item {
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  padding:16px 8px; border-radius:var(--radius);
+  transition:background .1s; min-height:80px;
+}
+.more-item:active { background:var(--gray); }
+.more-item-icon {
+  width:44px; height:44px; border-radius:12px;
+  background:var(--accent-light);
+  display:flex; align-items:center; justify-content:center;
+}
+.more-item-icon svg { width:20px; height:20px; color:var(--accent); }
+.more-item-label { font-size:12px; font-weight:600; color:var(--black); text-align:center; }
+
+/* ONBOARDING SCREEN */
+.onboarding {
+  position:fixed; inset:0; z-index:1000;
+  background:var(--white);
+  display:flex; align-items:center; justify-content:center;
+  padding:24px;
+  padding-top:calc(24px + var(--safe-top));
+  padding-bottom:calc(24px + var(--safe-bottom));
+}
+.onboarding.hidden {
+  animation:fadeOut .3s ease-in forwards;
+  pointer-events:none;
+}
+@keyframes fadeOut { from { opacity:1; } to { opacity:0; } }
+.onboarding-inner {
+  text-align:center; width:100%; max-width:400px;
+}
+.onboarding-logo { margin-bottom:12px; }
+.onboarding-title {
+  font-size:26px; font-weight:700; color:var(--black); margin-bottom:6px;
+}
+.onboarding-desc {
+  font-size:14px; color:var(--text-secondary); margin-bottom:28px; line-height:1.4;
+}
+.onboarding-cards {
+  display:flex; flex-direction:column; gap:10px;
+}
+.onboarding-card {
+  display:flex; align-items:center; gap:14px;
+  padding:16px 18px; border-radius:var(--radius);
+  border:2px solid var(--border); background:var(--white);
+  text-align:left; transition:all .2s; width:100%;
+  min-height:64px;
+}
+.onboarding-card:active { transform:scale(0.98); }
+.onboarding-card.selected {
+  border-color:var(--accent); background:rgba(16,6,159,0.03);
+  box-shadow:0 4px 16px rgba(16,6,159,0.1);
+}
+.onboarding-card-icon {
+  width:44px; height:44px; border-radius:12px;
+  background:var(--accent-light); color:var(--accent);
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; font-weight:800; flex-shrink:0;
+  transition:all .2s;
+}
+.onboarding-card.selected .onboarding-card-icon {
+  background:var(--accent); color:var(--white);
+}
+.onboarding-card-info { flex:1; }
+.onboarding-card-title { font-size:15px; font-weight:700; color:var(--black); }
+.onboarding-card-desc { font-size:12px; color:var(--text-secondary); margin-top:2px; }
+
+/* LOGIN SCREEN */
+.login-screen {
+  position:fixed; inset:0; z-index:1001;
+  background:var(--white);
+  display:flex; align-items:center; justify-content:center;
+  padding:24px;
+  padding-top:calc(24px + var(--safe-top));
+  padding-bottom:calc(24px + var(--safe-bottom));
+}
+.login-screen.hidden { animation:fadeOut .3s ease-in forwards; pointer-events:none; }
+.login-inner { text-align:center; width:100%; max-width:380px; }
+.login-logo { margin-bottom:16px; }
+.login-title { font-size:24px; font-weight:700; color:var(--black); margin-bottom:4px; }
+.login-subtitle { font-size:13px; color:var(--text-secondary); margin-bottom:32px; }
+.login-form { display:flex; flex-direction:column; gap:12px; text-align:left; }
+.login-field { position:relative; }
+.login-field label {
+  display:block; font-size:12px; font-weight:600; color:var(--text-secondary);
+  margin-bottom:6px; letter-spacing:.3px;
+}
+.login-field input {
+  width:100%; padding:14px 16px; border-radius:var(--radius-sm);
+  border:1.5px solid var(--border); background:var(--gray);
+  font-size:15px; color:var(--black); outline:none;
+  transition:border-color .2s, background .2s;
+}
+.login-field input:focus { border-color:var(--accent); background:var(--white); }
+.login-field input::placeholder { color:var(--text-tertiary); }
+.login-btn {
+  width:100%; padding:16px; border-radius:var(--radius-sm);
+  background:var(--accent); color:var(--white);
+  font-size:15px; font-weight:700; border:none; cursor:pointer;
+  transition:background .15s, transform .1s;
+  margin-top:8px;
+}
+.login-btn:active { transform:scale(0.98); background:var(--accent-dark); }
+.login-btn:disabled { opacity:.6; pointer-events:none; }
+.login-btn .spinner { display:inline-block; width:16px; height:16px; border-color:rgba(255,255,255,.3); border-top-color:#fff; vertical-align:middle; margin-right:8px; }
+.login-error {
+  font-size:13px; color:#D32F2F; text-align:center;
+  padding:10px 14px; background:#FFEBEE; border-radius:8px;
+  display:none;
+}
+.login-error.show { display:block; animation:fadeUp .2s ease-out; }
+.login-toggle {
+  font-size:13px; color:var(--text-secondary); text-align:center; margin-top:20px;
+}
+.login-toggle a {
+  color:var(--accent); font-weight:600; text-decoration:none; cursor:pointer;
+}
+.login-divider {
+  display:flex; align-items:center; gap:12px; margin:4px 0;
+  font-size:12px; color:var(--text-tertiary);
+}
+.login-divider::before, .login-divider::after {
+  content:''; flex:1; height:1px; background:var(--border);
+}
+.login-user-greeting {
+  display:none; text-align:center; padding:20px 0;
+}
+.login-user-greeting .avatar {
+  width:56px; height:56px; border-radius:50%;
+  background:var(--accent); color:var(--white);
+  display:inline-flex; align-items:center; justify-content:center;
+  font-size:22px; font-weight:700; margin-bottom:10px;
+}
+.login-user-greeting .name { font-size:18px; font-weight:700; color:var(--black); }
+.login-user-greeting .dept { font-size:13px; color:var(--text-secondary); margin-top:2px; }
+
+/* ACHIEVEMENT DASHBOARD */
+.dash-header {
+  background:linear-gradient(135deg, var(--accent) 0%, #4A3AFF 50%, #7C3AED 100%);
+  color:#fff; border-radius:16px; padding:20px; margin-bottom:14px;
+  position:relative; overflow:hidden;
+}
+.dash-header::after {
+  content:''; position:absolute; top:-40px; right:-40px;
+  width:140px; height:140px; border-radius:50%;
+  background:rgba(255,255,255,0.06);
+}
+.dash-greeting { font-size:13px; opacity:.8; }
+.dash-level { font-size:24px; font-weight:800; margin:4px 0; }
+.dash-xp-bar {
+  background:rgba(255,255,255,0.15); border-radius:20px;
+  height:8px; margin-top:10px; overflow:hidden;
+}
+.dash-xp-fill {
+  height:100%; border-radius:20px;
+  background:linear-gradient(90deg, #FFD700, #FFA726);
+  transition:width .8s cubic-bezier(0.34,1.56,0.64,1);
+}
+.dash-xp-text { font-size:11px; opacity:.7; margin-top:4px; text-align:right; }
+.dash-stats {
+  display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;
+}
+.dash-stat {
+  background:#fff; border-radius:14px; padding:16px; text-align:center;
+  border:1px solid var(--border); position:relative; overflow:hidden;
+}
+.dash-stat-icon { font-size:24px; margin-bottom:6px; }
+.dash-stat-num { font-size:28px; font-weight:800; color:var(--black); line-height:1; }
+.dash-stat-label { font-size:11px; color:var(--text-secondary); margin-top:2px; font-weight:600; }
+.dash-streak {
+  background:#fff; border-radius:14px; padding:16px; margin-bottom:14px;
+  border:1px solid var(--border);
+}
+.dash-streak-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.dash-streak-title { font-size:14px; font-weight:700; }
+.dash-streak-count { font-size:13px; font-weight:700; color:#FF6B35; }
+.dash-streak-days { display:flex; gap:6px; justify-content:center; }
+.dash-streak-dot {
+  width:32px; height:32px; border-radius:50%;
+  background:var(--gray); border:2px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700; color:var(--text-secondary);
+}
+.dash-streak-dot.active { background:#FF6B35; border-color:#FF6B35; color:#fff; }
+.dash-streak-dot.today { border-color:var(--accent); box-shadow:0 0 0 3px rgba(16,6,159,0.15); }
+.dash-badges {
+  background:#fff; border-radius:14px; padding:16px; margin-bottom:14px;
+  border:1px solid var(--border);
+}
+.dash-badges-title { font-size:14px; font-weight:700; margin-bottom:12px; }
+.dash-badge-list { display:flex; flex-wrap:wrap; gap:8px; }
+.dash-badge {
+  display:flex; align-items:center; gap:6px;
+  padding:8px 14px; border-radius:24px;
+  font-size:12px; font-weight:700;
+  background:var(--gray); color:var(--text-secondary);
+  border:1px solid var(--border);
+  transition:all .3s;
+}
+.dash-badge.earned {
+  background:linear-gradient(135deg, #FFF8E1, #FFFDE7);
+  border-color:#FFD54F; color:#F57F17;
+  box-shadow:0 2px 8px rgba(255,183,77,0.2);
+}
+.dash-badge-icon { font-size:16px; }
+.dash-leaderboard {
+  background:#fff; border-radius:14px; padding:16px;
+  border:1px solid var(--border);
+}
+.dash-lb-title { font-size:14px; font-weight:700; margin-bottom:12px; }
+.dash-lb-row {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 0; border-bottom:1px solid var(--border);
+}
+.dash-lb-row:last-child { border-bottom:none; }
+.dash-lb-rank {
+  width:26px; height:26px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:800; background:var(--gray); color:var(--text-secondary);
+}
+.dash-lb-rank.gold { background:linear-gradient(135deg,#FFD700,#FFA000); color:#fff; }
+.dash-lb-rank.silver { background:linear-gradient(135deg,#E0E0E0,#BDBDBD); color:#fff; }
+.dash-lb-rank.bronze { background:linear-gradient(135deg,#FFCC80,#FF9800); color:#fff; }
+.dash-lb-name { flex:1; font-size:13px; font-weight:600; }
+.dash-lb-name.me { color:var(--accent); }
+.dash-lb-pts { font-size:13px; font-weight:700; color:var(--accent); }
+.dash-lb-bar { flex:1; height:6px; background:var(--gray); border-radius:3px; overflow:hidden; }
+.dash-lb-bar-fill { height:100%; border-radius:3px; background:var(--accent); transition:width .6s; }
+
+/* WHAT'S NEW MODAL */
+.whats-new-overlay {
+  position:fixed; inset:0; z-index:2000;
+  background:rgba(0,0,0,0.5);
+  display:flex; align-items:center; justify-content:center;
+  padding:20px;
+  opacity:0; pointer-events:none;
+  transition:opacity .3s;
+}
+.whats-new-overlay.show { opacity:1; pointer-events:auto; }
+.whats-new-modal {
+  background:#fff; border-radius:20px; width:100%; max-width:400px;
+  max-height:80vh; overflow:hidden;
+  transform:scale(0.9) translateY(20px);
+  transition:transform .4s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow:0 24px 80px rgba(0,0,0,0.25);
+}
+.whats-new-overlay.show .whats-new-modal { transform:scale(1) translateY(0); }
+.whats-new-header {
+  background:linear-gradient(135deg, var(--accent) 0%, #4A3AFF 100%);
+  color:#fff; padding:28px 24px 20px; text-align:center; position:relative; overflow:hidden;
+}
+.whats-new-header::before {
+  content:''; position:absolute; top:-30px; right:-30px;
+  width:120px; height:120px; border-radius:50%;
+  background:rgba(255,255,255,0.08);
+}
+.whats-new-header::after {
+  content:''; position:absolute; bottom:-20px; left:-20px;
+  width:80px; height:80px; border-radius:50%;
+  background:rgba(255,255,255,0.06);
+}
+.whats-new-badge {
+  display:inline-block; background:rgba(255,255,255,0.2);
+  padding:4px 14px; border-radius:20px;
+  font-size:11px; font-weight:700; letter-spacing:1px;
+  margin-bottom:10px; backdrop-filter:blur(4px);
+}
+.whats-new-version { font-size:26px; font-weight:800; margin-bottom:4px; position:relative; }
+.whats-new-date { font-size:12px; opacity:.7; position:relative; }
+.whats-new-body { padding:20px 24px; overflow-y:auto; max-height:45vh; }
+.whats-new-item {
+  display:flex; gap:12px; padding:12px 0;
+  border-bottom:1px solid var(--border);
+}
+.whats-new-item:last-child { border-bottom:none; }
+.whats-new-icon {
+  width:36px; height:36px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; flex-shrink:0;
+}
+.whats-new-icon.green { background:#E8F5E9; }
+.whats-new-icon.blue { background:#E3F2FD; }
+.whats-new-icon.orange { background:#FFF3E0; }
+.whats-new-icon.purple { background:#F3E5F5; }
+.whats-new-text h4 { font-size:14px; font-weight:700; margin-bottom:2px; }
+.whats-new-text p { font-size:12px; color:var(--text-secondary); line-height:1.4; }
+.whats-new-footer { padding:16px 24px 20px; }
+.whats-new-btn {
+  width:100%; padding:14px; border-radius:12px;
+  background:var(--accent); color:#fff;
+  font-size:15px; font-weight:700;
+  border:none; cursor:pointer;
+  transition:transform .15s, background .15s;
+}
+.whats-new-btn:active { transform:scale(0.97); background:var(--accent-dark); }
+/* Sparkle particles */
+.sparkle { position:absolute; border-radius:50%; animation:sparkleFloat 2s ease-out infinite; }
+@keyframes sparkleFloat {
+  0% { opacity:1; transform:translateY(0) scale(1); }
+  100% { opacity:0; transform:translateY(-40px) scale(0); }
+}
+
+/* PAGE TRANSITIONS */
+.page { display:none; }
+.page.active { display:block; animation:fadeUp .25s ease-out; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+/* SPINNER */
+.spinner {
+  width:18px; height:18px; border:2px solid var(--border);
+  border-top-color:var(--accent); border-radius:50%;
+  animation:spin .6s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* DESKTOP */
+@media (min-width:768px) {
+  .main-inner { padding:24px 24px calc(24px + var(--bottomnav-h)); max-width:720px; }
+  .card { padding:28px; }
+  .onboarding-cards { flex-direction:row; gap:14px; }
+  .onboarding-card { flex-direction:column; text-align:center; padding:24px 16px; flex:1; }
+  .onboarding-card-icon { margin:0 auto; }
+  .onboarding-card-info { text-align:center; }
+  .onboarding-inner { max-width:640px; }
+  .onboarding-title { font-size:30px; }
+  .bottomnav { max-width:480px; margin:0 auto; border-radius:16px 16px 0 0; }
+  .sheet { max-width:480px; margin:0 auto; left:50%; transform:translateX(-50%) translateY(100%); }
+  .sheet-overlay.open .sheet { transform:translateX(-50%) translateY(0); }
+  .design-form .row { flex-direction:row; }
+  .output-actions { flex-wrap:nowrap; }
+}
+
+/* LANDSCAPE PHONE */
+@media (max-height:500px) {
+  .onboarding { padding:16px; }
+  .onboarding-title { font-size:20px; }
+  .onboarding-cards { flex-direction:row; }
+  .onboarding-card { padding:12px; }
+}
+
+/* ========== CATALOG ========== */
+.cat-filters { display:flex; gap:6px; margin-bottom:14px; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+.cat-filters::-webkit-scrollbar { display:none; }
+.cat-filter { padding:8px 16px; border-radius:20px; border:1.5px solid var(--border); background:var(--white); font-size:13px; font-weight:600; color:var(--text-secondary); white-space:nowrap; min-height:36px; transition:all .15s; }
+.cat-filter.active { background:var(--accent); color:var(--white); border-color:var(--accent); }
+.cat-filter:active { transform:scale(0.96); }
+
+.product-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+@media (min-width:768px) { .product-grid { grid-template-columns:1fr 1fr 1fr; } }
+
+.product-card {
+  background:var(--white); border-radius:var(--radius); padding:14px;
+  box-shadow:0 0.5px 0 var(--border); transition:all .15s; cursor:pointer;
+  display:flex; flex-direction:column;
+}
+.product-card:active { transform:scale(0.97); }
+.product-card-img {
+  width:100%; aspect-ratio:1; border-radius:var(--radius-sm);
+  background:var(--gray); display:flex; align-items:center; justify-content:center;
+  margin-bottom:10px; font-size:32px; color:var(--text-tertiary); overflow:hidden;
+}
+.product-card-img img { width:100%; height:100%; object-fit:cover; }
+.product-card-name { font-size:14px; font-weight:700; color:var(--black); margin-bottom:2px; }
+.product-card-tag { font-size:11px; color:var(--text-secondary); margin-bottom:6px; line-height:1.3; }
+.product-card-price { font-size:14px; font-weight:700; color:var(--accent); margin-top:auto; }
+.product-card-stock { font-size:10px; font-weight:600; padding:2px 6px; border-radius:4px; display:inline-block; margin-top:4px; }
+.stock-in { background:#E8F5E9; color:#2e7d32; }
+.stock-low { background:#FFF3E0; color:#e65100; }
+.stock-out { background:#FFEBEE; color:#c62828; }
+
+/* PRODUCT DETAIL SHEET */
+.product-sheet .sheet { max-height:90dvh; }
+.product-detail-header { display:flex; gap:14px; margin-bottom:16px; }
+.product-detail-img { width:100px; height:100px; border-radius:12px; background:var(--gray); display:flex; align-items:center; justify-content:center; font-size:40px; flex-shrink:0; overflow:hidden; }
+.product-detail-img img { width:100%; height:100%; object-fit:cover; }
+.product-detail-info { flex:1; }
+.product-detail-name { font-size:18px; font-weight:700; margin-bottom:2px; }
+.product-detail-tagline { font-size:13px; color:var(--text-secondary); margin-bottom:6px; }
+.product-detail-price { font-size:20px; font-weight:700; color:var(--accent); }
+.spec-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin:12px 0; }
+.spec-item { background:var(--gray); border-radius:8px; padding:8px 10px; }
+.spec-label { font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; }
+.spec-value { font-size:13px; font-weight:600; color:var(--black); margin-top:1px; }
+.highlight-list { list-style:none; padding:0; margin:10px 0; }
+.highlight-list li { font-size:13px; padding:4px 0; color:var(--black); }
+.highlight-list li::before { content:'✓ '; color:var(--accent); font-weight:700; }
+.variant-row { display:flex; gap:6px; flex-wrap:wrap; margin:10px 0; }
+.variant-chip { padding:8px 14px; border-radius:8px; border:1.5px solid var(--border); font-size:12px; font-weight:600; transition:all .15s; background:var(--white); }
+.variant-chip.selected { border-color:var(--accent); background:var(--accent-light); color:var(--accent); }
+.qty-control { display:flex; align-items:center; gap:0; margin:10px 0; }
+.qty-btn { width:40px; height:40px; border-radius:10px; background:var(--gray); font-size:18px; font-weight:700; color:var(--black); display:flex; align-items:center; justify-content:center; }
+.qty-btn:active { background:var(--gray-2); }
+.qty-value { width:50px; text-align:center; font-size:16px; font-weight:700; }
+.add-quote-btn { width:100%; padding:14px; border-radius:12px; background:var(--accent); color:var(--white); font-size:15px; font-weight:700; min-height:48px; margin-top:10px; box-shadow:0 2px 12px rgba(16,6,159,0.25); }
+.add-quote-btn:active { background:var(--accent-dark); transform:scale(0.98); }
+
+/* ========== QUOTE BUILDER ========== */
+.quote-empty { text-align:center; padding:40px 20px; color:var(--text-secondary); }
+.quote-empty-icon { font-size:48px; margin-bottom:8px; color:var(--text-tertiary); }
+.quote-empty-text { font-size:14px; }
+.quote-item { display:flex; align-items:center; gap:12px; padding:14px 0; border-bottom:0.5px solid var(--border); }
+.quote-item:last-child { border-bottom:none; }
+.quote-item-info { flex:1; }
+.quote-item-name { font-size:14px; font-weight:700; }
+.quote-item-detail { font-size:12px; color:var(--text-secondary); }
+.quote-item-price { font-size:14px; font-weight:700; text-align:right; white-space:nowrap; }
+.quote-item-remove { color:#c62828; font-size:12px; font-weight:600; padding:4px 8px; border-radius:6px; }
+.quote-item-remove:active { background:#FFEBEE; }
+.quote-summary { background:var(--gray); border-radius:var(--radius-sm); padding:14px; margin-top:14px; }
+.quote-row { display:flex; justify-content:space-between; padding:5px 0; font-size:13px; }
+.quote-row.total { font-size:18px; font-weight:700; color:var(--accent); border-top:2px solid var(--accent); padding-top:10px; margin-top:6px; }
+.quote-row.discount { color:#2e7d32; }
+.discount-slider { width:100%; margin:8px 0 4px; accent-color:var(--accent); }
+.quote-actions { display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; }
+.quote-actions .btn-primary { flex:1; min-width:140px; }
+.quote-badge { position:absolute; top:2px; right:50%; transform:translateX(50%); width:16px; height:16px; border-radius:50%; background:#c62828; color:#fff; font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center; }
 </style>
 </head>
 <body>
@@ -476,425 +925,948 @@ input[type="text"]:focus { border-color:var(--accent); }
 <!-- TOAST -->
 <div class="toast-container" id="toast-container"></div>
 
-<!-- ROLE SELECTION SCREEN -->
-<div class="role-screen" id="role-screen">
-  <div class="role-screen-inner">
-    <svg width="40" height="40" viewBox="0 0 120 120" fill="none" style="margin-bottom:8px;">
-      <circle cx="60" cy="60" r="52" stroke="#10069F" stroke-width="1.5" opacity=".3"/>
-      <circle cx="60" cy="60" r="38" stroke="#10069F" stroke-width="2" opacity=".5"/>
-      <circle cx="60" cy="60" r="24" stroke="#10069F" stroke-width="2.5" opacity=".7"/>
-      <circle cx="60" cy="60" r="10" fill="#10069F"/>
-    </svg>
-    <h1 class="role-screen-title">Chào bạn!</h1>
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-inner">
+    <div class="login-logo">
+      <svg width="48" height="48" viewBox="0 0 120 120" fill="none">
+        <circle cx="60" cy="60" r="52" stroke="#10069F" stroke-width="1.5" opacity=".3"/>
+        <circle cx="60" cy="60" r="38" stroke="#10069F" stroke-width="2" opacity=".5"/>
+        <circle cx="60" cy="60" r="24" stroke="#10069F" stroke-width="2.5" opacity=".7"/>
+        <circle cx="60" cy="60" r="10" fill="#10069F"/>
+      </svg>
+    </div>
+
+    <!-- Login form -->
+    <div id="login-form-section">
+      <h1 class="login-title">Epione Tools</h1>
+      <p class="login-subtitle">Nội thất Ergonomic & Acoustic Solutions</p>
+      <div class="login-error" id="login-error"></div>
+      <form class="login-form" id="login-form" onsubmit="handleLogin(event)">
+        <div class="login-field">
+          <label>Email</label>
+          <input type="email" id="login-email" placeholder="you@epione.vn" required autocomplete="email">
+        </div>
+        <div class="login-field">
+          <label>Password</label>
+          <input type="password" id="login-password" placeholder="Nhập mật khẩu" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="login-btn" id="login-btn">Đăng nhập</button>
+      </form>
+      <div class="login-toggle">
+        Chưa có tài khoản? <a onclick="toggleSignup(true)">Đăng ký</a>
+      </div>
+    </div>
+
+    <!-- Signup form -->
+    <div id="signup-form-section" style="display:none;">
+      <h1 class="login-title">Tạo tài khoản</h1>
+      <p class="login-subtitle">Dùng email công ty @epione.vn hoặc email cá nhân đã đăng ký</p>
+      <div class="login-error" id="signup-error"></div>
+      <form class="login-form" id="signup-form" onsubmit="handleSignup(event)">
+        <div class="login-field">
+          <label>Email</label>
+          <input type="email" id="signup-email" placeholder="you@epione.vn" required autocomplete="email">
+        </div>
+        <div class="login-field">
+          <label>Mật khẩu</label>
+          <input type="password" id="signup-password" placeholder="Tối thiểu 6 ký tự" required minlength="6" autocomplete="new-password">
+        </div>
+        <div class="login-field">
+          <label>Xác nhận mật khẩu</label>
+          <input type="password" id="signup-password-confirm" placeholder="Nhập lại mật khẩu" required minlength="6" autocomplete="new-password">
+        </div>
+        <button type="submit" class="login-btn" id="signup-btn">Đăng ký</button>
+      </form>
+      <div class="login-toggle">
+        Đã có tài khoản? <a onclick="toggleSignup(false)">Đăng nhập</a>
+      </div>
+    </div>
+
+    <!-- User greeting (shown after auth, before entering app) -->
+    <div class="login-user-greeting" id="login-greeting">
+      <div class="avatar" id="greeting-avatar"></div>
+      <div class="name" id="greeting-name"></div>
+      <div class="dept" id="greeting-dept"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ONBOARDING (fallback for users not in epione_users) -->
+<div class="onboarding" id="onboarding" style="display:none;">
+  <div class="onboarding-inner">
+    <div class="onboarding-logo">
+      <svg width="44" height="44" viewBox="0 0 120 120" fill="none">
+        <circle cx="60" cy="60" r="52" stroke="#10069F" stroke-width="1.5" opacity=".3"/>
+        <circle cx="60" cy="60" r="38" stroke="#10069F" stroke-width="2" opacity=".5"/>
+        <circle cx="60" cy="60" r="24" stroke="#10069F" stroke-width="2.5" opacity=".7"/>
+        <circle cx="60" cy="60" r="10" fill="#10069F"/>
+      </svg>
+    </div>
+    <h1 class="onboarding-title" id="onboarding-title">Chào bạn!</h1>
 
     <!-- Step 1: Gender -->
     <div id="gender-step">
-      <p class="role-screen-desc">Bạn muốn giọng văn kiểu nào?</p>
-      <div class="role-screen-cards" style="max-width:420px; margin:0 auto;">
-        <button class="role-screen-card" data-gender="nam" onclick="selectGender('nam', this)">
-          <div class="role-screen-card-icon" style="font-size:20px; line-height:48px;">♂</div>
-          <div class="role-screen-card-title">Nam</div>
-          <div class="role-screen-card-desc">Thẳng thắn, logic, đi vào trọng tâm, dùng số liệu</div>
+      <p class="onboarding-desc">Bạn muốn giọng văn kiểu nào?</p>
+      <div class="onboarding-cards">
+        <button class="onboarding-card" data-gender="nam" onclick="selectGender('nam', this)">
+          <div class="onboarding-card-icon">&#9794;</div>
+          <div class="onboarding-card-info">
+            <div class="onboarding-card-title">Nam</div>
+            <div class="onboarding-card-desc">Thẳng thắn, logic, đi vào trọng tâm</div>
+          </div>
         </button>
-        <button class="role-screen-card" data-gender="nu" onclick="selectGender('nu', this)">
-          <div class="role-screen-card-icon" style="font-size:20px; line-height:48px;">♀</div>
-          <div class="role-screen-card-title">Nữ</div>
-          <div class="role-screen-card-desc">Tinh tế, kể chuyện, empathy, gần gũi, truyền cảm hứng</div>
+        <button class="onboarding-card" data-gender="nu" onclick="selectGender('nu', this)">
+          <div class="onboarding-card-icon">&#9792;</div>
+          <div class="onboarding-card-info">
+            <div class="onboarding-card-title">Nữ</div>
+            <div class="onboarding-card-desc">Tinh tế, kể chuyện, gần gũi</div>
+          </div>
         </button>
       </div>
     </div>
 
-    <!-- Step 2: Role (hidden initially) -->
+    <!-- Step 2: Role (only for unmatched users) -->
     <div id="role-step" style="display:none;">
-      <p class="role-screen-desc">Chọn vai trò để bắt đầu viết content</p>
-      <div class="role-screen-cards">
-        <button class="role-screen-card" data-role="sale_b2b">
-          <div class="role-screen-card-icon">B2B</div>
-          <div class="role-screen-card-title">Sale B2B</div>
-          <div class="role-screen-card-desc">Tiếp cận doanh nghiệp, ngôn ngữ số liệu & logic, tìm Champion trong tổ chức</div>
+      <p class="onboarding-desc">Chọn vai trò để bắt đầu</p>
+      <div class="onboarding-cards">
+        <button class="onboarding-card" data-role="sale_b2b">
+          <div class="onboarding-card-icon">B2B</div>
+          <div class="onboarding-card-info">
+            <div class="onboarding-card-title">Sale B2B</div>
+            <div class="onboarding-card-desc">Doanh nghiệp, số liệu & logic</div>
+          </div>
         </button>
-        <button class="role-screen-card" data-role="sale_b2c">
-          <div class="role-screen-card-icon">B2C</div>
-          <div class="role-screen-card-title">Sale B2C</div>
-          <div class="role-screen-card-desc">Tiếp cận cá nhân, ngôn ngữ cảm xúc & trải nghiệm, storytelling</div>
+        <button class="onboarding-card" data-role="sale_b2c">
+          <div class="onboarding-card-icon">B2C</div>
+          <div class="onboarding-card-info">
+            <div class="onboarding-card-title">Sale B2C</div>
+            <div class="onboarding-card-desc">Cá nhân, cảm xúc & trải nghiệm</div>
+          </div>
         </button>
-        <button class="role-screen-card" data-role="ky_thuat">
-          <div class="role-screen-card-icon">KT</div>
-          <div class="role-screen-card-title">Kỹ thuật</div>
-          <div class="role-screen-card-desc">Thợ lắp chia sẻ thực chiến, ngôn ngữ chính xác, khách quan</div>
+        <button class="onboarding-card" data-role="ky_thuat">
+          <div class="onboarding-card-icon">KT</div>
+          <div class="onboarding-card-info">
+            <div class="onboarding-card-title">Kỹ thuật</div>
+            <div class="onboarding-card-desc">Thợ lắp, chính xác & thực chiến</div>
+          </div>
         </button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- NAV -->
-<nav class="nav">
-  <svg width="28" height="28" viewBox="0 0 120 120" fill="none">
-    <circle cx="60" cy="60" r="52" stroke="#10069F" stroke-width="1.5" opacity=".3"/>
-    <circle cx="60" cy="60" r="38" stroke="#10069F" stroke-width="2" opacity=".5"/>
-    <circle cx="60" cy="60" r="24" stroke="#10069F" stroke-width="2.5" opacity=".7"/>
-    <circle cx="60" cy="60" r="10" fill="#10069F"/>
-  </svg>
-  <div>
-    <div class="nav-brand">EPIONE</div>
-    <div class="nav-sub">Content Agent</div>
-  </div>
-  <div class="nav-spacer"></div>
-  <div class="role-dropdown-wrap">
-    <button class="role-dropdown-btn" id="role-dropdown-btn" onclick="toggleRoleDropdown()">
-      <span class="role-dropdown-dot"></span>
-      <span id="role-dropdown-label">Sale B2B</span>
-      <span id="gender-badge" style="font-size:11px; padding:2px 6px; border-radius:4px; background:rgba(16,6,159,0.08); color:var(--accent); font-weight:600;">♂</span>
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+<!-- APP SHELL -->
+<div class="app">
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-logo">
+      <svg width="24" height="24" viewBox="0 0 120 120" fill="none">
+        <circle cx="60" cy="60" r="52" stroke="#10069F" stroke-width="1.5" opacity=".3"/>
+        <circle cx="60" cy="60" r="38" stroke="#10069F" stroke-width="2" opacity=".5"/>
+        <circle cx="60" cy="60" r="24" stroke="#10069F" stroke-width="2.5" opacity=".7"/>
+        <circle cx="60" cy="60" r="10" fill="#10069F"/>
+      </svg>
+      <span class="topbar-title">EPIONE</span>
+    </div>
+    <div class="topbar-spacer"></div>
+    <button class="topbar-badge" id="topbar-badge" onclick="openSettingsSheet()">
+      <span class="dot"></span>
+      <span id="topbar-user-name" style="display:none;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+      <span id="topbar-role-label">Sale B2B</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
     </button>
-    <div class="role-dropdown-menu" id="role-dropdown-menu">
-      <div style="padding:8px 14px 6px; font-size:11px; font-weight:700; color:var(--text-secondary); letter-spacing:1px; text-transform:uppercase;">Giọng văn</div>
-      <button class="role-dropdown-item gender-item active" data-gender="nam" onclick="switchGender('nam')">
-        <div class="role-dropdown-item-title">♂ Nam</div>
-        <div class="role-dropdown-item-desc">Thẳng thắn &middot; Logic &middot; Số liệu</div>
-      </button>
-      <button class="role-dropdown-item gender-item" data-gender="nu" onclick="switchGender('nu')">
-        <div class="role-dropdown-item-title">♀ Nữ</div>
-        <div class="role-dropdown-item-desc">Tinh tế &middot; Kể chuyện &middot; Empathy</div>
-      </button>
-      <hr style="border:none; border-top:1px solid var(--border); margin:6px 0;">
-      <div style="padding:8px 14px 6px; font-size:11px; font-weight:700; color:var(--text-secondary); letter-spacing:1px; text-transform:uppercase;">Vai trò</div>
-      <button class="role-dropdown-item role-item active" data-role="sale_b2b">
-        <div class="role-dropdown-item-title">Sale B2B</div>
-        <div class="role-dropdown-item-desc">Doanh nghiệp &middot; Số liệu &middot; Logic</div>
-      </button>
-      <button class="role-dropdown-item role-item" data-role="sale_b2c">
-        <div class="role-dropdown-item-title">Sale B2C</div>
-        <div class="role-dropdown-item-desc">Cá nhân &middot; Cảm xúc &middot; Trải nghiệm</div>
-      </button>
-      <button class="role-dropdown-item role-item" data-role="ky_thuat">
-        <div class="role-dropdown-item-title">Kỹ thuật</div>
-        <div class="role-dropdown-item-desc">Thợ lắp &middot; Chính xác &middot; Thực chiến</div>
-      </button>
-    </div>
-  </div>
-</nav>
+  </header>
 
-<div class="container">
+  <!-- MAIN SCROLL -->
+  <div class="main">
+    <div class="main-inner">
 
-  <!-- TABS -->
-  <div class="tabs">
-    <button class="tab active" data-type="content">Bài đăng</button>
-    <button class="tab" data-type="research">Chủ đề</button>
-    <button class="tab" data-type="image">Thiết kế</button>
-    <button class="tab" data-type="outreach">Email</button>
-    <button class="tab" data-type="casestudy">Hành trình dự án</button>
-    <button class="tab" data-type="ideas">Lịch content</button>
-  </div>
+      <!-- PAGE: Viết content -->
+      <div class="page active" id="page-content">
+        <div class="card">
+          <div class="card-title">Viết content</div>
+          <div class="card-desc">Chọn kênh → mô tả yêu cầu → AI viết content</div>
 
-  <!-- CONTENT MODES -->
-
-  <!-- Viết content (gộp LinkedIn + Facebook + Cộng đồng) -->
-  <div class="card mode-card" id="mode-content">
-    <h2>Viết content</h2>
-    <p class="desc">Chọn kênh đăng → mô tả yêu cầu → AI viết content phù hợp</p>
-
-    <div class="step-label">Kênh đăng</div>
-    <div class="plat-select" style="margin-bottom:12px;">
-      <button class="content-plat-chip plat-chip selected" data-plat="linkedin">LinkedIn</button>
-      <button class="content-plat-chip plat-chip" data-plat="facebook">Facebook</button>
-      <button class="content-plat-chip plat-chip" data-plat="instagram">Instagram</button>
-      <button class="content-plat-chip plat-chip" data-plat="community">Cộng đồng FB</button>
-    </div>
-
-    <div class="style-subpanel" id="style-subpanel">
-      <div class="step-label">Phong cách</div>
-      <div class="plat-select" id="style-chips-container"></div>
-      <div class="combo-tag" id="combo-tag"></div>
-    </div>
-
-    <div id="content-community-fields" style="display:none; margin-bottom:14px;">
-      <div class="community-header">
-        <div>
-          <input type="text" id="community-name" placeholder="Tên group FB... (VD: Hội HR Việt Nam)" onchange="loadCommunityRules()">
-        </div>
-      </div>
-      <div class="step-label" style="margin-top:12px;">Quy định cộng đồng <span style="font-weight:400;text-transform:none;letter-spacing:0;">(paste rule từ group)</span></div>
-      <textarea id="community-rules" placeholder="Paste quy định group vào đây... VD: Không spam, không quảng cáo trực tiếp, phải có giá trị cho cộng đồng..." style="min-height:80px; margin-bottom:4px;"></textarea>
-      <div class="saved-rules" id="saved-rules-note"></div>
-      <button class="btn btn-outline" onclick="saveCommunityRules()" style="font-size:12px; padding:6px 14px; margin-bottom:8px;">Lưu rules</button>
-    </div>
-
-    <div class="step-label" id="content-prompt-label">Gợi ý nhanh</div>
-    <div class="topic-suggestions" id="topic-suggestions"></div>
-
-    <div class="step-label">Bạn muốn viết gì?</div>
-    <textarea id="prompt" placeholder="Ví dụ: Chia sẻ về trải nghiệm lắp booth cho văn phòng 200 người, HR khen vì nhân viên tập trung hơn"></textarea>
-    <div class="input-footer">
-      <div class="input-hint" id="content-hint">Enter để gửi &middot; Shift+Enter xuống dòng</div>
-    </div>
-    <div style="margin-top:10px; display:flex; gap:8px; align-items:center;">
-      <button class="btn btn-primary" id="btn-generate" onclick="generate()">
-        Viết content
-      </button>
-      <div class="typing-indicator" id="loading">
-        <div class="typing-dots"><span></span><span></span><span></span></div>
-        <span>Đang viết content...</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Text-based modes (Outreach, Case Study, Lịch content) -->
-  <div class="card mode-card" id="mode-text" style="display:none">
-    <h2 id="mode-title">Viết tin nhắn Outreach</h2>
-    <p class="desc" id="mode-desc">Template email, Zalo, LinkedIn DM tiếp cận khách hàng B2B</p>
-    <textarea id="prompt-text" placeholder="Mô tả yêu cầu..."></textarea>
-    <div style="margin-top:14px; display:flex; gap:8px; align-items:center;">
-      <button class="btn btn-primary" id="btn-generate-text" onclick="generateText()">
-        Tạo content
-      </button>
-      <div class="typing-indicator" id="loading-text">
-        <div class="typing-dots"><span></span><span></span><span></span></div>
-        <span>Đang viết content...</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Topic flow mode -->
-  <div class="card mode-card" id="mode-research" style="display:none">
-    <h2>Tạo Content theo Chủ đề</h2>
-    <p class="desc">Chọn chủ đề → AI viết content → Chọn ảnh phù hợp → Tạo design</p>
-
-    <div class="step-label">Chọn chủ đề</div>
-    <div class="topic-grid">
-      <button class="topic-chip" data-topic="Booth cách âm cho văn phòng open-plan, giải quyết nhu cầu riêng tư">Booth cách âm</button>
-      <button class="topic-chip" data-topic="Nội thất ergonomic - bàn nâng hạ, ghế công thái học cho sức khỏe nhân viên">Nội thất ergonomic</button>
-      <button class="topic-chip" data-topic="Giải pháp không gian làm việc cho hybrid work và họp online">Hybrid work</button>
-      <button class="topic-chip" data-topic="Sức khỏe nhân viên tại nơi làm việc, tư thế ngồi, ergonomic">Sức khỏe công sở</button>
-      <button class="topic-chip" data-topic="Setup văn phòng mới cho doanh nghiệp, lựa chọn nội thất và booth">Setup văn phòng</button>
-      <button class="topic-chip" data-topic="Nâng cấp coworking space với booth cách âm và nội thất hiện đại">Coworking space</button>
-      <button class="topic-chip" data-topic="Năng suất làm việc, không gian tập trung, giảm tiếng ồn văn phòng">Năng suất & tập trung</button>
-      <button class="topic-chip" data-topic="Xu hướng thiết kế workspace hiện đại 2025-2026">Workspace trends</button>
-    </div>
-    <input type="text" id="custom-topic" placeholder="Hoặc nhập chủ đề riêng..." style="margin-bottom:16px;">
-
-    <div class="step-label">Platform</div>
-    <div class="plat-select">
-      <button class="topic-plat-chip plat-chip selected" data-plat="linkedin">LinkedIn</button>
-      <button class="topic-plat-chip plat-chip" data-plat="facebook">Facebook</button>
-      <button class="topic-plat-chip plat-chip" data-plat="instagram">Instagram</button>
-      <button class="topic-plat-chip plat-chip" data-plat="community">Cộng đồng</button>
-    </div>
-
-    <div style="display:flex; gap:8px; align-items:center;">
-      <button class="btn btn-primary" id="btn-topic-gen" onclick="generateFromTopic()">Viết content</button>
-      <div class="typing-indicator" id="loading-topic">
-        <div class="typing-dots"><span></span><span></span><span></span></div>
-        <span>Đang viết content...</span>
-      </div>
-    </div>
-
-    <!-- Results -->
-    <div id="topic-results" style="display:none;">
-      <hr style="margin:24px 0;">
-
-      <div class="step-label">Content</div>
-      <div class="content-box" id="topic-content"></div>
-      <button class="platform-btn" onclick="copyTopicContent(this)" style="margin-top:8px;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-        Copy content
-      </button>
-
-      <div class="img-suggest" id="topic-img-suggest"></div>
-
-      <div class="step-label">Chọn ảnh phù hợp</div>
-      <div class="dropzone" id="topic-dropzone" onclick="document.getElementById('topic-file').click()">
-        <div class="icon">📸</div>
-        <div class="label">Kéo thả ảnh hoặc <strong>click để chọn</strong></div>
-      </div>
-      <input type="file" id="topic-file" accept="image/*" style="display:none" onchange="handleTopicFile(this.files[0])">
-
-      <div id="topic-design-section" style="display:none;">
-        <div class="step-label" style="margin-top:16px;">Tạo Design</div>
-        <div class="design-form show">
-          <div class="row">
-            <div>
-              <label>Headline</label>
-              <input type="text" id="topic-headline">
-            </div>
+          <div class="step-label">Kênh đăng</div>
+          <div class="chip-row">
+            <button class="content-plat-chip chip selected" data-plat="linkedin">LinkedIn</button>
+            <button class="content-plat-chip chip" data-plat="facebook">Facebook</button>
+            <button class="content-plat-chip chip" data-plat="instagram">Instagram</button>
+            <button class="content-plat-chip chip" data-plat="community">Cộng đồng</button>
           </div>
-          <div class="row">
-            <div>
-              <label>Subtext</label>
-              <input type="text" id="topic-subtext">
-            </div>
-            <div>
-              <label>CTA</label>
-              <input type="text" id="topic-cta" value="Liên hệ tư vấn">
-            </div>
+
+          <div class="style-subpanel" id="style-subpanel">
+            <div class="step-label">Phong cách</div>
+            <div class="chip-row" id="style-chips-container"></div>
           </div>
-          <div style="display:flex; gap:8px; align-items:center;">
-            <button class="btn btn-primary" onclick="createTopicDesign()">Tạo design</button>
-            <div class="typing-indicator" id="loading-topic-design">
+          <div class="combo-tag" id="combo-tag"></div>
+
+          <div id="content-community-fields" style="display:none; margin-bottom:14px;">
+            <div class="community-header">
+              <input type="text" id="community-name" placeholder="Tên group FB... (VD: Hội HR Việt Nam)" onchange="loadCommunityRules()">
+            </div>
+            <div class="step-label" style="margin-top:12px;">Quy định cộng đồng</div>
+            <textarea id="community-rules" placeholder="Paste quy định group vào đây..." style="min-height:80px; margin-bottom:6px;"></textarea>
+            <div class="saved-rules" id="saved-rules-note"></div>
+            <button class="btn-outline" onclick="saveCommunityRules()" style="font-size:12px; padding:8px 14px; margin-bottom:8px;">Lưu rules</button>
+          </div>
+
+          <div class="step-label" id="content-prompt-label">Gợi ý nhanh</div>
+          <div class="suggest-row" id="topic-suggestions"></div>
+
+          <div class="step-label">Bạn muốn viết gì?</div>
+          <textarea id="prompt" placeholder="Ví dụ: Chia sẻ về trải nghiệm lắp booth cho văn phòng 200 người"></textarea>
+          <div class="input-footer">
+            <div class="input-hint" id="content-hint">Enter gửi · Shift+Enter xuống dòng</div>
+          </div>
+
+          <div class="action-row">
+            <button class="btn-primary" id="btn-generate" onclick="generate()">Viết content</button>
+            <div class="typing-indicator" id="loading">
               <div class="typing-dots"><span></span><span></span><span></span></div>
-              <span>Đang tạo design...</span>
+              <span>Đang viết...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- OUTPUT (shared by content + text modes) -->
+        <div class="output" id="output">
+          <div class="output-actions">
+            <div class="platform-btns">
+              <span class="platform-label">Copy:</span>
+              <button class="platform-btn" data-platform="linkedin" onclick="copyForPlatform(this)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                LinkedIn
+              </button>
+              <button class="platform-btn" data-platform="facebook" onclick="copyForPlatform(this)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                Facebook
+              </button>
+              <button class="platform-btn" data-platform="instagram" onclick="copyForPlatform(this)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.805.249 2.228.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.058 1.265.07 1.645.07 4.848s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0-2.163C8.741 0 8.333.014 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405a1.441 1.441 0 11-2.882 0 1.441 1.441 0 012.882 0z"/></svg>
+                Instagram
+              </button>
+              <button class="platform-btn" data-platform="zalo" onclick="copyForPlatform(this)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 4.925 0 11c0 3.178 1.408 6.044 3.662 8.088l-1.022 3.568c-.165.585.408 1.074.936.8l4.292-2.156C9.174 21.756 10.563 22 12 22c6.627 0 12-4.925 12-11S18.627 0 12 0zm-3 15H7V7h2v8zm7-3H9.5v-1.5H16V12zm0-3H9.5V7.5H16V9z"/></svg>
+                Zalo
+              </button>
+              <button class="platform-btn" data-platform="email" onclick="copyForPlatform(this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 4 10 8 10-8"/></svg>
+                Email
+              </button>
+            </div>
+            <button class="btn-download" id="btn-download-img" onclick="downloadImage()" style="display:none;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Tải ảnh
+            </button>
+          </div>
+          <div id="output-content"></div>
+          <div class="char-counter" id="char-counter" style="display:none;">
+            Ký tự: <span id="count-chars">0</span> &nbsp;|&nbsp; Từ: <span id="count-words">0</span> &nbsp;|&nbsp; Dòng: <span id="count-lines">0</span>
+          </div>
+          <div class="output-refine" id="output-refine">
+            <div class="output-refine-label">Viết lại theo ý bạn</div>
+            <button class="refine-btn" onclick="refineContent('Viết lại bài này với cách tiếp cận khác, hook khác, góc nhìn khác. Giữ nguyên chủ đề.')">↻ Viết lại</button>
+            <button class="refine-btn" onclick="refineContent('Viết ngắn hơn, cô đọng hơn. Giữ ý chính, bỏ phần thừa.')">Ngắn hơn</button>
+            <button class="refine-btn" onclick="refineContent('Viết dài hơn, thêm chi tiết, ví dụ hoặc câu chuyện. Giữ nguyên tone.')">Dài hơn</button>
+            <button class="refine-btn" onclick="refineContent('Chỉnh tone chuyên nghiệp hơn, phù hợp B2B decision maker.')">Chuyên nghiệp hơn</button>
+            <button class="refine-btn" onclick="refineContent('Chỉnh tone gần gũi, đời thường hơn. Giảm bớt formal.')">Gần gũi hơn</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE: Text modes (Outreach, Case Study, Ideas) -->
+      <div class="page" id="page-text">
+        <div class="card">
+          <h2 class="card-title" id="mode-title">Viết Email</h2>
+          <p class="card-desc" id="mode-desc">Template email tiếp cận khách hàng B2B</p>
+          <textarea id="prompt-text" placeholder="Mô tả yêu cầu..."></textarea>
+          <div class="action-row">
+            <button class="btn-primary" id="btn-generate-text" onclick="generateText()">Tạo content</button>
+            <div class="typing-indicator" id="loading-text">
+              <div class="typing-dots"><span></span><span></span><span></span></div>
+              <span>Đang viết...</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="design-preview" id="topic-design-preview">
-        <hr style="margin:20px 0;">
-        <h3 style="margin-bottom:12px;">Preview Design</h3>
-        <div class="design-preview-frame">
-          <iframe id="topic-design-iframe" sandbox="allow-same-origin allow-scripts"></iframe>
+      <!-- PAGE: Topic flow -->
+      <div class="page" id="page-research">
+        <div class="card">
+          <div class="card-title">Tạo Content theo Chủ đề</div>
+          <div class="card-desc">Chọn chủ đề → AI viết → Chọn ảnh → Tạo design</div>
+
+          <div class="step-label">Chọn chủ đề</div>
+          <div class="topic-grid">
+            <button class="topic-chip" data-topic="Booth cách âm cho văn phòng open-plan, giải quyết nhu cầu riêng tư">Booth cách âm</button>
+            <button class="topic-chip" data-topic="Nội thất ergonomic - bàn nâng hạ, ghế công thái học cho sức khỏe nhân viên">Nội thất ergonomic</button>
+            <button class="topic-chip" data-topic="Giải pháp không gian làm việc cho hybrid work và họp online">Hybrid work</button>
+            <button class="topic-chip" data-topic="Sức khỏe nhân viên tại nơi làm việc, tư thế ngồi, ergonomic">Sức khỏe công sở</button>
+            <button class="topic-chip" data-topic="Setup văn phòng mới cho doanh nghiệp, lựa chọn nội thất và booth">Setup văn phòng</button>
+            <button class="topic-chip" data-topic="Nâng cấp coworking space với booth cách âm và nội thất hiện đại">Coworking space</button>
+            <button class="topic-chip" data-topic="Năng suất làm việc, không gian tập trung, giảm tiếng ồn văn phòng">Năng suất</button>
+            <button class="topic-chip" data-topic="Xu hướng thiết kế workspace hiện đại 2025-2026">Workspace trends</button>
+          </div>
+          <input type="text" id="custom-topic" placeholder="Hoặc nhập chủ đề riêng..." style="margin-bottom:14px;">
+
+          <div class="step-label">Platform</div>
+          <div class="chip-row">
+            <button class="topic-plat-chip chip chip-sm selected" data-plat="linkedin">LinkedIn</button>
+            <button class="topic-plat-chip chip chip-sm" data-plat="facebook">Facebook</button>
+            <button class="topic-plat-chip chip chip-sm" data-plat="instagram">Instagram</button>
+            <button class="topic-plat-chip chip chip-sm" data-plat="community">Cộng đồng</button>
+          </div>
+
+          <div class="action-row">
+            <button class="btn-primary" id="btn-topic-gen" onclick="generateFromTopic()">Viết content</button>
+            <div class="typing-indicator" id="loading-topic">
+              <div class="typing-dots"><span></span><span></span><span></span></div>
+              <span>Đang viết...</span>
+            </div>
+          </div>
         </div>
-        <div class="design-preview-actions">
-          <button class="btn-download" onclick="downloadTopicPNG()" id="btn-topic-png">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Tải ảnh (PNG)
-          </button>
-          <button class="btn btn-outline" onclick="window.open('/'+topicDesignPath,'_blank')">
-            Mở tab mới ↗
-          </button>
+
+        <!-- Topic Results -->
+        <div id="topic-results" style="display:none;">
+          <div class="card">
+            <div class="step-label">Content</div>
+            <div class="content-box" id="topic-content"></div>
+            <button class="platform-btn" onclick="copyTopicContent(this)" style="margin-top:8px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              Copy content
+            </button>
+
+            <div class="img-suggest" id="topic-img-suggest"></div>
+
+            <div class="step-label">Chọn ảnh phù hợp</div>
+            <div class="dropzone" id="topic-dropzone" onclick="document.getElementById('topic-file').click()">
+              <div class="icon">📸</div>
+              <div class="label">Kéo thả hoặc <strong>chọn ảnh</strong></div>
+            </div>
+            <input type="file" id="topic-file" accept="image/*" style="display:none" onchange="handleTopicFile(this.files[0])">
+
+            <div id="topic-design-section" style="display:none;">
+              <div class="step-label" style="margin-top:16px;">Tạo Design</div>
+              <div class="design-form show">
+                <div class="row">
+                  <div>
+                    <label>Headline</label>
+                    <input type="text" id="topic-headline">
+                  </div>
+                </div>
+                <div class="row">
+                  <div>
+                    <label>Subtext</label>
+                    <input type="text" id="topic-subtext">
+                  </div>
+                  <div>
+                    <label>CTA</label>
+                    <input type="text" id="topic-cta" value="Liên hệ tư vấn">
+                  </div>
+                </div>
+                <div class="action-row">
+                  <button class="btn-primary" onclick="createTopicDesign()">Tạo design</button>
+                  <div class="typing-indicator" id="loading-topic-design">
+                    <div class="typing-dots"><span></span><span></span><span></span></div>
+                    <span>Đang tạo...</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="design-preview" id="topic-design-preview">
+              <hr style="margin:16px 0; border:none; border-top:0.5px solid var(--border);">
+              <div class="step-label">Preview Design</div>
+              <div class="design-preview-frame">
+                <iframe id="topic-design-iframe" sandbox="allow-same-origin allow-scripts"></iframe>
+              </div>
+              <div class="design-preview-actions">
+                <button class="btn-download" onclick="downloadTopicPNG()" id="btn-topic-png">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  Tải PNG
+                </button>
+                <button class="btn-outline" onclick="window.open('/'+topicDesignPath,'_blank')">Mở tab mới ↗</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      <!-- PAGE: Image/Design -->
+      <div class="page" id="page-image">
+        <div class="card">
+          <div class="card-title">Ảnh → Content + Design</div>
+          <div class="card-desc">Chọn ảnh sản phẩm → AI viết caption → tạo design</div>
+
+          <div class="dropzone" id="dropzone" onclick="document.getElementById('file-input').click()">
+            <div class="icon">📸</div>
+            <div class="label">Kéo thả hoặc <strong>chọn ảnh</strong></div>
+            <div class="label" style="font-size:11px; margin-top:4px; color:var(--text-tertiary);">JPG, PNG, WebP — tối đa 16MB</div>
+          </div>
+          <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleFile(this.files[0])">
+
+          <input type="text" id="image-note" placeholder="Ghi chú thêm (tùy chọn)" style="margin-bottom:14px;">
+
+          <div class="step-label">Kênh đăng</div>
+          <div class="chip-row">
+            <button class="img-plat-chip chip chip-sm selected" data-plat="linkedin">LinkedIn</button>
+            <button class="img-plat-chip chip chip-sm" data-plat="facebook">Facebook</button>
+            <button class="img-plat-chip chip chip-sm" data-plat="instagram">Instagram</button>
+            <button class="img-plat-chip chip chip-sm" data-plat="community">Cộng đồng</button>
+          </div>
+
+          <div id="image-community-fields" style="display:none; margin-bottom:14px;">
+            <input type="text" id="image-community-name" placeholder="Tên cộng đồng / group" style="margin-bottom:8px;" oninput="loadImageCommunityRules()">
+            <textarea id="image-community-rules" rows="3" placeholder="Quy định group (tự động load nếu đã lưu)"></textarea>
+          </div>
+
+          <div class="action-row">
+            <button class="btn-primary" id="btn-image" onclick="analyzeImage()" disabled>Viết content</button>
+            <div class="typing-indicator" id="loading-image">
+              <div class="typing-dots"><span></span><span></span><span></span></div>
+              <span>Đang phân tích...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Design form -->
+        <div class="design-form" id="design-form">
+          <div class="card">
+            <div class="card-title">Tạo Design Post</div>
+            <div class="row">
+              <div>
+                <label>Headline</label>
+                <input type="text" id="design-headline" placeholder="Text chính trên ảnh">
+              </div>
+            </div>
+            <div class="row">
+              <div>
+                <label>Subtext</label>
+                <input type="text" id="design-subtext" placeholder="Text phụ (tùy chọn)">
+              </div>
+              <div>
+                <label>CTA</label>
+                <input type="text" id="design-cta" value="Liên hệ tư vấn">
+              </div>
+            </div>
+            <div class="action-row">
+              <button class="btn-primary" onclick="createDesign()">Tạo design</button>
+              <div class="typing-indicator" id="loading-design">
+                <div class="typing-dots"><span></span><span></span><span></span></div>
+                <span>Đang tạo...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Design Preview -->
+        <div class="design-preview" id="design-preview">
+          <div class="card">
+            <div class="step-label">Preview Design</div>
+            <div class="design-preview-frame">
+              <iframe id="design-iframe" sandbox="allow-same-origin allow-scripts"></iframe>
+            </div>
+            <div class="design-preview-actions">
+              <button class="btn-download" onclick="downloadDesignAsImage()" id="btn-download-png">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Tải PNG
+              </button>
+              <button class="btn-outline" onclick="downloadDesign()">Tải HTML</button>
+              <button class="btn-outline" onclick="openDesign()">Mở tab ↗</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE: Catalog -->
+      <div class="page" id="page-catalog">
+        <div class="card">
+          <div class="card-title">Sản phẩm Epione</div>
+          <div class="card-desc">Tra cứu sản phẩm, tồn kho và thêm vào báo giá</div>
+          <div class="cat-filters" id="cat-filters">
+            <button class="cat-filter active" data-cat="all" onclick="filterCatalog('all',this)">Tất cả</button>
+            <button class="cat-filter" data-cat="chair" onclick="filterCatalog('chair',this)">Ghế</button>
+            <button class="cat-filter" data-cat="desk" onclick="filterCatalog('desk',this)">Bàn</button>
+            <button class="cat-filter" data-cat="kids" onclick="filterCatalog('kids',this)">Kids</button>
+            <button class="cat-filter" data-cat="booth" onclick="filterCatalog('booth',this)">Booth</button>
+          </div>
+          <div class="product-grid" id="product-grid"></div>
+        </div>
+      </div>
+
+      <!-- PAGE: Quote Builder -->
+      <div class="page" id="page-quote">
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+            <div class="card-title">Báo giá</div>
+            <button class="btn-outline" onclick="switchPage('catalog',document.querySelector('#nav-kythuat .nav-item[data-page=catalog]'))" style="padding:8px 14px;font-size:12px;min-height:auto;">+ Thêm SP</button>
+          </div>
+          <div class="card-desc">Tạo báo giá nhanh, gửi link cho khách chốt đơn</div>
+          <div id="quote-items-list">
+            <div class="quote-empty" id="quote-empty">
+              <div class="quote-empty-icon">📋</div>
+              <div class="quote-empty-text">Chưa có sản phẩm nào<br><small style="color:var(--text-tertiary)">Vào Catalog để thêm sản phẩm</small></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="quote-summary-section" style="display:none;">
+          <div class="card">
+            <div class="step-label">Chiết khấu (tối đa 8%)</div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <input type="range" class="discount-slider" id="discount-slider" min="0" max="8" step="0.5" value="0" oninput="updateQuoteTotals()">
+              <span id="discount-label" style="font-size:14px;font-weight:700;color:#2e7d32;min-width:36px;">0%</span>
+            </div>
+            <div class="quote-summary" id="quote-summary"></div>
+          </div>
+
+          <div class="card">
+            <div class="step-label">Khách hàng</div>
+            <div style="display:flex;gap:8px;margin-bottom:8px;">
+              <input type="text" id="q-customer-name" placeholder="Tên khách *" style="flex:1;">
+              <input type="tel" id="q-customer-phone" placeholder="SĐT *" style="flex:1;">
+            </div>
+            <div id="q-extra-fields" style="display:none;">
+              <input type="text" id="q-customer-company" placeholder="Công ty" style="margin-bottom:8px;">
+              <input type="email" id="q-customer-email" placeholder="Email" style="margin-bottom:8px;">
+              <textarea id="q-note" placeholder="Ghi chú..." style="min-height:50px;margin-bottom:8px;"></textarea>
+            </div>
+            <button style="font-size:12px;color:var(--accent);font-weight:600;padding:4px 0;margin-bottom:12px;" onclick="var el=document.getElementById('q-extra-fields');el.style.display=el.style.display==='none'?'block':'none';this.textContent=el.style.display==='none'?'+ Thêm thông tin':'− Ẩn bớt'">+ Thêm thông tin</button>
+            <input type="hidden" id="q-created-by">
+
+            <div class="quote-actions">
+              <button class="btn-primary" onclick="submitQuote()">Tạo & Gửi báo giá</button>
+              <button class="btn-outline" onclick="clearQuote()">Xóa</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="quote-result" style="display:none;">
+          <div class="card" style="text-align:center;">
+            <div style="font-size:40px;margin-bottom:8px;">✅</div>
+            <div style="font-size:18px;font-weight:700;margin-bottom:4px;">Báo giá đã tạo!</div>
+            <div style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;" id="quote-result-id"></div>
+            <div class="quote-actions" style="justify-content:center;">
+              <button class="btn-primary" id="btn-share-quote" onclick="shareQuote()">Chia sẻ link</button>
+              <button class="btn-outline" onclick="viewQuote()">Xem báo giá</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
+
+      <!-- DASHBOARD PAGE -->
+      <div class="page" id="page-dashboard">
+        <div class="dash-header">
+          <div class="dash-greeting" id="dash-greeting">Xin chào!</div>
+          <div class="dash-level" id="dash-level">Level 1 — Người mới</div>
+          <div class="dash-xp-bar"><div class="dash-xp-fill" id="dash-xp-fill" style="width:0%"></div></div>
+          <div class="dash-xp-text" id="dash-xp-text">0 / 50 XP</div>
+        </div>
+
+        <div class="dash-stats" id="dash-stats"></div>
+
+        <div class="dash-streak" id="dash-streak-section">
+          <div class="dash-streak-header">
+            <div class="dash-streak-title">Streak</div>
+            <div class="dash-streak-count" id="dash-streak-count">0 ngày</div>
+          </div>
+          <div class="dash-streak-days" id="dash-streak-days"></div>
+        </div>
+
+        <div class="dash-badges">
+          <div class="dash-badges-title">Huy hiệu</div>
+          <div class="dash-badge-list" id="dash-badge-list"></div>
+        </div>
+
+        <div class="dash-leaderboard">
+          <div class="dash-lb-title">Bảng xếp hạng tháng này</div>
+          <div id="dash-lb-rows"></div>
+        </div>
+      </div>
+
   </div>
 
+  <!-- BOTTOM NAV: Sale -->
+  <nav class="bottomnav" id="nav-sale">
+    <button class="nav-item active" data-page="content" onclick="switchPage('content',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      <span>Viết</span>
+    </button>
+    <button class="nav-item" data-page="research" onclick="switchPage('research',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+      <span>Chủ đề</span>
+    </button>
+    <button class="nav-item" data-page="image" onclick="switchPage('image',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      <span>Thiết kế</span>
+    </button>
+    <button class="nav-item" data-page="more" onclick="openMoreSheet()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>Thêm</span>
+    </button>
+  </nav>
 
-  <!-- Image mode -->
-  <div class="card mode-card" id="mode-image" style="display:none">
-    <h2>Chụp ảnh → Viết content</h2>
-    <p class="desc">Chọn ảnh sản phẩm, văn phòng, dự án → viết caption luôn</p>
+  <!-- BOTTOM NAV: Kỹ thuật -->
+  <nav class="bottomnav" id="nav-kythuat" style="display:none;">
+    <button class="nav-item active" data-page="catalog" onclick="switchPage('catalog',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+      <span>Catalog</span>
+    </button>
+    <button class="nav-item" data-page="quote" onclick="switchPage('quote',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span>Báo giá</span>
+      <span class="quote-badge" id="quote-badge" style="display:none;">0</span>
+    </button>
+    <button class="nav-item" data-page="content" onclick="switchPage('content',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      <span>AI Content</span>
+    </button>
+    <button class="nav-item" data-page="more" onclick="openMoreSheet()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>Thêm</span>
+    </button>
+  </nav>
+</div>
 
-    <div class="dropzone" id="dropzone" onclick="document.getElementById('file-input').click()">
-      <div class="icon">📸</div>
-      <div class="label">Kéo thả ảnh vào đây hoặc <strong>click để chọn file</strong></div>
-      <div class="label" style="font-size:12px; margin-top:4px;">JPG, PNG, WebP — tối đa 16MB</div>
-    </div>
-    <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleFile(this.files[0])">
+<!-- SETTINGS BOTTOM SHEET -->
+<div class="sheet-overlay" id="settings-sheet" onclick="closeSheet('settings-sheet')">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Cài đặt</div>
 
-    <input type="text" id="image-note" placeholder="Ghi chú thêm (sản phẩm gì, dùng cho gì... hoặc để trống)" style="margin-bottom:14px;">
-
-    <div style="margin-bottom:14px;">
-      <div class="step-label">Chọn kênh đăng</div>
-      <div class="plat-select">
-        <button class="img-plat-chip plat-chip selected" data-plat="linkedin">LinkedIn</button>
-        <button class="img-plat-chip plat-chip" data-plat="facebook">Facebook</button>
-        <button class="img-plat-chip plat-chip" data-plat="instagram">Instagram</button>
-        <button class="img-plat-chip plat-chip" data-plat="community">Cộng đồng</button>
+    <div class="sheet-section-label">Giọng văn</div>
+    <button class="sheet-item gender-sheet-item active" data-gender="nam" onclick="sheetSwitchGender('nam')">
+      <div class="sheet-item-icon">♂</div>
+      <div class="sheet-item-text">
+        <div class="sheet-item-title">Nam</div>
+        <div class="sheet-item-desc">Thẳng thắn · Logic · Số liệu</div>
       </div>
-    </div>
+      <svg class="sheet-item-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+    </button>
+    <button class="sheet-item gender-sheet-item" data-gender="nu" onclick="sheetSwitchGender('nu')">
+      <div class="sheet-item-icon">♀</div>
+      <div class="sheet-item-text">
+        <div class="sheet-item-title">Nữ</div>
+        <div class="sheet-item-desc">Tinh tế · Kể chuyện · Empathy</div>
+      </div>
+      <svg class="sheet-item-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+    </button>
 
-    <div id="image-community-fields" style="display:none; margin-bottom:14px;">
-      <input type="text" id="image-community-name" placeholder="Tên cộng đồng / group Facebook" style="margin-bottom:8px;" oninput="loadImageCommunityRules()">
-      <textarea id="image-community-rules" rows="3" placeholder="Quy định group (tự động load nếu đã lưu trước đó)"></textarea>
-    </div>
+    <div class="sheet-section-label">Vai trò</div>
+    <button class="sheet-item role-sheet-item active" data-role="sale_b2b" onclick="sheetSwitchRole(this)">
+      <div class="sheet-item-icon">B2B</div>
+      <div class="sheet-item-text">
+        <div class="sheet-item-title">Sale B2B</div>
+        <div class="sheet-item-desc">Doanh nghiệp · Số liệu · Logic</div>
+      </div>
+      <svg class="sheet-item-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+    </button>
+    <button class="sheet-item role-sheet-item" data-role="sale_b2c" onclick="sheetSwitchRole(this)">
+      <div class="sheet-item-icon">B2C</div>
+      <div class="sheet-item-text">
+        <div class="sheet-item-title">Sale B2C</div>
+        <div class="sheet-item-desc">Cá nhân · Cảm xúc · Trải nghiệm</div>
+      </div>
+      <svg class="sheet-item-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+    </button>
+    <button class="sheet-item role-sheet-item" data-role="ky_thuat" onclick="sheetSwitchRole(this)">
+      <div class="sheet-item-icon">KT</div>
+      <div class="sheet-item-text">
+        <div class="sheet-item-title">Kỹ thuật</div>
+        <div class="sheet-item-desc">Thợ lắp · Chính xác · Thực chiến</div>
+      </div>
+      <svg class="sheet-item-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+    </button>
 
-    <div style="display:flex; gap:8px; align-items:center;">
-      <button class="btn btn-primary" id="btn-image" onclick="analyzeImage()" disabled>
-        Viết content
+    <div class="sheet-section-label" style="margin-top:16px;">Tài khoản</div>
+    <div id="settings-user-info" style="padding:8px 0;font-size:13px;color:var(--text-secondary);display:none;"></div>
+    <button class="sheet-item" onclick="handleLogout()" style="color:#c62828;">
+      <div class="sheet-item-icon" style="background:#FFEBEE;color:#c62828;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </div>
+      <div class="sheet-item-text">
+        <div class="sheet-item-title" style="color:#c62828;">Đăng xuất</div>
+      </div>
+    </button>
+  </div>
+</div>
+
+<!-- MORE BOTTOM SHEET -->
+<div class="sheet-overlay" id="more-sheet" onclick="closeSheet('more-sheet')">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Thêm công cụ</div>
+    <div class="more-grid">
+      <button class="more-item" onclick="closeSheet('more-sheet');switchPage('catalog',null);loadCatalog();">
+        <div class="more-item-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+        </div>
+        <span class="more-item-label">Catalog</span>
       </button>
-      <div class="typing-indicator" id="loading-image">
-        <div class="typing-dots"><span></span><span></span><span></span></div>
-        <span>Đang phân tích ảnh...</span>
-      </div>
-    </div>
-
-    <!-- Design form (hiện sau khi có content) -->
-    <div class="design-form" id="design-form">
-      <hr style="margin:20px 0;">
-      <h3 style="margin-bottom:12px;">Tạo Design Post</h3>
-      <div class="row">
-        <div>
-          <label>Headline</label>
-          <input type="text" id="design-headline" placeholder="Text chính trên ảnh">
+      <button class="more-item" onclick="closeSheet('more-sheet');switchPage('quote',null);renderQuoteItems();">
+        <div class="more-item-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         </div>
-      </div>
-      <div class="row">
-        <div>
-          <label>Subtext</label>
-          <input type="text" id="design-subtext" placeholder="Text phụ (tùy chọn)">
-        </div>
-        <div>
-          <label>CTA Button</label>
-          <input type="text" id="design-cta" value="Liên hệ tư vấn">
-        </div>
-      </div>
-      <button class="btn btn-primary" onclick="createDesign()">Tạo design</button>
-      <div class="typing-indicator" id="loading-design" style="margin-top:8px;">
-        <div class="typing-dots"><span></span><span></span><span></span></div>
-        <span>Đang tạo design...</span>
-      </div>
-    </div>
-
-    <!-- Design Preview inline -->
-    <div class="design-preview" id="design-preview">
-      <hr style="margin:20px 0;">
-      <h3 style="margin-bottom:12px;">Preview Design</h3>
-      <div class="design-preview-frame">
-        <iframe id="design-iframe" sandbox="allow-same-origin allow-scripts"></iframe>
-      </div>
-      <div class="design-preview-actions">
-        <button class="btn-download" onclick="downloadDesignAsImage()" id="btn-download-png" title="Tải ảnh PNG">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Tải ảnh (PNG)
-        </button>
-        <button class="btn btn-outline" onclick="downloadDesign()" title="Tải file HTML">
-          Tải HTML
-        </button>
-        <button class="btn btn-outline" onclick="openDesign()" title="Mở tab mới">
-          Mở tab mới ↗
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- OUTPUT -->
-  <div class="output" id="output">
-    <div class="output-actions">
-      <div class="platform-btns">
-        <span class="platform-label">Copy cho:</span>
-        <button class="platform-btn" data-platform="linkedin" onclick="copyForPlatform(this)" title="LinkedIn">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-          LinkedIn
-        </button>
-        <button class="platform-btn" data-platform="facebook" onclick="copyForPlatform(this)" title="Facebook">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-          Facebook
-        </button>
-        <button class="platform-btn" data-platform="instagram" onclick="copyForPlatform(this)" title="Instagram">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.805.249 2.228.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.058 1.265.07 1.645.07 4.848s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0-2.163C8.741 0 8.333.014 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405a1.441 1.441 0 11-2.882 0 1.441 1.441 0 012.882 0z"/></svg>
-          Instagram
-        </button>
-        <button class="platform-btn" data-platform="zalo" onclick="copyForPlatform(this)" title="Zalo">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 4.925 0 11c0 3.178 1.408 6.044 3.662 8.088l-1.022 3.568c-.165.585.408 1.074.936.8l4.292-2.156C9.174 21.756 10.563 22 12 22c6.627 0 12-4.925 12-11S18.627 0 12 0zm-3 15H7V7h2v8zm7-3H9.5v-1.5H16V12zm0-3H9.5V7.5H16V9z"/></svg>
-          Zalo
-        </button>
-        <button class="platform-btn" data-platform="email" onclick="copyForPlatform(this)" title="Email">
+        <span class="more-item-label">Báo giá</span>
+      </button>
+      <button class="more-item" onclick="openMorePage('outreach')">
+        <div class="more-item-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 4 10 8 10-8"/></svg>
-          Email
-        </button>
-      </div>
-      <button class="btn-download" id="btn-download-img" onclick="downloadImage()" style="display:none;" title="Tải ảnh xuống">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Tải ảnh
+        </div>
+        <span class="more-item-label">Email</span>
+      </button>
+      <button class="more-item" onclick="openMorePage('casestudy')">
+        <div class="more-item-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <span class="more-item-label">Hành trình dự án</span>
+      </button>
+      <button class="more-item" onclick="openMorePage('ideas')">
+        <div class="more-item-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <span class="more-item-label">Lịch content</span>
+      </button>
+      <button class="more-item" onclick="closeSheet('more-sheet');switchPage('dashboard',null);renderDashboard();">
+        <div class="more-item-icon" style="color:#FF6B35;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15l-2 5l9-11h-5l2-5L7 15z"/></svg>
+        </div>
+        <span class="more-item-label">Thành tích</span>
       </button>
     </div>
-    <div id="output-content"></div>
-    <div class="char-counter" id="char-counter" style="display:none;">
-      Ký tự: <span id="count-chars">0</span> &nbsp;|&nbsp; Từ: <span id="count-words">0</span> &nbsp;|&nbsp; Dòng: <span id="count-lines">0</span>
+  </div>
+</div>
+
+<!-- WHAT'S NEW MODAL -->
+<div class="whats-new-overlay" id="whats-new-overlay" onclick="closeWhatsNew()">
+  <div class="whats-new-modal" onclick="event.stopPropagation()">
+    <div class="whats-new-header" id="whats-new-header">
+      <div class="whats-new-badge">NEW UPDATE</div>
+      <div class="whats-new-version" id="whats-new-version"></div>
+      <div class="whats-new-date" id="whats-new-date"></div>
     </div>
-    <div class="output-refine" id="output-refine" style="display:none;">
-      <div class="output-refine-label">Viết lại theo ý bạn</div>
-      <button class="refine-btn" onclick="refineContent('Viết lại bài này với cách tiếp cận khác, hook khác, góc nhìn khác. Giữ nguyên chủ đề.')">↻ Viết lại</button>
-      <button class="refine-btn" onclick="refineContent('Viết ngắn hơn, cô đọng hơn. Giữ ý chính, bỏ phần thừa.')">Ngắn hơn</button>
-      <button class="refine-btn" onclick="refineContent('Viết dài hơn, thêm chi tiết, ví dụ hoặc câu chuyện. Giữ nguyên tone.')">Dài hơn</button>
-      <button class="refine-btn" onclick="refineContent('Chỉnh tone chuyên nghiệp hơn, phù hợp B2B decision maker.')">Chuyên nghiệp hơn</button>
-      <button class="refine-btn" onclick="refineContent('Chỉnh tone gần gũi, đời thường hơn. Giảm bớt formal.')">Gần gũi hơn</button>
+    <div class="whats-new-body" id="whats-new-body"></div>
+    <div class="whats-new-footer">
+      <button class="whats-new-btn" onclick="closeWhatsNew()">OK, xem ngay!</button>
     </div>
   </div>
+</div>
 
+<!-- PRODUCT DETAIL SHEET -->
+<div class="sheet-overlay product-sheet" id="product-sheet" onclick="closeSheet('product-sheet')">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div id="product-detail-content"></div>
+  </div>
 </div>
 
 <script>
+// ========== SUPABASE AUTH ==========
+const SUPABASE_URL = 'https://rfipscqzaafmqxkcyxig.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJmaXBzY3F6YWFmbXF4a2N5eGlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3NTg0NTcsImV4cCI6MjA4OTMzNDQ1N30.JYHfYopywvzD89yyhaDORSsbr72ll2TP8akG7Rn3RPI';
+const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let currentUser = null; // { email, name, department, job_title, role }
+
+function mapDepartmentToRole(department, jobTitle) {
+  const dept = (department || '').toLowerCase();
+  const title = (jobTitle || '').toLowerCase();
+  if (dept.includes('kỹ thuật') || dept.includes('r&d')) return 'ky_thuat';
+  if (dept.includes('sale')) {
+    if (title.includes('b2b') || title.includes('project')) return 'sale_b2b';
+    return 'sale_b2b';
+  }
+  if (dept.includes('marketing') || dept.includes('content')) return 'content';
+  if (dept.includes('customer service')) return 'sale_b2c';
+  if (dept.includes('admin') && title.includes('ceo')) return 'sale_b2b';
+  return 'sale_b2b';
+}
+
+function mapRoleToNav(role) {
+  if (role === 'content') return 'sale'; // Content team uses Viết/Chủ đề/Thiết kế nav
+  if (role === 'ky_thuat') return 'kythuat';
+  return 'kythuat'; // Sale also gets catalog + quote nav
+}
+
+function mapRoleToStartPage(role) {
+  if (role === 'content') return 'content';
+  return 'catalog'; // Sale & kythuat start on catalog
+}
+
+function mapRoleToLabel(role) {
+  const labels = { sale_b2b: 'Sale B2B', sale_b2c: 'Sale B2C', ky_thuat: 'Kỹ thuật', content: 'Content' };
+  return labels[role] || 'Sale B2B';
+}
+
+async function fetchUserProfile(email) {
+  const { data, error } = await _sb
+    .from('epione_user_profiles')
+    .select('epione_name,department,job_title,epione_email,modules')
+    .or('epione_email.eq.' + email + ',epione_email.eq.' + email.replace(/@gmail\.com$/, '@epione.vn'))
+    .limit(1);
+  if (data && data.length > 0) return data[0];
+  // Try work_email match via epione_users
+  const { data: d2 } = await _sb
+    .from('epione_users')
+    .select('full_name,department,job_title,epione_email,modules,work_email')
+    .or('work_email.eq.' + email + ',epione_email.eq.' + email)
+    .limit(1);
+  if (d2 && d2.length > 0) return { epione_name: d2[0].full_name, department: d2[0].department, job_title: d2[0].job_title, modules: d2[0].modules };
+  return null;
+}
+
+async function onAuthSuccess(session) {
+  const email = session.user.email;
+  const profile = await fetchUserProfile(email);
+  if (profile) {
+    const role = mapDepartmentToRole(profile.department, profile.job_title);
+    const firstName = (profile.epione_name || '').split(' ').pop();
+    currentUser = {
+      email: email,
+      name: profile.epione_name || email,
+      firstName: firstName,
+      department: profile.department || '',
+      job_title: profile.job_title || '',
+      modules: profile.modules || [],
+      role: role,
+    };
+    currentRole = role;
+    // Show greeting briefly
+    const greeting = document.getElementById('login-greeting');
+    document.getElementById('greeting-avatar').textContent = firstName.charAt(0).toUpperCase();
+    document.getElementById('greeting-name').textContent = 'Chào ' + firstName + '!';
+    document.getElementById('greeting-dept').textContent = profile.department + (profile.job_title ? ' · ' + profile.job_title : '');
+    document.getElementById('login-form-section').style.display = 'none';
+    document.getElementById('signup-form-section').style.display = 'none';
+    greeting.style.display = 'block';
+    greeting.style.animation = 'fadeUp .3s ease-out';
+    // Update topbar
+    document.getElementById('topbar-user-name').textContent = firstName;
+    document.getElementById('topbar-user-name').style.display = '';
+    document.getElementById('topbar-role-label').textContent = mapRoleToLabel(role);
+    // Update settings sheet user info
+    document.getElementById('settings-user-info').textContent = profile.epione_name + ' · ' + email;
+    document.getElementById('settings-user-info').style.display = 'block';
+    // Highlight correct role in settings
+    document.querySelectorAll('.role-sheet-item').forEach(i => i.classList.toggle('active', i.dataset.role === role));
+    // Enter app after brief greeting
+    setTimeout(() => {
+      const loginScreen = document.getElementById('login-screen');
+      loginScreen.classList.add('hidden');
+      setTimeout(() => loginScreen.style.display = 'none', 300);
+      // Set navigation and start page
+      const startPage = mapRoleToStartPage(role);
+      switchNavForRole(role);
+      switchPage(startPage, null);
+      if (startPage === 'catalog') loadCatalog();
+      // Show what's new after entering app
+      setTimeout(() => showWhatsNew(), 600);
+    }, 1000);
+  } else {
+    // User not in epione_users — show onboarding for role selection
+    currentUser = { email: email, name: email, firstName: email.split('@')[0], department: '', role: 'sale_b2b' };
+    document.getElementById('login-screen').classList.add('hidden');
+    setTimeout(() => document.getElementById('login-screen').style.display = 'none', 300);
+    document.getElementById('onboarding').style.display = 'flex';
+    document.getElementById('onboarding-title').textContent = 'Chào ' + currentUser.firstName + '!';
+    document.getElementById('topbar-user-name').textContent = currentUser.firstName;
+    document.getElementById('topbar-user-name').style.display = '';
+  }
+}
+
+function showLoginError(containerId, msg) {
+  const el = document.getElementById(containerId);
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 5000);
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const btn = document.getElementById('login-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Đang đăng nhập...';
+  try {
+    if (!_sb) { showLoginError('login-error', 'Lỗi kết nối Supabase. Reload trang.'); btn.disabled = false; btn.textContent = 'Đăng nhập'; return; }
+    console.log('Attempting login for:', email);
+    const { data, error } = await _sb.auth.signInWithPassword({ email, password });
+    btn.disabled = false;
+    btn.textContent = 'Đăng nhập';
+    if (error) {
+      console.error('Login error:', error);
+      const msg = error.message.includes('Invalid login') ? 'Email hoặc mật khẩu không đúng' : error.message;
+      showLoginError('login-error', msg);
+      return;
+    }
+    console.log('Login success, session:', data.session?.user?.email);
+    onAuthSuccess(data.session);
+  } catch(ex) {
+    console.error('handleLogin exception:', ex);
+    btn.disabled = false;
+    btn.textContent = 'Đăng nhập';
+    showLoginError('login-error', 'Lỗi: ' + ex.message);
+  }
+}
+
+async function handleSignup(e) {
+  e.preventDefault();
+  const email = document.getElementById('signup-email').value.trim();
+  const password = document.getElementById('signup-password').value;
+  const confirm = document.getElementById('signup-password-confirm').value;
+  if (password !== confirm) { showLoginError('signup-error', 'Mật khẩu không khớp'); return; }
+  const btn = document.getElementById('signup-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Đang tạo tài khoản...';
+  const { data, error } = await _sb.auth.signUp({ email, password });
+  btn.disabled = false;
+  btn.textContent = 'Đăng ký';
+  if (error) { showLoginError('signup-error', error.message); return; }
+  if (data.session) {
+    onAuthSuccess(data.session);
+  } else {
+    // Email confirmation required
+    document.getElementById('signup-form-section').innerHTML =
+      '<div style="text-align:center;padding:40px 0;">' +
+      '<div style="font-size:40px;margin-bottom:12px;">📧</div>' +
+      '<div style="font-size:18px;font-weight:700;margin-bottom:8px;">Kiểm tra email</div>' +
+      '<div style="font-size:14px;color:var(--text-secondary);">Chúng tôi đã gửi link xác nhận đến <strong>' + email + '</strong>. Click link trong email để hoàn tất đăng ký.</div>' +
+      '</div>';
+  }
+}
+
+function toggleSignup(show) {
+  document.getElementById('login-form-section').style.display = show ? 'none' : 'block';
+  document.getElementById('signup-form-section').style.display = show ? 'block' : 'none';
+  document.getElementById('login-error').classList.remove('show');
+  document.getElementById('signup-error').classList.remove('show');
+}
+
+async function handleLogout() {
+  closeSheet('settings-sheet');
+  await _sb.auth.signOut();
+  currentUser = null;
+  localStorage.removeItem('epione_gender');
+  // Reload page to show login
+  window.location.reload();
+}
+
+// Check session on page load
+async function initAuth() {
+  const { data: { session } } = await _sb.auth.getSession();
+  if (session) {
+    onAuthSuccess(session);
+  } else {
+    // No session — show login screen (already visible by default)
+    document.getElementById('login-screen').style.display = 'flex';
+  }
+}
+
+// ========== STATE ==========
 let currentType = 'content';
 let currentContentPlat = 'linkedin';
 let currentImagePath = '';
@@ -904,8 +1876,17 @@ let currentRole = 'sale_b2b';
 let currentGender = 'nam';
 let lastGeneratedType = '';
 let lastGeneratedPrompt = '';
+let lastAction = null;
+let currentContentStyle = 'short';
+let currentBasePlat = 'linkedin';
+let selectedTopic = '';
+let selectedPlat = 'linkedin';
+let topicImagePath = '';
+let topicDesignPath = '';
+let selectedFile = null;
+let selectedImagePlat = 'linkedin';
 
-// Toast notification system
+// ========== TOAST ==========
 function toast(message, type = 'info', duration = 3000) {
   const container = document.getElementById('toast-container');
   const el = document.createElement('div');
@@ -918,12 +1899,11 @@ function toast(message, type = 'info', duration = 3000) {
   }, duration);
 }
 
-// Friendly error messages (Fix 1)
 function friendlyError(msg) {
   if (!msg) return 'Có lỗi xảy ra, vui lòng thử lại.';
   const s = msg.toLowerCase();
   if (s.includes('rate limit') || s.includes('429') || s.includes('rate_limit'))
-    return 'Hệ thống đang bận, vui lòng thử lại sau 30 giây.';
+    return 'Hệ thống đang bận, thử lại sau 30 giây.';
   if (s.includes('overloaded') || s.includes('529') || s.includes('503'))
     return 'Server đang quá tải, thử lại sau vài phút.';
   if (s.includes('timeout') || s.includes('timed out'))
@@ -937,7 +1917,6 @@ function friendlyError(msg) {
   return msg;
 }
 
-// Simple markdown to HTML parser (Fix 2)
 function renderMarkdown(text) {
   if (!text) return '';
   let html = text
@@ -955,10 +1934,369 @@ function renderMarkdown(text) {
   return '<p>' + html + '</p>';
 }
 
-// Last action for retry (Fix 6)
-let lastAction = null;
+// ========== WHAT'S NEW ==========
+const APP_CHANGELOG = [
+  {
+    version: 'v2.1',
+    date: '19/03/2026',
+    items: [
+      { icon: '🔐', color: 'purple', title: 'Đăng nhập bảo mật', desc: 'Hệ thống đăng nhập mới — tự nhận vai trò theo phòng ban, tối ưu trải nghiệm riêng cho Sale, Kỹ thuật, Content.' },
+      { icon: '📦', color: 'blue', title: 'Tồn kho realtime', desc: 'Kết nối trực tiếp Nhanh.vn qua Supabase — số liệu tồn kho chính xác, cập nhật liên tục.' },
+      { icon: '⚡', color: 'orange', title: 'Báo giá siêu nhanh', desc: 'Tạo báo giá chỉ 2 bước: chọn sản phẩm → gửi khách. Giá đã gồm VAT, không cần tính thêm.' },
+      { icon: '🎨', color: 'green', title: 'Giao diện Content', desc: 'Team Marketing có nav riêng: Viết bài, Chủ đề, Thiết kế — tối ưu cho workflow sáng tạo nội dung.' },
+    ]
+  }
+];
 
-// Topic suggestions per role (Fix 5)
+function showWhatsNew() {
+  const latest = APP_CHANGELOG[0];
+  if (!latest) return;
+  const seen = localStorage.getItem('epione_seen_version');
+  if (seen === latest.version) return;
+  // Render
+  document.getElementById('whats-new-version').textContent = latest.version;
+  document.getElementById('whats-new-date').textContent = latest.date;
+  const body = document.getElementById('whats-new-body');
+  body.innerHTML = latest.items.map(it =>
+    '<div class="whats-new-item">' +
+      '<div class="whats-new-icon ' + it.color + '">' + it.icon + '</div>' +
+      '<div class="whats-new-text"><h4>' + it.title + '</h4><p>' + it.desc + '</p></div>' +
+    '</div>'
+  ).join('');
+  // Add sparkles to header
+  const header = document.getElementById('whats-new-header');
+  const colors = ['#FFD700','#FF6B6B','#4ECDC4','#A78BFA','#FFA726'];
+  for (let i = 0; i < 12; i++) {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.style.cssText = 'width:' + (4 + Math.random()*6) + 'px;height:' + (4 + Math.random()*6) + 'px;' +
+      'background:' + colors[i % colors.length] + ';' +
+      'left:' + (Math.random()*100) + '%;top:' + (Math.random()*100) + '%;' +
+      'animation-delay:' + (Math.random()*2) + 's;animation-duration:' + (1.5 + Math.random()*1.5) + 's;';
+    header.appendChild(s);
+  }
+  // Show with delay
+  setTimeout(() => {
+    document.getElementById('whats-new-overlay').classList.add('show');
+  }, 500);
+}
+
+function closeWhatsNew() {
+  const overlay = document.getElementById('whats-new-overlay');
+  overlay.classList.remove('show');
+  localStorage.setItem('epione_seen_version', APP_CHANGELOG[0].version);
+}
+
+// ========== ACHIEVEMENT DASHBOARD ==========
+const ACTIVITY_KEY = 'epione_activity_log';
+const BADGES_DEF = [
+  { id:'first_content', icon:'✍️', name:'Bước đầu', desc:'Tạo bài viết đầu tiên', check: a => a.content >= 1 },
+  { id:'content_10', icon:'🔥', name:'On Fire', desc:'Tạo 10 bài viết', check: a => a.content >= 10 },
+  { id:'content_50', icon:'👑', name:'Content King', desc:'Tạo 50 bài viết', check: a => a.content >= 50 },
+  { id:'first_quote', icon:'📝', name:'Chốt đơn', desc:'Tạo báo giá đầu tiên', check: a => a.quote >= 1 },
+  { id:'quote_20', icon:'💰', name:'Sales Star', desc:'Tạo 20 báo giá', check: a => a.quote >= 20 },
+  { id:'first_design', icon:'🎨', name:'Designer', desc:'Tạo thiết kế đầu tiên', check: a => a.design >= 1 },
+  { id:'design_10', icon:'💎', name:'Design Pro', desc:'Tạo 10 thiết kế', check: a => a.design >= 10 },
+  { id:'streak_3', icon:'⚡', name:'3 ngày liên tiếp', desc:'Hoạt động 3 ngày liền', check: (a,s) => s >= 3 },
+  { id:'streak_7', icon:'🌟', name:'Tuần siêng năng', desc:'Hoạt động 7 ngày liền', check: (a,s) => s >= 7 },
+  { id:'streak_30', icon:'🏆', name:'Huyền thoại', desc:'Hoạt động 30 ngày liền', check: (a,s) => s >= 30 },
+  { id:'all_round', icon:'🦄', name:'Đa năng', desc:'Tạo cả content, báo giá & thiết kế', check: a => a.content >= 1 && a.quote >= 1 && a.design >= 1 },
+];
+
+const LEVELS = [
+  { name:'Người mới', xp:0 },
+  { name:'Thành viên', xp:50 },
+  { name:'Chuyên viên', xp:150 },
+  { name:'Chuyên gia', xp:400 },
+  { name:'Master', xp:800 },
+  { name:'Legend', xp:1500 },
+];
+
+function getActivityLog() {
+  try { return JSON.parse(localStorage.getItem(ACTIVITY_KEY) || '{}'); } catch { return {}; }
+}
+
+function saveActivityLog(log) {
+  localStorage.setItem(ACTIVITY_KEY, JSON.stringify(log));
+}
+
+function trackActivity(type) {
+  // type = 'content' | 'quote' | 'design' | 'research'
+  const log = getActivityLog();
+  const today = new Date().toISOString().slice(0,10);
+  if (!log.totals) log.totals = { content:0, quote:0, design:0, research:0 };
+  if (!log.daily) log.daily = {};
+  if (!log.daily[today]) log.daily[today] = { content:0, quote:0, design:0, research:0 };
+  log.totals[type] = (log.totals[type] || 0) + 1;
+  log.daily[today][type] = (log.daily[today][type] || 0) + 1;
+  saveActivityLog(log);
+  // Show quick XP toast
+  const xp = type === 'quote' ? 15 : type === 'design' ? 12 : 10;
+  toast('+' + xp + ' XP — ' + (type === 'content' ? 'Bài viết' : type === 'quote' ? 'Báo giá' : type === 'design' ? 'Thiết kế' : 'Nghiên cứu'), 'success', 2000);
+}
+
+function calcStreak() {
+  const log = getActivityLog();
+  if (!log.daily) return 0;
+  const days = Object.keys(log.daily).sort().reverse();
+  if (days.length === 0) return 0;
+  const today = new Date().toISOString().slice(0,10);
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+  // Streak counts from today or yesterday
+  let streak = 0;
+  let checkDate = days[0] === today ? new Date() : (days[0] === yesterday ? new Date(Date.now() - 86400000) : null);
+  if (!checkDate) return 0;
+  while (true) {
+    const d = checkDate.toISOString().slice(0,10);
+    const dayLog = log.daily[d];
+    if (dayLog && (dayLog.content || dayLog.quote || dayLog.design || dayLog.research)) {
+      streak++;
+      checkDate = new Date(checkDate.getTime() - 86400000);
+    } else break;
+  }
+  return streak;
+}
+
+function calcXP() {
+  const log = getActivityLog();
+  const t = log.totals || {};
+  return (t.content || 0) * 10 + (t.quote || 0) * 15 + (t.design || 0) * 12 + (t.research || 0) * 5;
+}
+
+function getLevel(xp) {
+  let lvl = LEVELS[0];
+  let idx = 0;
+  for (let i = LEVELS.length - 1; i >= 0; i--) {
+    if (xp >= LEVELS[i].xp) { lvl = LEVELS[i]; idx = i; break; }
+  }
+  const next = LEVELS[idx + 1] || null;
+  return { level: idx + 1, name: lvl.name, xp: lvl.xp, nextXp: next ? next.xp : null, nextName: next ? next.name : null };
+}
+
+function renderDashboard() {
+  const log = getActivityLog();
+  const totals = log.totals || { content:0, quote:0, design:0, research:0 };
+  const streak = calcStreak();
+  const xp = calcXP();
+  const lvl = getLevel(xp);
+  const firstName = (currentUser && currentUser.firstName) || 'bạn';
+
+  // Header
+  document.getElementById('dash-greeting').textContent = 'Xin chào, ' + firstName + '!';
+  document.getElementById('dash-level').textContent = 'Level ' + lvl.level + ' — ' + lvl.name;
+  if (lvl.nextXp) {
+    const pct = Math.min(100, ((xp - lvl.xp) / (lvl.nextXp - lvl.xp)) * 100);
+    document.getElementById('dash-xp-fill').style.width = pct + '%';
+    document.getElementById('dash-xp-text').textContent = xp + ' / ' + lvl.nextXp + ' XP → ' + lvl.nextName;
+  } else {
+    document.getElementById('dash-xp-fill').style.width = '100%';
+    document.getElementById('dash-xp-text').textContent = xp + ' XP — MAX LEVEL!';
+  }
+
+  // Stats
+  const stats = [
+    { icon:'✍️', num: totals.content || 0, label:'Bài viết', color:'#E3F2FD' },
+    { icon:'📋', num: totals.quote || 0, label:'Báo giá', color:'#E8F5E9' },
+    { icon:'🎨', num: totals.design || 0, label:'Thiết kế', color:'#FFF3E0' },
+    { icon:'💡', num: totals.research || 0, label:'Chủ đề', color:'#F3E5F5' },
+  ];
+  document.getElementById('dash-stats').innerHTML = stats.map(s =>
+    '<div class="dash-stat"><div class="dash-stat-icon">' + s.icon + '</div>' +
+    '<div class="dash-stat-num">' + s.num + '</div>' +
+    '<div class="dash-stat-label">' + s.label + '</div></div>'
+  ).join('');
+
+  // Streak
+  document.getElementById('dash-streak-count').textContent = streak + ' ngày';
+  const today = new Date();
+  const dayLabels = ['CN','T2','T3','T4','T5','T6','T7'];
+  let streakHTML = '';
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(today.getTime() - i * 86400000);
+    const key = d.toISOString().slice(0,10);
+    const dayLog = (log.daily || {})[key];
+    const hasActivity = dayLog && (dayLog.content || dayLog.quote || dayLog.design || dayLog.research);
+    const isToday = i === 0;
+    streakHTML += '<div class="dash-streak-dot' + (hasActivity ? ' active' : '') + (isToday ? ' today' : '') + '">' +
+      dayLabels[d.getDay()] + '</div>';
+  }
+  document.getElementById('dash-streak-days').innerHTML = streakHTML;
+
+  // Badges
+  const badgesHTML = BADGES_DEF.map(b => {
+    const earned = b.check(totals, streak);
+    return '<div class="dash-badge' + (earned ? ' earned' : '') + '" title="' + b.desc + '">' +
+      '<span class="dash-badge-icon">' + b.icon + '</span>' +
+      '<span>' + b.name + '</span></div>';
+  }).join('');
+  document.getElementById('dash-badge-list').innerHTML = badgesHTML;
+
+  // Leaderboard (mix current user with mock team data for now)
+  const myPts = xp;
+  const team = [
+    { name: firstName, pts: myPts, me: true },
+    { name: 'Trung Hiệp', pts: Math.max(20, Math.floor(myPts * 0.85 + Math.random() * 30)) },
+    { name: 'Macy', pts: Math.max(15, Math.floor(myPts * 0.7 + Math.random() * 25)) },
+    { name: 'Xuân Cường', pts: Math.max(10, Math.floor(myPts * 0.6 + Math.random() * 20)) },
+    { name: 'Phương Nam', pts: Math.max(5, Math.floor(myPts * 0.4 + Math.random() * 15)) },
+  ].sort((a, b) => b.pts - a.pts);
+  const maxPts = team[0].pts || 1;
+  const rankClass = ['gold','silver','bronze'];
+  document.getElementById('dash-lb-rows').innerHTML = team.map((u, i) =>
+    '<div class="dash-lb-row">' +
+      '<div class="dash-lb-rank ' + (rankClass[i] || '') + '">' + (i+1) + '</div>' +
+      '<div class="dash-lb-name' + (u.me ? ' me' : '') + '">' + u.name + (u.me ? ' (bạn)' : '') + '</div>' +
+      '<div class="dash-lb-bar"><div class="dash-lb-bar-fill" style="width:' + (u.pts/maxPts*100) + '%"></div></div>' +
+      '<div class="dash-lb-pts">' + u.pts + '</div>' +
+    '</div>'
+  ).join('');
+}
+
+// ========== NAVIGATION ==========
+function switchPage(page, navBtn) {
+  // Update bottom nav — only update the currently visible nav
+  const activeNav = currentRole === 'ky_thuat'
+    ? document.getElementById('nav-kythuat')
+    : document.getElementById('nav-sale');
+  activeNav.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (navBtn) navBtn.classList.add('active');
+  else {
+    const match = activeNav.querySelector('.nav-item[data-page="' + page + '"]');
+    if (match) match.classList.add('active');
+  }
+
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+  // Show target page
+  const directPages = ['content', 'research', 'image', 'catalog', 'quote'];
+  if (directPages.includes(page)) {
+    document.getElementById('page-' + page).classList.add('active');
+    currentType = page;
+    if (page === 'catalog') loadCatalog();
+    if (page === 'quote') renderQuoteItems();
+  } else {
+    // text modes (outreach, casestudy, ideas)
+    document.getElementById('page-text').classList.add('active');
+    document.getElementById('page-content').classList.remove('active');
+    currentType = page;
+  }
+
+  // Scroll to top
+  document.querySelector('.main').scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function openMoreSheet() {
+  openSheet('more-sheet');
+}
+
+function openMorePage(type) {
+  closeSheet('more-sheet');
+  const MODE_INFO = {
+    outreach:  { title:'Viết Email', desc:'Template email tiếp cận khách hàng B2B — cá nhân hóa, ngắn gọn, đúng tone' },
+    casestudy: { title:'Hành trình dự án', desc:'Bối cảnh, thách thức, giải pháp, kết quả — kể lại dự án đã triển khai' },
+    ideas:     { title:'Lên Lịch content', desc:'Ý tưởng content theo tuần/tháng cho đội sale' },
+  };
+  document.getElementById('mode-title').textContent = MODE_INFO[type].title;
+  document.getElementById('mode-desc').textContent = MODE_INFO[type].desc;
+  currentType = type;
+
+  // Switch to text page
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelector('.nav-item[data-page="more"]').classList.add('active');
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-text').classList.add('active');
+}
+
+// ========== BOTTOM SHEETS ==========
+function openSheet(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeSheet(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+function openSettingsSheet() {
+  openSheet('settings-sheet');
+}
+
+// Sheet: switch gender
+function sheetSwitchGender(gender) {
+  currentGender = gender;
+  document.querySelectorAll('.gender-sheet-item').forEach(i => {
+    i.classList.toggle('active', i.dataset.gender === gender);
+  });
+  localStorage.setItem('epione_gender', gender);
+  toast('Giọng văn: ' + (gender === 'nam' ? 'Nam' : 'Nữ'), 'info', 2000);
+}
+
+// Sheet: switch role
+function sheetSwitchRole(item) {
+  currentRole = item.dataset.role;
+  document.querySelectorAll('.role-sheet-item').forEach(i => i.classList.remove('active'));
+  item.classList.add('active');
+  document.getElementById('topbar-role-label').textContent = item.querySelector('.sheet-item-title').textContent;
+  renderSuggestions();
+  switchNavForRole(currentRole);
+  toast('Vai trò: ' + item.querySelector('.sheet-item-title').textContent, 'info', 2000);
+}
+
+function switchNavForRole(role) {
+  if (role === 'content') {
+    // Content team: Viết, Chủ đề, Thiết kế, Thêm
+    document.getElementById('nav-sale').style.display = 'flex';
+    document.getElementById('nav-kythuat').style.display = 'none';
+    if (['catalog', 'quote'].includes(currentType)) {
+      switchPage('content', null);
+    }
+  } else {
+    // Sale & kythuat: Catalog, Báo giá, AI Content, Thêm
+    document.getElementById('nav-sale').style.display = 'none';
+    document.getElementById('nav-kythuat').style.display = 'flex';
+    if (['research', 'image'].includes(currentType)) {
+      switchPage('catalog', null);
+    }
+  }
+}
+
+// ========== ONBOARDING (fallback for unmatched users) ==========
+function selectGender(gender, btn) {
+  currentGender = gender;
+  document.querySelectorAll('#gender-step .onboarding-card').forEach(c => {
+    c.classList.toggle('selected', c.dataset.gender === gender);
+  });
+  document.querySelectorAll('.gender-sheet-item').forEach(i => {
+    i.classList.toggle('active', i.dataset.gender === gender);
+  });
+  localStorage.setItem('epione_gender', gender);
+  setTimeout(() => {
+    document.getElementById('gender-step').style.display = 'none';
+    document.getElementById('role-step').style.display = 'block';
+    document.getElementById('role-step').style.animation = 'fadeUp .3s ease-out';
+  }, 250);
+}
+
+document.querySelectorAll('#role-step .onboarding-card').forEach(card => {
+  card.addEventListener('click', () => {
+    currentRole = card.dataset.role;
+    const title = card.querySelector('.onboarding-card-title').textContent;
+    document.getElementById('topbar-role-label').textContent = title;
+    document.querySelectorAll('.role-sheet-item').forEach(i => {
+      i.classList.toggle('active', i.dataset.role === currentRole);
+    });
+    renderSuggestions();
+    switchNavForRole(currentRole);
+    const startPage = mapRoleToStartPage(currentRole);
+    switchPage(startPage, null);
+    if (startPage === 'catalog') loadCatalog();
+    const screen = document.getElementById('onboarding');
+    screen.classList.add('hidden');
+    setTimeout(() => screen.style.display = 'none', 300);
+  });
+});
+
+// ========== SUGGESTIONS ==========
 const ROLE_SUGGESTIONS = {
   sale_b2b: [
     'Pain point văn phòng open-plan, hướng đến HR Manager',
@@ -1020,6 +2358,26 @@ const ROLE_SUGGESTIONS = {
     'Lỗi thường gặp khi lắp nội thất và cách khắc phục',
     'So sánh bánh xe ghế: PU vs nylon vs cao su',
   ],
+  content: [
+    'Behind the scenes: Quy trình sản xuất ghế Epione',
+    'Storytelling: Hành trình từ đau lưng đến workspace hoàn hảo',
+    'UGC content: Khách hàng chia sẻ setup workspace',
+    'Infographic: So sánh ghế thường vs ghế ergonomic',
+    'Video script: Unbox và review FortisChair 2.0',
+    'Carousel: 7 ngày thử thách đứng-ngồi xen kẽ',
+    'Reels/Short: Setup workspace aesthetic dưới 15 triệu',
+    'Blog: Ergonomic 101 — Hướng dẫn chọn ghế theo chiều cao',
+    'Email newsletter: Xu hướng nội thất văn phòng 2026',
+    'Social proof: Case study khách hàng doanh nghiệp',
+    'Content series: Một ngày của Epioner tại văn phòng',
+    'SEO article: Top ghế công thái học dưới 5 triệu',
+    'Landing page copy: Ra mắt sản phẩm mới',
+    'Community post: Tips chăm sóc ghế và bàn',
+    'Collaboration: Collab với KOL/KOC ngành WFH',
+    'Event content: Workshop ergonomic cho doanh nghiệp',
+    'Brand story: Tại sao Epione chọn lưới K&R Đức?',
+    'Trend content: Bắt trend TikTok cho nội thất ergonomic',
+  ],
 };
 
 function shuffleAndPick(arr, count) {
@@ -1034,7 +2392,7 @@ function renderSuggestions() {
   container.innerHTML = picked.map(s =>
     '<button class="suggest-chip" onclick="useSuggestion(this)">' + s + '</button>'
   ).join('') +
-  '<button class="suggest-chip" onclick="renderSuggestions()" style="border-style:dashed;color:var(--accent);">↻ Làm mới</button>';
+  '<button class="suggest-chip" onclick="renderSuggestions()" style="border-style:dashed;color:var(--accent);">↻ Mới</button>';
 }
 
 function useSuggestion(btn) {
@@ -1042,7 +2400,7 @@ function useSuggestion(btn) {
   saveDraft('prompt', btn.textContent);
 }
 
-// Auto-save drafts (Fix 3)
+// ========== DRAFTS ==========
 function saveDraft(key, value) {
   try { localStorage.setItem('draft_' + key, value); } catch(e) {}
 }
@@ -1060,12 +2418,12 @@ function initDrafts() {
   });
 }
 
-// Dynamic placeholders per channel
+// ========== PLATFORM / STYLE ==========
 const CHANNEL_PLACEHOLDERS = {
-  linkedin: 'Ví dụ: Chia sẻ góc nhìn về việc đầu tư nội thất ergonomic cho nhân viên, hướng đến HR Manager. Mở bài bằng con số hoặc quan điểm trái chiều.',
-  facebook: 'Ví dụ: Viết caption về trải nghiệm setup góc làm việc tại nhà, tone thân thiện. Hook phải hấp dẫn trong 2 dòng đầu.',
-  instagram: 'Ví dụ: Caption cho ảnh booth cách âm trong văn phòng hiện đại. Ngắn gọn, visual-first, kèm hashtag.',
-  community: 'Ví dụ: Chia sẻ kinh nghiệm chỉnh ghế ergonomic đúng cách cho group. Viết như thành viên, không quảng cáo.',
+  linkedin: 'Ví dụ: Chia sẻ góc nhìn về đầu tư nội thất ergonomic, hướng đến HR Manager.',
+  facebook: 'Ví dụ: Caption về trải nghiệm setup góc làm việc, tone thân thiện.',
+  instagram: 'Ví dụ: Caption cho ảnh booth cách âm. Ngắn gọn, visual-first.',
+  community: 'Ví dụ: Chia sẻ kinh nghiệm chỉnh ghế ergonomic cho group.',
 };
 
 function updatePlaceholder() {
@@ -1074,7 +2432,6 @@ function updatePlaceholder() {
   textarea.placeholder = CHANNEL_PLACEHOLDERS[basePlat] || CHANNEL_PLACEHOLDERS.linkedin;
 }
 
-// Character counter
 function updateCharCounter(text) {
   const counter = document.getElementById('char-counter');
   if (!text || !text.trim()) { counter.style.display = 'none'; return; }
@@ -1084,113 +2441,13 @@ function updateCharCounter(text) {
   document.getElementById('count-lines').textContent = text.split('\n').filter(l => l.trim()).length;
 }
 
-// Gender selection (step 1 on welcome screen)
-function selectGender(gender, btn) {
-  currentGender = gender;
-  // Highlight selected card
-  document.querySelectorAll('#gender-step .role-screen-card').forEach(c => {
-    c.style.borderColor = c.dataset.gender === gender ? 'var(--accent)' : '';
-    c.style.background = c.dataset.gender === gender ? 'rgba(16,6,159,0.04)' : '';
-  });
-  // Update navbar badge
-  updateGenderBadge();
-  // Update dropdown gender items
-  document.querySelectorAll('.gender-item').forEach(i => {
-    i.classList.toggle('active', i.dataset.gender === gender);
-  });
-  // Show role step after short delay
-  setTimeout(() => {
-    document.getElementById('gender-step').style.display = 'none';
-    document.getElementById('role-step').style.display = 'block';
-  }, 300);
-}
-
-function switchGender(gender) {
-  currentGender = gender;
-  updateGenderBadge();
-  document.querySelectorAll('.gender-item').forEach(i => {
-    i.classList.toggle('active', i.dataset.gender === gender);
-  });
-  toast('Giọng văn: ' + (gender === 'nam' ? 'Nam' : 'Nữ'), 'info', 2000);
-}
-
-function updateGenderBadge() {
-  const badge = document.getElementById('gender-badge');
-  badge.textContent = currentGender === 'nam' ? '♂' : '♀';
-}
-
-// Role selection screen (step 2)
-document.querySelectorAll('#role-step .role-screen-card').forEach(card => {
-  card.addEventListener('click', () => {
-    currentRole = card.dataset.role;
-    const title = card.querySelector('.role-screen-card-title').textContent;
-    document.getElementById('role-dropdown-label').textContent = title;
-    document.querySelectorAll('.role-item').forEach(i => {
-      i.classList.toggle('active', i.dataset.role === currentRole);
-    });
-    renderSuggestions();
-    // Hide role screen, show main app
-    const screen = document.getElementById('role-screen');
-    screen.classList.add('hidden');
-    setTimeout(() => screen.style.display = 'none', 300);
-  });
-});
-
-// Role dropdown (switch role anytime from navbar)
-function toggleRoleDropdown() {
-  document.getElementById('role-dropdown-menu').classList.toggle('open');
-}
-document.addEventListener('click', e => {
-  if (!e.target.closest('.role-dropdown-wrap')) {
-    document.getElementById('role-dropdown-menu').classList.remove('open');
-  }
-});
-document.querySelectorAll('.role-item').forEach(item => {
-  item.addEventListener('click', () => {
-    document.querySelectorAll('.role-item').forEach(i => i.classList.remove('active'));
-    item.classList.add('active');
-    currentRole = item.dataset.role;
-    document.getElementById('role-dropdown-label').textContent = item.querySelector('.role-dropdown-item-title').textContent;
-    document.getElementById('role-dropdown-menu').classList.remove('open');
-    renderSuggestions();
-    toast('Vai trò: ' + item.querySelector('.role-dropdown-item-title').textContent, 'info', 2000);
-  });
-});
-
-const MODE_INFO = {
-  outreach:   { title:'Viết Email', desc:'Template email tiếp cận khách hàng B2B — cá nhân hóa, ngắn gọn, đúng tone' },
-  casestudy:  { title:'Hành trình dự án', desc:'Những dự án, sản phẩm đã triển khai: Bối cảnh, thách thức, giải pháp, kết quả' },
-  ideas:      { title:'Lên Lịch content', desc:'Ý tưởng content theo tuần/tháng cho đội sale' },
-};
-
-// Content platform + style selector
-let currentContentStyle = 'short';
-let currentBasePlat = 'linkedin';
-
 const PLATFORM_STYLES = {
-  linkedin:  [
-    { label: 'Bán hàng', value: 'short' },
-    { label: 'Kể chuyện', value: 'story' },
-    { label: 'FOMO', value: 'fomo' },
-  ],
-  facebook:  [
-    { label: 'Bán hàng', value: 'short' },
-    { label: 'Kể chuyện', value: 'story' },
-    { label: 'FOMO', value: 'fomo' },
-  ],
-  instagram: [
-    { label: 'Bán hàng', value: 'short' },
-    { label: 'Kể chuyện', value: 'story' },
-    { label: 'FOMO', value: 'fomo' },
-  ],
-  community: [
-    { label: 'Bán hàng', value: 'short' },
-    { label: 'Kể chuyện', value: 'story' },
-    { label: 'FOMO', value: 'fomo' },
-  ],
+  linkedin:  [{ label: 'Bán hàng', value: 'short' }, { label: 'Kể chuyện', value: 'story' }, { label: 'FOMO', value: 'fomo' }],
+  facebook:  [{ label: 'Bán hàng', value: 'short' }, { label: 'Kể chuyện', value: 'story' }, { label: 'FOMO', value: 'fomo' }],
+  instagram: [{ label: 'Bán hàng', value: 'short' }, { label: 'Kể chuyện', value: 'story' }, { label: 'FOMO', value: 'fomo' }],
+  community: [{ label: 'Bán hàng', value: 'short' }, { label: 'Kể chuyện', value: 'story' }, { label: 'FOMO', value: 'fomo' }],
 };
-
-const PLAT_NAMES = { linkedin: 'LinkedIn', facebook: 'Facebook', instagram: 'Instagram', community: 'Cộng đồng FB' };
+const PLAT_NAMES = { linkedin: 'LinkedIn', facebook: 'Facebook', instagram: 'Instagram', community: 'Cộng đồng' };
 
 function updateComboTag() {
   const styleObj = (PLATFORM_STYLES[currentBasePlat] || []).find(s => s.value === currentContentStyle);
@@ -1204,7 +2461,7 @@ function renderStyleChips(platform) {
   styles.forEach((s, i) => {
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'style-chip plat-chip' + (i === 0 ? ' selected' : '');
+    btn.className = 'style-chip chip chip-sm' + (i === 0 ? ' selected' : '');
     btn.dataset.style = s.value;
     btn.textContent = s.label;
     btn.addEventListener('click', () => {
@@ -1221,6 +2478,7 @@ function renderStyleChips(platform) {
   updateComboTag();
 }
 
+// Content platform chip events
 document.querySelectorAll('.content-plat-chip').forEach(chip => {
   chip.addEventListener('click', () => {
     document.querySelectorAll('.content-plat-chip').forEach(c => c.classList.remove('selected'));
@@ -1232,50 +2490,20 @@ document.querySelectorAll('.content-plat-chip').forEach(chip => {
   });
 });
 
-// Init default
-renderStyleChips('linkedin');
-updatePlaceholder();
-
-// Tab switching
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    currentType = tab.dataset.type;
-
-    // Show/hide mode cards
-    document.querySelectorAll('.mode-card').forEach(c => c.style.display = 'none');
-    document.getElementById('output').classList.remove('show');
-
-    if (currentType === 'content') {
-      document.getElementById('mode-content').style.display = 'block';
-    } else if (currentType === 'research') {
-      document.getElementById('mode-research').style.display = 'block';
-    } else if (currentType === 'image') {
-      document.getElementById('mode-image').style.display = 'block';
-    } else {
-      document.getElementById('mode-text').style.display = 'block';
-      document.getElementById('mode-title').textContent = MODE_INFO[currentType].title;
-      document.getElementById('mode-desc').textContent = MODE_INFO[currentType].desc;
-    }
-  });
-});
-
-// Generate content (Viết content tab)
+// ========== GENERATE CONTENT ==========
 async function generate() {
   const prompt = document.getElementById('prompt').value.trim();
   if (!prompt) return toast('Nhập yêu cầu trước', 'error');
 
   setLoading('loading', true);
   document.getElementById('btn-generate').disabled = true;
-
   lastAction = generate;
+
   try {
     lastGeneratedType = currentContentPlat;
     lastGeneratedPrompt = prompt;
 
     if (currentBasePlat === 'community') {
-      // Community flow
       const communityName = document.getElementById('community-name').value.trim();
       const rules = document.getElementById('community-rules').value.trim();
       const res = await fetch('/api/community', {
@@ -1287,8 +2515,7 @@ async function generate() {
       if (data.error) throw new Error(data.error);
       showOutput(data.content);
     } else {
-      // LinkedIn / Facebook / Instagram with style
-      const type = currentContentPlat; // e.g. linkedin_short, facebook_story
+      const type = currentContentPlat;
       const res = await fetch('/api/generate', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -1298,6 +2525,7 @@ async function generate() {
       if (data.error) throw new Error(data.error);
       showOutput(data.content);
     }
+    trackActivity('content');
   } catch (e) {
     showOutput('Lỗi: ' + friendlyError(e.message));
   } finally {
@@ -1306,13 +2534,12 @@ async function generate() {
   }
 }
 
-// Generate for text modes (Outreach, Case Study, Lịch content)
+// ========== GENERATE TEXT (outreach, casestudy, ideas) ==========
 async function generateText() {
   const prompt = document.getElementById('prompt-text').value.trim();
   if (!prompt) return toast('Nhập yêu cầu trước', 'error');
   lastGeneratedType = currentType;
   lastGeneratedPrompt = prompt;
-
   lastAction = generateText;
   setLoading('loading-text', true);
   document.getElementById('btn-generate-text').disabled = true;
@@ -1325,21 +2552,18 @@ async function generateText() {
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    showOutput(data.content);
+    // Move output into content page temporarily for text modes
+    showOutputInPage('page-text', data.content);
+    trackActivity('content');
   } catch (e) {
-    showOutput('Lỗi: ' + friendlyError(e.message));
+    showOutputInPage('page-text', 'Lỗi: ' + friendlyError(e.message));
   } finally {
     setLoading('loading-text', false);
     document.getElementById('btn-generate-text').disabled = false;
   }
 }
 
-// Topic flow
-let selectedTopic = '';
-let selectedPlat = 'linkedin';
-let topicImagePath = '';
-let topicDesignPath = '';
-
+// ========== TOPIC FLOW ==========
 document.querySelectorAll('.topic-chip').forEach(chip => {
   chip.addEventListener('click', () => {
     document.querySelectorAll('.topic-chip').forEach(c => c.classList.remove('selected'));
@@ -1366,8 +2590,7 @@ document.getElementById('custom-topic').addEventListener('input', () => {
 
 async function generateFromTopic() {
   const topic = selectedTopic || document.getElementById('custom-topic').value.trim();
-  if (!topic) return;
-
+  if (!topic) return toast('Chọn hoặc nhập chủ đề', 'error');
   lastAction = generateFromTopic;
   setLoading('loading-topic', true);
   document.getElementById('btn-topic-gen').disabled = true;
@@ -1387,7 +2610,6 @@ async function generateFromTopic() {
     const rest = parts.slice(1).join('\n');
 
     document.getElementById('topic-content').textContent = caption;
-
     const imgMatch = rest.match(/GỢI Ý HÌNH ẢNH:\s*(.+)/i);
     document.getElementById('topic-img-suggest').textContent =
       (imgMatch ? imgMatch[1].trim() : 'Chọn ảnh phù hợp với chủ đề trên');
@@ -1401,6 +2623,7 @@ async function generateFromTopic() {
 
     document.getElementById('topic-results').style.display = 'block';
     document.getElementById('topic-results').scrollIntoView({ behavior:'smooth', block:'start' });
+    trackActivity('research');
   } catch (e) {
     toast(friendlyError(e.message), 'error');
   } finally {
@@ -1413,9 +2636,8 @@ function copyTopicContent(btn) {
   const text = document.getElementById('topic-content').textContent;
   navigator.clipboard.writeText(text).then(() => {
     btn.classList.add('copied');
-    const svg = btn.querySelector('svg').outerHTML;
     const orig = btn.innerHTML;
-    btn.innerHTML = svg + ' Copied!';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
     setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 2000);
   });
 }
@@ -1484,6 +2706,7 @@ async function createTopicDesign() {
       } catch(e) { iframe.style.height = '600px'; }
     };
     preview.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    trackActivity('design');
   } catch (e) {
     toast('Lỗi: ' + e.message, 'error');
   } finally {
@@ -1518,7 +2741,7 @@ async function downloadTopicPNG() {
   finally { btn.innerHTML = orig; btn.disabled = false; }
 }
 
-// Community flow
+// ========== COMMUNITY ==========
 function loadCommunityRules() {
   const name = document.getElementById('community-name').value.trim();
   if (!name) return;
@@ -1545,10 +2768,8 @@ function saveCommunityRules() {
   toast('Đã lưu rules cho "' + name + '"', 'success');
 }
 
-// Image handling
+// ========== IMAGE HANDLING ==========
 const dropzone = document.getElementById('dropzone');
-let selectedFile = null;
-let selectedImagePlat = 'linkedin';
 
 document.querySelectorAll('.img-plat-chip').forEach(chip => {
   chip.addEventListener('click', () => {
@@ -1580,12 +2801,10 @@ dropzone.addEventListener('drop', ev => {
 function handleFile(file) {
   if (!file || !file.type.startsWith('image/')) return;
   selectedFile = file;
-
-  // Show preview
   const reader = new FileReader();
   reader.onload = e => {
-    dropzone.innerHTML = `<img class="preview" src="${e.target.result}" alt="Preview">
-      <div class="label" style="margin-top:8px;"><strong>${file.name}</strong> (${(file.size/1024).toFixed(0)} KB)</div>`;
+    dropzone.innerHTML = '<img class="preview" src="' + e.target.result + '" alt="Preview">' +
+      '<div class="label" style="margin-top:8px;"><strong>' + file.name + '</strong> (' + (file.size/1024).toFixed(0) + ' KB)</div>';
   };
   reader.readAsDataURL(file);
   document.getElementById('btn-image').disabled = false;
@@ -1594,7 +2813,6 @@ function handleFile(file) {
 async function analyzeImage() {
   if (!selectedFile) return;
   lastAction = analyzeImage;
-
   setLoading('loading-image', true);
   document.getElementById('btn-image').disabled = true;
 
@@ -1610,7 +2828,6 @@ async function analyzeImage() {
     const cRules = document.getElementById('image-community-rules').value.trim();
     if (cName) note += '\nCộng đồng: ' + cName;
     if (cRules) note += '\nQuy định group:\n' + cRules;
-    // Lưu rules cho lần sau
     if (cName && cRules) localStorage.setItem('community_rules_' + cName, cRules);
   }
   formData.append('prompt', note);
@@ -1624,7 +2841,6 @@ async function analyzeImage() {
     currentImageUrl = data.image_url || '';
     showOutput(data.content, true);
 
-    // Parse headline/subtext từ response và hiện design form
     const hl = data.content.match(/Headline:\s*[""](.+?)[""\u201d]/);
     const st = data.content.match(/Subtext:\s*[""](.+?)[""\u201d]/);
     const ct = data.content.match(/CTA:\s*[""](.+?)[""\u201d]/);
@@ -1659,24 +2875,18 @@ async function createDesign() {
     if (data.error) throw new Error(data.error);
 
     currentDesignPath = data.design_path;
-
-    // Show inline preview
     const preview = document.getElementById('design-preview');
     const iframe = document.getElementById('design-iframe');
     iframe.src = '/' + currentDesignPath;
     preview.classList.add('show');
-
-    // Auto-resize iframe to fit content
     iframe.onload = () => {
       try {
         const doc = iframe.contentDocument || iframe.contentWindow.document;
         iframe.style.height = doc.documentElement.scrollHeight + 'px';
-      } catch(e) {
-        iframe.style.height = '600px';
-      }
+      } catch(e) { iframe.style.height = '600px'; }
     };
-
     preview.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    trackActivity('design');
   } catch (e) {
     toast('Lỗi: ' + e.message, 'error');
   } finally {
@@ -1685,43 +2895,28 @@ async function createDesign() {
 }
 
 function openDesign() {
-  if (currentDesignPath) {
-    window.open('/' + currentDesignPath, '_blank');
-  }
+  if (currentDesignPath) window.open('/' + currentDesignPath, '_blank');
 }
 
 async function downloadDesignAsImage() {
   if (!currentDesignPath) return;
   const btn = document.getElementById('btn-download-png');
   const originalText = btn.innerHTML;
-  btn.innerHTML = '<div class="spinner" style="width:14px;height:14px;"></div> Đang xuất ảnh...';
+  btn.innerHTML = '<div class="spinner" style="width:14px;height:14px;"></div> Đang xuất...';
   btn.disabled = true;
-
   try {
     const iframe = document.getElementById('design-iframe');
     const iframeWin = iframe.contentWindow;
     const iframeDoc = iframe.contentDocument;
-
-    // Inject html2canvas vào iframe nếu chưa có
     if (!iframeWin.html2canvas) {
       const script = iframeDoc.createElement('script');
       script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
       iframeDoc.head.appendChild(script);
-      await new Promise((resolve, reject) => {
-        script.onload = resolve;
-        script.onerror = () => reject(new Error('Không tải được html2canvas'));
-      });
+      await new Promise((resolve, reject) => { script.onload = resolve; script.onerror = () => reject(new Error('Không tải được html2canvas')); });
     }
-
     const postEl = iframeDoc.querySelector('.post');
     if (!postEl) throw new Error('Không tìm thấy design');
-
-    const canvas = await iframeWin.html2canvas(postEl, {
-      useCORS: true,
-      scale: 2,
-      backgroundColor: null,
-    });
-
+    const canvas = await iframeWin.html2canvas(postEl, { useCORS:true, scale:2, backgroundColor:null });
     const link = document.createElement('a');
     link.download = 'epione-design.png';
     link.href = canvas.toDataURL('image/png');
@@ -1745,7 +2940,7 @@ function downloadDesign() {
   }
 }
 
-// Helpers
+// ========== HELPERS ==========
 function setLoading(id, state) {
   document.getElementById(id).classList.toggle('show', state);
 }
@@ -1765,23 +2960,51 @@ function showOutput(text, showDownload) {
   }
   el.classList.add('show');
 
-  // Show/hide download button
   const dlBtn = document.getElementById('btn-download-img');
   dlBtn.style.display = showDownload && currentImageUrl ? 'inline-flex' : 'none';
-
-  // Reset platform button states
   document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('copied'));
-
-  // Update character counter
   updateCharCounter(text);
-
-  // Show/hide refine buttons
   document.getElementById('output-refine').style.display = isError ? 'none' : 'flex';
-
   el.scrollIntoView({ behavior:'smooth', block:'nearest' });
 }
 
-// Retry last action (Fix 6)
+// Show output for text pages (creates a temporary output area)
+function showOutputInPage(pageId, text) {
+  const page = document.getElementById(pageId);
+  let outputEl = page.querySelector('.page-output');
+  if (!outputEl) {
+    outputEl = document.createElement('div');
+    outputEl.className = 'output page-output show';
+    outputEl.innerHTML = '<div class="output-actions"><div class="platform-btns"><span class="platform-label">Copy:</span>' +
+      '<button class="platform-btn" onclick="copyPageOutput(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>' +
+      '</div></div><div class="page-output-content"></div>';
+    page.appendChild(outputEl);
+  }
+  outputEl.classList.add('show');
+  const contentEl = outputEl.querySelector('.page-output-content');
+  const isError = text.startsWith('Lỗi:');
+  if (isError) {
+    contentEl.innerHTML = '<div class="output-error">' + text.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</div>';
+    contentEl.className = 'page-output-content';
+  } else {
+    contentEl.innerHTML = renderMarkdown(text);
+    contentEl.className = 'page-output-content output-content-md';
+  }
+  outputEl.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+function copyPageOutput(btn) {
+  const output = btn.closest('.page-output');
+  const text = output.querySelector('.page-output-content').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+    toast('Đã copy', 'success', 2000);
+    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 2000);
+  });
+}
+
 function retryLast() {
   if (lastAction) lastAction();
 }
@@ -1813,15 +3036,10 @@ function downloadImage() {
   }
 }
 
-// Refine content (Viết lại, Ngắn hơn, Dài hơn, etc.)
 async function refineContent(instruction) {
   const currentOutput = document.getElementById('output-content').innerText;
   if (!currentOutput) return;
-
-  // Disable all refine buttons
   document.querySelectorAll('.refine-btn').forEach(b => b.disabled = true);
-
-  // Show a mini loading state
   const refineArea = document.getElementById('output-refine');
   const originalHTML = refineArea.innerHTML;
   refineArea.innerHTML = '<div class="typing-indicator show" style="margin:0;"><div class="typing-dots"><span></span><span></span><span></span></div><span>Đang chỉnh sửa...</span></div>';
@@ -1847,7 +3065,7 @@ async function refineContent(instruction) {
   }
 }
 
-// Enter to submit
+// ========== KEYBOARD ==========
 document.getElementById('prompt').addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); generate(); }
 });
@@ -1855,9 +3073,391 @@ document.getElementById('custom-topic').addEventListener('keydown', e => {
   if (e.key === 'Enter') { e.preventDefault(); generateFromTopic(); }
 });
 
-// Init: auto-save drafts + topic suggestions
+// ========== SWIPE BETWEEN PAGES ==========
+let touchStartX = 0;
+let touchStartY = 0;
+const salePageOrder = ['content', 'research', 'image'];
+const kythuatPageOrder = ['catalog', 'quote', 'content'];
+
+document.querySelector('.main').addEventListener('touchstart', e => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+document.querySelector('.main').addEventListener('touchend', e => {
+  const deltaX = e.changedTouches[0].clientX - touchStartX;
+  const deltaY = e.changedTouches[0].clientY - touchStartY;
+
+  if (Math.abs(deltaX) > 60 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+    const pageOrder = currentRole === 'ky_thuat' ? kythuatPageOrder : salePageOrder;
+    const currentIdx = pageOrder.indexOf(currentType);
+    if (currentIdx === -1) return;
+
+    let newIdx;
+    if (deltaX < 0) {
+      newIdx = Math.min(currentIdx + 1, pageOrder.length - 1);
+    } else {
+      newIdx = Math.max(currentIdx - 1, 0);
+    }
+
+    if (newIdx !== currentIdx) {
+      const newPage = pageOrder[newIdx];
+      switchPage(newPage, null);
+    }
+  }
+}, { passive: true });
+
+// ========== CATALOG ==========
+let catalogProducts = [];
+let catalogLoaded = false;
+let currentCatFilter = 'all';
+
+async function loadCatalog() {
+  if (catalogLoaded) { renderCatalog(); return; }
+  const grid = document.getElementById('product-grid');
+  grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;"><div class="spinner" style="margin:0 auto;"></div></div>';
+  try {
+    const res = await fetch('/api/products');
+    const data = await res.json();
+    catalogProducts = data.products || [];
+    catalogLoaded = true;
+    renderCatalog();
+  } catch (e) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-secondary);">Lỗi tải catalog</div>';
+  }
+}
+
+function filterCatalog(cat, btn) {
+  currentCatFilter = cat;
+  document.querySelectorAll('.cat-filter').forEach(f => f.classList.remove('active'));
+  btn.classList.add('active');
+  renderCatalog();
+}
+
+function renderCatalog() {
+  const grid = document.getElementById('product-grid');
+  const filtered = currentCatFilter === 'all'
+    ? catalogProducts
+    : catalogProducts.filter(p => p.category === currentCatFilter);
+
+  grid.innerHTML = filtered.map(p => {
+    const minPrice = Math.min(...p.variants.map(v => v.price));
+    const imgHTML = p.image
+      ? '<img src="' + p.image + '" alt="' + p.name + '" loading="lazy">'
+      : (p.category === 'chair' ? '🪑' : p.category === 'desk' ? '🖥️' : '👶');
+    return '<div class="product-card" onclick="openProductDetail(\'' + p.id + '\')">' +
+      '<div class="product-card-img">' + imgHTML + '</div>' +
+      '<div class="product-card-name">' + p.name + '</div>' +
+      '<div class="product-card-tag">' + (p.tagline || '') + '</div>' +
+      '<div class="product-card-price">' + formatPrice(minPrice) + 'đ</div>' +
+    '</div>';
+  }).join('');
+}
+
+function formatPrice(n) {
+  return n.toLocaleString('vi-VN');
+}
+
+async function openProductDetail(productId) {
+  openSheet('product-sheet');
+  const container = document.getElementById('product-detail-content');
+  container.innerHTML = '<div style="text-align:center;padding:40px;"><div class="spinner" style="margin:0 auto;"></div></div>';
+
+  try {
+    const res = await fetch('/api/products/' + productId);
+    const p = await res.json();
+    if (p.error) throw new Error(p.error);
+
+    const detailImg = p.image
+      ? '<img src="' + p.image + '" alt="' + p.name + '">'
+      : (p.category === 'chair' ? '🪑' : p.category === 'desk' ? '🖥️' : '👶');
+    const specs = p.specs ? Object.entries(p.specs).map(function(e) {
+      return '<div class="spec-item"><div class="spec-label">' + e[0] + '</div><div class="spec-value">' + e[1] + '</div></div>';
+    }).join('') : '';
+
+    const highlights = (p.highlights || []).map(function(h) {
+      return '<li>' + h + '</li>';
+    }).join('');
+
+    const variants = (p.variants || []).map(function(v, i) {
+      var si = v.stock || {};
+      var sc = si.status === 'in_stock' ? 'stock-in' : si.status === 'low_stock' ? 'stock-low' : 'stock-out';
+      var st = si.status === 'out_of_stock' ? 'Hết hàng' : 'Còn ' + si.quantity;
+      return '<button class="variant-chip' + (i === 0 ? ' selected' : '') + '" data-idx="' + i + '" onclick="selectVariant(this,' + i + ')">' +
+        v.name + ' — ' + formatPrice(v.price) + 'đ' +
+        ' <span class="product-card-stock ' + sc + '" style="margin-left:4px;">' + st + '</span>' +
+      '</button>';
+    }).join('');
+
+    container.innerHTML =
+      '<div class="product-detail-header">' +
+        '<div class="product-detail-img">' + detailImg + '</div>' +
+        '<div class="product-detail-info">' +
+          '<div class="product-detail-name">' + p.name + '</div>' +
+          '<div class="product-detail-tagline">' + (p.tagline || '') + '</div>' +
+          '<div class="product-detail-price" id="pd-price">' + formatPrice(p.variants[0].price) + 'đ</div>' +
+        '</div>' +
+      '</div>' +
+      (p.description ? '<div style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin-bottom:12px;">' + p.description + '</div>' : '') +
+      (specs ? '<div class="step-label">Thông số</div><div class="spec-grid">' + specs + '</div>' : '') +
+      (highlights ? '<div class="step-label">Điểm nổi bật</div><ul class="highlight-list">' + highlights + '</ul>' : '') +
+      '<div class="step-label">Phiên bản</div>' +
+      '<div class="variant-row" id="pd-variants">' + variants + '</div>' +
+      '<div class="step-label">Số lượng</div>' +
+      '<div class="qty-control">' +
+        '<button class="qty-btn" onclick="changeQty(-1)">−</button>' +
+        '<span class="qty-value" id="pd-qty">1</span>' +
+        '<button class="qty-btn" onclick="changeQty(1)">+</button>' +
+      '</div>' +
+      '<div id="pd-delivery" style="font-size:12px;color:var(--text-secondary);margin-bottom:6px;"></div>' +
+      '<div style="display:flex;gap:8px;">' +
+        '<button class="add-quote-btn" style="flex:1;" onclick="addToQuoteFromDetail(false)">+ Báo giá</button>' +
+        '<button class="add-quote-btn" style="flex:1;background:var(--accent-dark);" onclick="addToQuoteFromDetail(true)">+ Báo giá & Xem</button>' +
+      '</div>';
+
+    window._currentProduct = p;
+    window._selectedVariantIdx = 0;
+    window._selectedQty = 1;
+    checkDelivery();
+  } catch (e) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-secondary);">Lỗi tải sản phẩm</div>';
+  }
+}
+
+function selectVariant(btn, idx) {
+  document.querySelectorAll('#pd-variants .variant-chip').forEach(function(c) { c.classList.remove('selected'); });
+  btn.classList.add('selected');
+  window._selectedVariantIdx = idx;
+  var variant = window._currentProduct.variants[idx];
+  document.getElementById('pd-price').textContent = formatPrice(variant.price) + 'đ';
+  checkDelivery();
+}
+
+function changeQty(delta) {
+  window._selectedQty = Math.max(1, (window._selectedQty || 1) + delta);
+  document.getElementById('pd-qty').textContent = window._selectedQty;
+  checkDelivery();
+}
+
+async function checkDelivery() {
+  var p = window._currentProduct;
+  if (!p) return;
+  var variant = p.variants[window._selectedVariantIdx];
+  var el = document.getElementById('pd-delivery');
+  try {
+    var res = await fetch('/api/inventory/delivery', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ sku: variant.sku, quantity: window._selectedQty })
+    });
+    var data = await res.json();
+    el.innerHTML = '📦 ' + data.note + ' — Dự kiến giao: <strong>' + data.estimated_date + '</strong> (' + data.estimated_days + ' ngày)';
+  } catch(e) { el.textContent = ''; }
+}
+
+// ========== QUOTE ==========
+let quoteItems = [];
+
+function addToQuoteFromDetail(goToQuote) {
+  var p = window._currentProduct;
+  if (!p) return;
+  var variant = p.variants[window._selectedVariantIdx];
+  var qty = window._selectedQty || 1;
+
+  var existing = quoteItems.find(function(i) { return i.sku === variant.sku; });
+  if (existing) {
+    existing.quantity += qty;
+  } else {
+    quoteItems.push({
+      product_name: p.name,
+      variant_name: variant.name,
+      sku: variant.sku,
+      unit_price: variant.price,
+      quantity: qty,
+    });
+  }
+
+  updateQuoteBadge();
+  closeSheet('product-sheet');
+  toast('Đã thêm ' + p.name + ' — ' + variant.name + ' x' + qty, 'success');
+
+  if (goToQuote) {
+    setTimeout(function() {
+      switchPage('quote', null);
+      renderQuoteItems();
+      // Auto-fill người tư vấn from logged-in user
+      if (currentUser && currentUser.name) {
+        var el = document.getElementById('q-created-by');
+        if (!el.value) el.value = currentUser.name;
+      }
+    }, 200);
+  }
+}
+
+function updateQuoteBadge() {
+  var badge = document.getElementById('quote-badge');
+  if (quoteItems.length > 0) {
+    badge.style.display = 'flex';
+    badge.textContent = quoteItems.length;
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function renderQuoteItems() {
+  var list = document.getElementById('quote-items-list');
+  var empty = document.getElementById('quote-empty');
+  var summarySection = document.getElementById('quote-summary-section');
+  var resultSection = document.getElementById('quote-result');
+  resultSection.style.display = 'none';
+  // Auto-fill người tư vấn from logged-in user
+  if (currentUser && currentUser.name) {
+    var el = document.getElementById('q-created-by');
+    if (el && !el.value) el.value = currentUser.name;
+  }
+
+  if (quoteItems.length === 0) {
+    list.innerHTML = '';
+    list.appendChild(empty);
+    empty.style.display = 'block';
+    summarySection.style.display = 'none';
+    return;
+  }
+
+  empty.style.display = 'none';
+  summarySection.style.display = 'block';
+
+  list.innerHTML = quoteItems.map(function(item, i) {
+    return '<div class="quote-item">' +
+      '<div class="quote-item-info">' +
+        '<div class="quote-item-name">' + item.product_name + '</div>' +
+        '<div class="quote-item-detail">' + item.variant_name + ' · ' + item.sku + ' · SL: ' + item.quantity + ' × ' + formatPrice(item.unit_price) + 'đ</div>' +
+      '</div>' +
+      '<div style="display:flex;align-items:center;gap:8px;">' +
+        '<div class="quote-item-price">' + formatPrice(item.unit_price * item.quantity) + 'đ</div>' +
+        '<button class="quote-item-remove" onclick="removeQuoteItem(' + i + ')">✕</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  updateQuoteTotals();
+}
+
+function removeQuoteItem(idx) {
+  quoteItems.splice(idx, 1);
+  updateQuoteBadge();
+  renderQuoteItems();
+}
+
+function updateQuoteTotals() {
+  var discount = parseFloat(document.getElementById('discount-slider').value) || 0;
+  document.getElementById('discount-label').textContent = discount + '%';
+
+  var subtotal = quoteItems.reduce(function(sum, i) { return sum + i.unit_price * i.quantity; }, 0);
+  var discountAmount = Math.round(subtotal * discount / 100);
+  var total = subtotal - discountAmount;
+
+  var summary = document.getElementById('quote-summary');
+  summary.innerHTML =
+    '<div class="quote-row"><span>Tạm tính</span><span>' + formatPrice(subtotal) + 'đ</span></div>' +
+    (discount > 0 ? '<div class="quote-row discount"><span>Chiết khấu (' + discount + '%)</span><span>-' + formatPrice(discountAmount) + 'đ</span></div>' : '') +
+    '<div class="quote-row" style="font-size:11px;color:var(--text-tertiary);"><span>Giá đã bao gồm VAT</span><span></span></div>' +
+    '<div class="quote-row total"><span>Tổng cộng</span><span>' + formatPrice(total) + 'đ</span></div>';
+}
+
+async function submitQuote() {
+  if (quoteItems.length === 0) return toast('Chưa có sản phẩm', 'error');
+  var name = document.getElementById('q-customer-name').value.trim();
+  if (!name) return toast('Nhập tên khách hàng', 'error');
+
+  var discount = parseFloat(document.getElementById('discount-slider').value) || 0;
+
+  try {
+    var res = await fetch('/api/quote', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        customer_name: name,
+        customer_company: document.getElementById('q-customer-company').value.trim(),
+        customer_phone: document.getElementById('q-customer-phone').value.trim(),
+        customer_email: document.getElementById('q-customer-email').value.trim(),
+        items: quoteItems,
+        discount_percent: discount,
+        note: document.getElementById('q-note').value.trim(),
+        created_by: document.getElementById('q-created-by').value.trim(),
+      })
+    });
+    var data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    window._lastQuoteId = data.id;
+    document.getElementById('quote-result-id').textContent = '#' + data.id + ' — ' + formatPrice(data.total) + 'đ';
+    document.getElementById('quote-result').style.display = 'block';
+    trackActivity('quote');
+    document.getElementById('quote-summary-section').style.display = 'none';
+    document.getElementById('quote-items-list').innerHTML = '';
+
+    quoteItems = [];
+    updateQuoteBadge();
+    document.getElementById('discount-slider').value = 0;
+    ['q-customer-name','q-customer-company','q-customer-phone','q-customer-email','q-note'].forEach(function(id) {
+      document.getElementById(id).value = '';
+    });
+
+    toast('Báo giá #' + data.id + ' đã tạo!', 'success');
+    document.getElementById('quote-result').scrollIntoView({ behavior:'smooth' });
+  } catch(e) {
+    toast('Lỗi: ' + friendlyError(e.message), 'error');
+  }
+}
+
+function shareQuote() {
+  var id = window._lastQuoteId;
+  if (!id) return;
+  var url = window.location.origin + '/quote/' + id;
+  if (navigator.share) {
+    navigator.share({ title: 'Báo giá Epione #' + id, url: url });
+  } else {
+    navigator.clipboard.writeText(url).then(function() { toast('Đã copy link báo giá', 'success'); });
+  }
+}
+
+function viewQuote() {
+  var id = window._lastQuoteId;
+  if (id) window.open('/quote/' + id, '_blank');
+}
+
+function clearQuote() {
+  quoteItems = [];
+  updateQuoteBadge();
+  renderQuoteItems();
+  toast('Đã xóa báo giá', 'info');
+}
+
+// ========== INIT ==========
+renderStyleChips('linkedin');
+updatePlaceholder();
 initDrafts();
 renderSuggestions();
+
+// Restore gender preference
+const savedGender = localStorage.getItem('epione_gender');
+if (savedGender) {
+  currentGender = savedGender;
+  document.querySelectorAll('.gender-sheet-item').forEach(i => {
+    i.classList.toggle('active', i.dataset.gender === savedGender);
+  });
+}
+
+// Handle visual viewport for mobile keyboard
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', () => {
+    document.documentElement.style.setProperty('--vh', window.visualViewport.height + 'px');
+  });
+}
+
+// Start auth check
+initAuth();
 </script>
 </body>
 </html>

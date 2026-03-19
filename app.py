@@ -1,5 +1,6 @@
 """Flask web app cho Epione B2B Sales Content Agent."""
 
+import json
 import os
 
 from dotenv import load_dotenv
@@ -7,6 +8,8 @@ from flask import Flask, jsonify, render_template, request
 
 from agent import EpioneSalesAgent
 from design_generator import DesignGenerator
+from inventory import estimate_delivery, get_stock
+from quote_manager import create_quote, get_quote, list_quotes
 
 load_dotenv()
 
@@ -22,6 +25,11 @@ IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".webp"}
 api_key = os.getenv("ANTHROPIC_API_KEY")
 agent = EpioneSalesAgent(api_key=api_key) if api_key else None
 design_gen = DesignGenerator()
+
+# Load product catalog
+CATALOG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "products", "catalog.json")
+with open(CATALOG_PATH, "r", encoding="utf-8") as f:
+    CATALOG = json.load(f)
 
 
 @app.route("/")
@@ -209,6 +217,83 @@ def serve_upload(filename):
     """Serve uploaded images."""
     from flask import send_from_directory
     return send_from_directory(UPLOAD_DIR, filename)
+
+
+# ========== PRODUCT CATALOG API ==========
+
+@app.route("/api/products")
+def products():
+    """Return full product catalog with optional category filter."""
+    category = request.args.get("category")
+    products_list = CATALOG["products"]
+    if category:
+        products_list = [p for p in products_list if p["category"] == category]
+    return jsonify({"categories": CATALOG["categories"], "products": products_list})
+
+
+@app.route("/api/products/<product_id>")
+def product_detail(product_id):
+    """Return single product with inventory info."""
+    product = next((p for p in CATALOG["products"] if p["id"] == product_id), None)
+    if not product:
+        return jsonify({"error": "Sản phẩm không tồn tại"}), 404
+
+    # Attach stock info to each variant
+    for variant in product.get("variants", []):
+        variant["stock"] = get_stock(variant["sku"])
+
+    return jsonify(product)
+
+
+@app.route("/api/inventory/<sku>")
+def inventory(sku):
+    """Get stock info for a SKU."""
+    return jsonify(get_stock(sku))
+
+
+@app.route("/api/inventory/delivery", methods=["POST"])
+def delivery_estimate():
+    """Estimate delivery for a SKU + quantity."""
+    data = request.json
+    sku = data.get("sku", "")
+    quantity = int(data.get("quantity", 1))
+    return jsonify(estimate_delivery(sku, quantity))
+
+
+# ========== QUOTE API ==========
+
+@app.route("/api/quote", methods=["POST"])
+def create_quote_api():
+    """Create a new quote."""
+    data = request.json
+    if not data.get("items"):
+        return jsonify({"error": "Chưa có sản phẩm trong báo giá"}), 400
+    quote = create_quote(data)
+    return jsonify(quote)
+
+
+@app.route("/api/quote/<quote_id>")
+def get_quote_api(quote_id):
+    """Get quote by ID (JSON)."""
+    quote = get_quote(quote_id)
+    if not quote:
+        return jsonify({"error": "Không tìm thấy báo giá"}), 404
+    return jsonify(quote)
+
+
+@app.route("/api/quotes")
+def list_quotes_api():
+    """List recent quotes."""
+    return jsonify(list_quotes())
+
+
+@app.route("/quote/<quote_id>")
+def quote_page(quote_id):
+    """Shareable quote page (HTML — for Zalo/Email links)."""
+    quote = get_quote(quote_id)
+    if not quote:
+        return "Báo giá không tồn tại", 404
+    return render_template("quote.html", quote=quote)
 
 
 if __name__ == "__main__":
