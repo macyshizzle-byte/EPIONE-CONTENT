@@ -366,17 +366,22 @@ input[type="text"]:focus { border-color:var(--accent); }
 
 /* ACTION BUTTONS after output */
 .output-refine {
-  display:flex; gap:6px; flex-wrap:wrap;
-  margin-top:16px; padding-top:14px;
-  border-top:1px solid var(--border);
+  display:flex; gap:8px; flex-wrap:wrap;
+  margin-top:20px; padding:16px;
+  background:var(--gray); border-radius:12px;
+}
+.output-refine-label {
+  width:100%; font-size:11px; font-weight:700; color:var(--text-secondary);
+  letter-spacing:1px; text-transform:uppercase; margin-bottom:4px;
 }
 .refine-btn {
-  padding:7px 16px; border-radius:20px;
+  padding:9px 18px; border-radius:10px;
   border:1px solid var(--border); background:var(--white);
-  font-size:12px; font-weight:600; color:var(--text-secondary);
+  font-size:13px; font-weight:600; color:var(--black);
   cursor:pointer; font-family:inherit; transition:all .2s;
+  box-shadow:0 1px 3px rgba(0,0,0,0.04);
 }
-.refine-btn:hover { border-color:var(--accent); color:var(--accent); background:rgba(16,6,159,0.04); }
+.refine-btn:hover { border-color:var(--accent); color:var(--white); background:var(--accent); box-shadow:0 2px 8px rgba(16,6,159,0.15); }
 .refine-btn:disabled { opacity:0.5; cursor:not-allowed; }
 
 /* CHAR COUNTER */
@@ -439,8 +444,8 @@ input[type="text"]:focus { border-color:var(--accent); }
   .container { padding:16px 12px; }
   .output-actions { flex-direction:column; align-items:flex-start; }
   .platform-btns { width:100%; overflow-x:auto; flex-wrap:nowrap; -webkit-overflow-scrolling:touch; }
-  .output-refine { gap:4px; }
-  .refine-btn { padding:6px 12px; font-size:11px; }
+  .output-refine { gap:6px; padding:12px; }
+  .refine-btn { padding:7px 14px; font-size:12px; }
   .toast-container { top:10px; right:10px; left:10px; }
   .toast { max-width:100%; }
   .plat-select { flex-wrap:wrap; }
@@ -860,7 +865,8 @@ input[type="text"]:focus { border-color:var(--accent); }
       Ký tự: <span id="count-chars">0</span> &nbsp;|&nbsp; Từ: <span id="count-words">0</span> &nbsp;|&nbsp; Dòng: <span id="count-lines">0</span>
     </div>
     <div class="output-refine" id="output-refine" style="display:none;">
-      <button class="refine-btn" onclick="refineContent('Viết lại bài này với cách tiếp cận khác, hook khác, góc nhìn khác. Giữ nguyên chủ đề.')">Viết lại</button>
+      <div class="output-refine-label">Viết lại theo ý bạn</div>
+      <button class="refine-btn" onclick="refineContent('Viết lại bài này với cách tiếp cận khác, hook khác, góc nhìn khác. Giữ nguyên chủ đề.')">↻ Viết lại</button>
       <button class="refine-btn" onclick="refineContent('Viết ngắn hơn, cô đọng hơn. Giữ ý chính, bỏ phần thừa.')">Ngắn hơn</button>
       <button class="refine-btn" onclick="refineContent('Viết dài hơn, thêm chi tiết, ví dụ hoặc câu chuyện. Giữ nguyên tone.')">Dài hơn</button>
       <button class="refine-btn" onclick="refineContent('Chỉnh tone chuyên nghiệp hơn, phù hợp B2B decision maker.')">Chuyên nghiệp hơn</button>
