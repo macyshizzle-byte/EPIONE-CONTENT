@@ -760,7 +760,7 @@ LINKEDIN_SHORT_PROMPT = """{role_context}
 
 {gender_context}
 
-Bạn làm việc tại Epione, viết bài LinkedIn cá nhân NGẮN GỌN.
+Bạn làm việc tại Epione, viết bài LinkedIn cá nhân NGẮN GỌN — Content Driven.
 
 {brand_context}
 
@@ -769,6 +769,23 @@ Bạn làm việc tại Epione, viết bài LinkedIn cá nhân NGẮN GỌN.
 {topic_insight}
 
 {writing_style}
+
+## LINKEDIN CONTENT DRIVEN — Thẩm quyền & Tầm nhìn (Authority & Vision)
+SEO Keywords: "Văn phòng tương lai", "Quản trị hiệu suất", "Employer Branding"
+
+### INSIGHT THEO VAI TRÒ (chọn đúng vai trò đang dùng):
+**Sale B2B** — Văn phong phân tích chiến lược (Consultative):
+- Insight: "Ghế xịn không phải là phúc lợi, đó là công cụ giữ chân tài sản lớn nhất của công ty."
+- Hook mẫu: "Đừng hỏi tại sao nhân sự giỏi nghỉ việc nếu văn phòng của bạn vẫn trông như những năm 2000."
+- Hướng thiết kế: Bảng so sánh chi phí — Tuyển dụng mới ($$$) vs. Nâng cấp trải nghiệm ngồi ($)
+
+**Sale B2C** — Văn phong truyền cảm hứng (Personal Brand):
+- Insight: "Cơ thể bạn là 'cỗ máy' kiếm tiền duy nhất. Đừng chạy nó bằng một bộ khung lỗi thời."
+- Hook mẫu: "Tôi đã X2 thu nhập sau khi đầu tư $1000 vào thứ mà tôi dành 1/3 cuộc đời để chạm vào."
+
+**Kỹ thuật** — Văn phong chuyên gia (Technical Authority):
+- Insight: "Sự kết hợp giữa module di động (Workpod) và không gian cố định là lời giải cho bài toán diện tích."
+- Hook mẫu: "Tại sao thiết kế văn phòng hiện đại lại đang 'khai tử' vách ngăn thạch cao?"
 
 Viết bài LinkedIn ngắn gọn, đúng trọng tâm. Chia sẻ từ góc nhìn cá nhân.
 Mở bài bằng 1 quan điểm mạnh, số liệu gây chú ý, hoặc nhận định ngắn.
@@ -799,7 +816,7 @@ FACEBOOK_SHORT_PROMPT = """{role_context}
 
 {gender_context}
 
-Bạn làm việc tại Epione, viết caption Facebook NGẮN GỌN.
+Bạn làm việc tại Epione, viết caption Facebook NGẮN GỌN — Content Driven.
 
 {brand_context}
 
@@ -808,6 +825,23 @@ Bạn làm việc tại Epione, viết caption Facebook NGẮN GỌN.
 {topic_insight}
 
 {writing_style}
+
+## FACEBOOK CONTENT DRIVEN — Cộng đồng & Cảm xúc (Engagement)
+SEO Keywords: "Ghế công thái học tốt nhất", "Cabin cách âm giá bao nhiêu", Local SEO, Review sản phẩm
+
+### INSIGHT THEO VAI TRÒ (chọn đúng vai trò đang dùng):
+**Sale B2B** — Văn phong case-study thực tế:
+- Insight: "Văn phòng ồn ào là kẻ sát nhân thầm lặng đối với các cuộc họp Sales."
+- Gợi ý visual: Clip ngắn 15s — Tiếng ồn bên ngoài 80dB → Bước vào Workpod còn 30dB
+
+**Sale B2C** — Văn phong đồng cảm & hài hước nhẹ:
+- Insight: "Nỗi đau mang tên 'đau lưng' không chừa một ai, từ Gen Z đến Gen X."
+- Hook mẫu: "Cột sống của bạn đang 'khóc thét' hay đang được nâng niu?"
+- Gợi ý visual: Ảnh Before & After — Dáng ngồi gù (ghế thường) vs. Dáng ngồi thẳng (Ergonomic)
+
+**Kỹ thuật** — Văn phong trải nghiệm sản phẩm (Unboxing/Review):
+- Insight: "Độ hoàn thiện nằm ở chi tiết: Từ đường chỉ lưới đến độ êm của Piston."
+- Gợi ý visual: Ảnh Macro chụp cận cảnh chất liệu lưới hoặc khung nhôm phay xước
 
 Viết 1 caption Facebook ngắn gọn, đúng trọng tâm.
 Hook mạnh ngay dòng đầu (trước nút "Xem thêm"). Đi thẳng vào point.
@@ -843,7 +877,7 @@ INSTAGRAM_SHORT_PROMPT = """{role_context}
 
 {gender_context}
 
-Bạn làm việc tại Epione, viết caption Instagram NGẮN GỌN.
+Bạn làm việc tại Epione, viết caption Instagram NGẮN GỌN — Content Driven.
 
 {brand_context}
 
@@ -852,6 +886,18 @@ Bạn làm việc tại Epione, viết caption Instagram NGẮN GỌN.
 {topic_insight}
 
 {writing_style}
+
+## INSTAGRAM CONTENT DRIVEN — Phong cách sống (Aesthetic)
+SEO/Hashtag: "Góc làm việc đẹp", "Setup văn phòng thông minh", xu hướng thị giác
+
+### INSIGHT THEO VAI TRÒ (chọn đúng vai trò đang dùng):
+**Sale B2B & B2C** — Văn phong tối giản (Minimalist):
+- Insight: "Không gian đẹp tạo ra ý tưởng lớn."
+- Gợi ý visual: Video ASMR — tiếng đóng cửa Workpod, tiếng gõ phím cơ trên bàn nâng hạ, tiếng ghế xoay êm ái
+
+**Kỹ thuật** — Văn phong hậu trường (Behind the scenes):
+- Insight: "Cấu tạo bên trong một chiếc Workpod cách âm 4 lớp."
+- Gợi ý visual: Bản vẽ kỹ thuật lồng ghép với ảnh thực tế (Overlay)
 
 Viết 1 caption Instagram ngắn gọn, visual-first, viết cho ảnh/reel.
 Mở bài thu hút 1 dòng. Đi thẳng vào point. Tone trẻ trung.
@@ -989,6 +1035,22 @@ Bạn làm việc tại Epione, viết tin nhắn tiếp cận khách hàng.
 {topic_insight}
 
 {writing_style}
+
+## OUTREACH CONTENT DRIVEN — Trực diện & Cá nhân hóa
+Mục tiêu: Tối ưu tỷ lệ Open/Click rate. Mỗi tin nhắn phải cung cấp GIÁ TRỊ CỤ THỂ.
+
+### INSIGHT THEO VAI TRÒ (chọn đúng vai trò đang dùng):
+**Sale B2B** (Gửi sếp/HR/Admin):
+- Mở bài bằng lợi ích kinh tế cụ thể: "Em gửi anh bản tính toán diện tích tiết kiệm được khi dùng Workpod thay vì xây phòng họp."
+- Give: data, bảng tính, so sánh chi phí — trước khi đề nghị gì
+
+**Sale B2C** (Gửi cá nhân):
+- Mở bài bằng cảm xúc + khẩn cấp: "Đầu tư cho cột sống, không bao giờ là muộn."
+- Give: voucher, tips miễn phí, link bài hữu ích — trước khi bán
+
+**Kỹ thuật** (Gửi KTS/PM):
+- Mở bài bằng hỗ trợ công việc: "Gửi anh bộ File 3D (SketchUp/Revit) của các dòng Pod bên em để anh đưa vào bản vẽ cho khách."
+- Give: file kỹ thuật, thông số, bản vẽ — tạo giá trị trước
 
 Viết tin nhắn outreach tự nhiên, ngắn gọn. KHÔNG có template format hay metadata.
 
