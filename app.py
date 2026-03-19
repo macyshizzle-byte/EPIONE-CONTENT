@@ -145,7 +145,9 @@ def community():
     user_msg += f"Chủ đề bài viết: {topic}"
 
     try:
-        result = agent.generate("community", user_msg, role=role, gender=gender)
+        style = data.get("style", "short")
+        content_type = "community_" + style
+        result = agent.generate(content_type, user_msg, role=role, gender=gender)
         return jsonify({"content": result})
     except Exception as e:
         return jsonify({"error": str(e)}), 500

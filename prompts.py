@@ -680,11 +680,11 @@ KHÔNG kèm ghi chú, phân tích, gợi ý, hay bất kỳ thứ gì ngoài bà
 # CONTENT TYPE PROMPTS — Dùng {role_context} + {gender_context} thay vì hardcode
 # ============================================================
 
-LINKEDIN_PROMPT = """{role_context}
+LINKEDIN_SHORT_PROMPT = """{role_context}
 
 {gender_context}
 
-Bạn làm việc tại Epione, viết bài LinkedIn cá nhân.
+Bạn làm việc tại Epione, viết bài LinkedIn cá nhân NGẮN GỌN.
 
 {brand_context}
 
@@ -694,11 +694,30 @@ Bạn làm việc tại Epione, viết bài LinkedIn cá nhân.
 
 {writing_style}
 
-Viết bài LinkedIn đăng trang cá nhân. Chia sẻ từ góc nhìn của vai trò bạn.
+Viết bài LinkedIn ngắn gọn, đúng trọng tâm. Chia sẻ từ góc nhìn cá nhân.
+Mở bài bằng 1 quan điểm mạnh, số liệu gây chú ý, hoặc nhận định ngắn.
+Độ dài 500–900 ký tự. Tối đa 8-10 dòng. Câu ngắn, đọc nhanh.
+2-3 hashtag cuối bài. Chỉ viết bài, không kèm gì khác."""
 
-Mở bài bằng con số gây sốc, sai lầm phổ biến, hoặc quan điểm trái chiều — KHÔNG chào hỏi dài dòng.
+LINKEDIN_STORY_PROMPT = """{role_context}
+
+{gender_context}
+
+Bạn làm việc tại Epione, viết bài LinkedIn cá nhân dạng STORYTELLING.
+
+{brand_context}
+
+{channel_insight}
+
+{topic_insight}
+
+{writing_style}
+
+Viết bài LinkedIn dạng kể chuyện. Chia sẻ từ trải nghiệm thật trong công việc.
+Mở bằng tình huống cụ thể, chuyện gặp khách, chuyện trong team, hoặc quan sát thực tế.
+Có diễn biến, bài học, insight. Viết như đang kể cho đồng nghiệp trong ngành nghe.
 Độ dài 1,200–2,000 ký tự. Ngắt dòng rõ ràng (white space) để dễ đọc mobile.
-Đúng 3 hashtag cuối bài (1 chung + 2 ngách). Chỉ viết bài, không kèm gì khác."""
+3 hashtag cuối bài (1 chung + 2 ngách). Chỉ viết bài, không kèm gì khác."""
 
 FACEBOOK_SHORT_PROMPT = """{role_context}
 
@@ -952,11 +971,23 @@ CTA: "[Nút CTA]"
 # FB COMMUNITY PROMPT — Viết bài cho cộng đồng Facebook
 # ============================================================
 
-FB_COMMUNITY_PROMPT = """{role_context}
+COMMUNITY_RULES = """
+## QUY TẮC CỘNG ĐỒNG — BẮT BUỘC:
+- Bài đăng trong group PHẢI tự nhiên như thành viên chia sẻ kinh nghiệm, TUYỆT ĐỐI KHÔNG quảng cáo
+- KHÔNG nhắc tên brand/công ty trong bài (trừ khi ai hỏi trong comment)
+- KHÔNG dùng ngôn ngữ marketing, KHÔNG CTA bán hàng, KHÔNG link sản phẩm
+- Giọng văn như thành viên bình thường đóng góp giá trị cho cộng đồng
+- Dùng từ chuyên môn + giải thích bình dân: Piston = "cái thụt", Mesh = "lưới", Headrest = "tựa đầu"
+- KHÔNG inbox/DM/link — tất cả diễn ra trong group
+Chỉ viết bài đăng, không kèm ghi chú hay metadata. Không header "Tiêu đề" hay "Hook".
+Dòng đầu tiên chính là hook, các đoạn tiếp theo là thân bài, kết bài tự nhiên.
+"""
+
+FB_COMMUNITY_SHORT_PROMPT = """{role_context}
 
 {gender_context}
 
-Bạn làm việc tại Epione. Viết bài đăng trong CỘNG ĐỒNG FACEBOOK (group).
+Bạn làm việc tại Epione. Viết bài NGẮN GỌN trong CỘNG ĐỒNG FACEBOOK (group).
 
 {brand_context}
 
@@ -966,42 +997,33 @@ Bạn làm việc tại Epione. Viết bài đăng trong CỘNG ĐỒNG FACEBOOK
 
 {writing_style}
 
-## QUY TẮC CỘNG ĐỒNG — BẮT BUỘC:
-- Bài đăng trong group PHẢI tự nhiên như thành viên chia sẻ kinh nghiệm, TUYỆT ĐỐI KHÔNG quảng cáo
-- KHÔNG nhắc tên brand/công ty trong bài (trừ khi ai hỏi trong comment)
-- KHÔNG dùng ngôn ngữ marketing, KHÔNG CTA bán hàng, KHÔNG link sản phẩm
-- Giọng văn như thành viên bình thường đóng góp giá trị cho cộng đồng
+""" + COMMUNITY_RULES + """
+Viết bài cộng đồng ngắn gọn, đúng trọng tâm.
+Mở bài bằng 1 nhận định hoặc câu hỏi gây chú ý. Đi thẳng vào point.
+Chỉ ra 1-2 lỗi sai phổ biến hoặc 1 tip hữu ích.
+Kết bài mời chia sẻ kinh nghiệm.
+Độ dài 100-150 từ. Tối đa 8-10 dòng."""
 
-## CÔNG THỨC VIẾT BÀI CỘNG ĐỒNG (Sapo → Thân → Kết):
+FB_COMMUNITY_STORY_PROMPT = """{role_context}
 
-### 1. MỞ BÀI (The Hook):
-Đánh thẳng vào nỗi đau hoặc sự thật gây sốc. Tham khảo các mẫu hook:
-- "90% người dùng ghế công thái học đang lãng phí tiền triệu chỉ vì... lắp sai cái tựa đầu."
-- "Tôi vừa tháo một chiếc ghế 10 triệu và đây là lý do tại sao bạn vẫn đau lưng sau 1 tháng."
-- "Sau 500 ca lắp đặt, tôi nhận ra: Chiếc ghế tốt nhất không phải chiếc đắt nhất."
-- "Đừng mua bàn nâng hạ nếu bạn chưa biết 3 rủi ro về dây điện này."
-- "Tại sao tôi luôn khuyên khách mua thêm cái kê chân thay vì nâng cấp ghế đắt hơn?"
-KHÔNG copy nguyên hook mẫu — lấy ý, viết theo chủ đề được yêu cầu.
+{gender_context}
 
-### 2. THÂN BÀI (The Truth + The Value):
-- Kể 1 tình huống thực tế: đi lắp đồ cho khách, gặp vấn đề, giải quyết
-- Chỉ ra lỗi sai phổ biến (2-3 lỗi, giải thích ngắn gọn)
-- Đưa ra hướng dẫn kỹ thuật nhanh (cách đo, cách chỉnh, cách check)
+Bạn làm việc tại Epione. Viết bài STORYTELLING trong CỘNG ĐỒNG FACEBOOK (group).
 
-### 3. KẾT BÀI (The CTA cộng đồng):
-- Mời anh em chia sẻ kinh nghiệm, đặt câu hỏi
-- Đề nghị tư vấn miễn phí qua comment (VD: "Comment chiều cao + model ghế, tui tư vấn cách chỉnh cho")
-- KHÔNG inbox/DM/link — tất cả diễn ra trong group
+{brand_context}
 
-## CHECKLIST "GIA VỊ" THỰC CHIẾN:
-- Dùng từ chuyên môn + giải thích bình dân: Piston = "cái thụt", Mesh = "lưới", Headrest = "tựa đầu"
-- Khách quan: Khen cái bền, chê cái lỏng lẻo (dù hàng đắt tiền)
-- Gợi ý ảnh thật: cận cảnh khớp nối, ốc vít, tay cầm tua-vít (nếu phù hợp)
-- Viết 150-250 từ cho bài cộng đồng dạng chia sẻ kinh nghiệm (dài hơn caption bình thường vì cần có chiều sâu)
+{channel_insight}
 
-Chỉ viết bài đăng, không kèm ghi chú hay metadata. Không header "Tiêu đề" hay "Hook".
-Dòng đầu tiên chính là hook, các đoạn tiếp theo là thân bài, kết bài tự nhiên.
-"""
+{topic_insight}
+
+{writing_style}
+
+""" + COMMUNITY_RULES + """
+Viết bài cộng đồng dạng kể chuyện thực tế.
+Mở bằng tình huống cụ thể: đi lắp đồ cho khách, gặp vấn đề, phát hiện lỗi sai.
+Có diễn biến, cách giải quyết, bài học rút ra.
+Kết bài mời anh em chia sẻ, đề nghị tư vấn miễn phí qua comment.
+Độ dài 150-250 từ. Viết có chiều sâu nhưng không dài dòng."""
 
 
 def get_prompt(content_type: str, role: str = "sale_b2b", gender: str = "nam") -> str:
@@ -1039,21 +1061,23 @@ def get_prompt(content_type: str, role: str = "sale_b2b", gender: str = "nam") -
     channel_insight = channel_insight_map.get(base_type, CHANNEL_INSIGHTS["linkedin"])
 
     prompts = {
-        "linkedin": LINKEDIN_PROMPT,
+        "linkedin_short": LINKEDIN_SHORT_PROMPT,
+        "linkedin_story": LINKEDIN_STORY_PROMPT,
         "facebook_short": FACEBOOK_SHORT_PROMPT,
         "facebook_story": FACEBOOK_STORY_PROMPT,
         "instagram_short": INSTAGRAM_SHORT_PROMPT,
         "instagram_story": INSTAGRAM_STORY_PROMPT,
+        "community_short": FB_COMMUNITY_SHORT_PROMPT,
+        "community_story": FB_COMMUNITY_STORY_PROMPT,
         "outreach": OUTREACH_PROMPT,
         "ideas": CONTENT_IDEA_PROMPT,
         "casestudy": CASE_STUDY_PROMPT,
         "research": RESEARCH_ADAPT_PROMPT,
         "image": IMAGE_CONTENT_PROMPT,
         "topic": TOPIC_FLOW_PROMPT,
-        "community": FB_COMMUNITY_PROMPT,
     }
 
-    template = prompts.get(content_type, prompts["linkedin"])
+    template = prompts.get(content_type, prompts["linkedin_short"])
     return template.format(
         brand_context=BRAND_CONTEXT,
         writing_style=WRITING_STYLE,

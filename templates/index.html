@@ -575,11 +575,11 @@ input[type="text"]:focus { border-color:var(--accent); }
     <div class="step-label">Kênh đăng</div>
     <div class="plat-select" style="margin-bottom:8px;">
       <button class="content-plat-chip plat-chip selected" data-plat="linkedin">LinkedIn</button>
-      <button class="content-plat-chip plat-chip" data-plat="facebook_short">Facebook</button>
-      <button class="content-plat-chip plat-chip" data-plat="instagram_short">Instagram</button>
+      <button class="content-plat-chip plat-chip" data-plat="facebook">Facebook</button>
+      <button class="content-plat-chip plat-chip" data-plat="instagram">Instagram</button>
       <button class="content-plat-chip plat-chip" data-plat="community">Cộng đồng FB</button>
     </div>
-    <div class="plat-select" id="content-style-btns" style="display:none; margin-bottom:16px;">
+    <div class="plat-select" id="content-style-btns" style="margin-bottom:16px;">
       <span style="font-size:11px; font-weight:600; color:var(--text-secondary); margin-right:4px;">Phong cách:</span>
       <button class="style-chip plat-chip selected" data-style="short" onclick="switchContentStyle('short')">Ngắn gọn</button>
       <button class="style-chip plat-chip" data-style="story" onclick="switchContentStyle('story')">Story telling</button>
@@ -1140,19 +1140,16 @@ const MODE_INFO = {
 
 // Content platform selector
 let currentContentStyle = 'short';
+let currentBasePlat = 'linkedin';
 
 document.querySelectorAll('.content-plat-chip').forEach(chip => {
   chip.addEventListener('click', () => {
     document.querySelectorAll('.content-plat-chip').forEach(c => c.classList.remove('selected'));
     chip.classList.add('selected');
-    currentContentPlat = chip.dataset.plat;
+    currentBasePlat = chip.dataset.plat;
+    currentContentPlat = currentBasePlat + '_' + currentContentStyle;
 
-    // Show style buttons for facebook/instagram
-    const basePlat = currentContentPlat.replace('_short', '').replace('_story', '');
-    const showStyles = basePlat === 'facebook' || basePlat === 'instagram';
-    document.getElementById('content-style-btns').style.display = showStyles ? 'flex' : 'none';
-
-    document.getElementById('content-community-fields').style.display = currentContentPlat === 'community' ? 'block' : 'none';
+    document.getElementById('content-community-fields').style.display = currentBasePlat === 'community' ? 'block' : 'none';
     updatePlaceholder();
   });
 });
@@ -1161,11 +1158,11 @@ function switchContentStyle(style) {
   currentContentStyle = style;
   document.querySelectorAll('.style-chip').forEach(c => c.classList.remove('selected'));
   document.querySelector('.style-chip[data-style="' + style + '"]').classList.add('selected');
-  // Update currentContentPlat with style suffix
-  const basePlat = currentContentPlat.replace('_short', '').replace('_story', '');
-  currentContentPlat = basePlat + '_' + style;
+  currentContentPlat = currentBasePlat + '_' + style;
 }
 
+// Init default
+currentContentPlat = 'linkedin_short';
 updatePlaceholder();
 
 // Tab switching
@@ -1206,21 +1203,21 @@ async function generate() {
     lastGeneratedType = currentContentPlat;
     lastGeneratedPrompt = prompt;
 
-    if (currentContentPlat === 'community') {
+    if (currentBasePlat === 'community') {
       // Community flow
       const communityName = document.getElementById('community-name').value.trim();
       const rules = document.getElementById('community-rules').value.trim();
       const res = await fetch('/api/community', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ community: communityName, rules, topic: prompt, role: currentRole, gender: currentGender })
+        body: JSON.stringify({ community: communityName, rules, topic: prompt, style: currentContentStyle, role: currentRole, gender: currentGender })
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       showOutput(data.content);
     } else {
-      // LinkedIn / Facebook
-      const type = currentContentPlat; // linkedin, facebook, or instagram
+      // LinkedIn / Facebook / Instagram with style
+      const type = currentContentPlat; // e.g. linkedin_short, facebook_story
       const res = await fetch('/api/generate', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
