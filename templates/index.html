@@ -311,6 +311,24 @@ input[type="text"]:focus { border-color:var(--accent); }
 }
 .plat-chip:hover { border-color:var(--accent); color:var(--accent); }
 .plat-chip.selected { background:var(--accent); color:var(--white); border-color:var(--accent); }
+.style-subpanel {
+  margin-left:8px; padding-left:12px;
+  border-left:2px solid var(--accent);
+  margin-bottom:16px;
+  animation:slideDown .2s ease;
+}
+@keyframes slideDown {
+  from { opacity:0; transform:translateY(-8px); }
+  to { opacity:1; transform:translateY(0); }
+}
+.combo-tag {
+  display:inline-block;
+  font-size:11px; font-weight:600; color:var(--accent);
+  background:rgba(16,6,159,0.06);
+  border:1px solid rgba(16,6,159,0.15);
+  border-radius:6px; padding:3px 10px; margin-top:8px;
+}
+.combo-tag:empty { display:none; }
 .content-box {
   background:#FAFAFA; border:1px solid var(--border); border-radius:10px;
   padding:16px; margin:8px 0; white-space:pre-wrap; font-size:14px; line-height:1.7;
@@ -585,11 +603,10 @@ input[type="text"]:focus { border-color:var(--accent); }
       <button class="content-plat-chip plat-chip" data-plat="community">Cộng đồng FB</button>
     </div>
 
-    <div class="step-label">Phong cách</div>
-    <div class="plat-select" style="margin-bottom:16px;">
-      <button type="button" class="style-chip plat-chip selected" data-style="short">Bán hàng</button>
-      <button type="button" class="style-chip plat-chip" data-style="story">Kể chuyện</button>
-      <button type="button" class="style-chip plat-chip" data-style="fomo">FOMO</button>
+    <div class="style-subpanel" id="style-subpanel">
+      <div class="step-label">Phong cách</div>
+      <div class="plat-select" id="style-chips-container"></div>
+      <div class="combo-tag" id="combo-tag"></div>
     </div>
 
     <div id="content-community-fields" style="display:none; margin-bottom:14px;">
@@ -1146,33 +1163,77 @@ const MODE_INFO = {
   ideas:      { title:'Lên Lịch content', desc:'Ý tưởng content theo tuần/tháng cho đội sale' },
 };
 
-// Content platform selector
+// Content platform + style selector
 let currentContentStyle = 'short';
 let currentBasePlat = 'linkedin';
+
+const PLATFORM_STYLES = {
+  linkedin:  [
+    { label: 'Bán hàng', value: 'short' },
+    { label: 'Kể chuyện', value: 'story' },
+    { label: 'FOMO', value: 'fomo' },
+  ],
+  facebook:  [
+    { label: 'Bán hàng', value: 'short' },
+    { label: 'Kể chuyện', value: 'story' },
+    { label: 'FOMO', value: 'fomo' },
+  ],
+  instagram: [
+    { label: 'Bán hàng', value: 'short' },
+    { label: 'Kể chuyện', value: 'story' },
+    { label: 'FOMO', value: 'fomo' },
+  ],
+  community: [
+    { label: 'Bán hàng', value: 'short' },
+    { label: 'Kể chuyện', value: 'story' },
+    { label: 'FOMO', value: 'fomo' },
+  ],
+};
+
+const PLAT_NAMES = { linkedin: 'LinkedIn', facebook: 'Facebook', instagram: 'Instagram', community: 'Cộng đồng FB' };
+
+function updateComboTag() {
+  const styleObj = (PLATFORM_STYLES[currentBasePlat] || []).find(s => s.value === currentContentStyle);
+  document.getElementById('combo-tag').textContent = (PLAT_NAMES[currentBasePlat] || '') + ' · ' + (styleObj ? styleObj.label : '');
+}
+
+function renderStyleChips(platform) {
+  const container = document.getElementById('style-chips-container');
+  const styles = PLATFORM_STYLES[platform] || PLATFORM_STYLES.linkedin;
+  container.innerHTML = '';
+  styles.forEach((s, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'style-chip plat-chip' + (i === 0 ? ' selected' : '');
+    btn.dataset.style = s.value;
+    btn.textContent = s.label;
+    btn.addEventListener('click', () => {
+      container.querySelectorAll('.style-chip').forEach(c => c.classList.remove('selected'));
+      btn.classList.add('selected');
+      currentContentStyle = s.value;
+      currentContentPlat = currentBasePlat + '_' + currentContentStyle;
+      updateComboTag();
+    });
+    container.appendChild(btn);
+  });
+  currentContentStyle = styles[0].value;
+  currentContentPlat = platform + '_' + currentContentStyle;
+  updateComboTag();
+}
 
 document.querySelectorAll('.content-plat-chip').forEach(chip => {
   chip.addEventListener('click', () => {
     document.querySelectorAll('.content-plat-chip').forEach(c => c.classList.remove('selected'));
     chip.classList.add('selected');
     currentBasePlat = chip.dataset.plat;
-    currentContentPlat = currentBasePlat + '_' + currentContentStyle;
-
+    renderStyleChips(currentBasePlat);
     document.getElementById('content-community-fields').style.display = currentBasePlat === 'community' ? 'block' : 'none';
     updatePlaceholder();
   });
 });
 
-document.querySelectorAll('.style-chip').forEach(chip => {
-  chip.addEventListener('click', () => {
-    document.querySelectorAll('.style-chip').forEach(c => c.classList.remove('selected'));
-    chip.classList.add('selected');
-    currentContentStyle = chip.dataset.style;
-    currentContentPlat = currentBasePlat + '_' + currentContentStyle;
-  });
-});
-
 // Init default
-currentContentPlat = 'linkedin_short';
+renderStyleChips('linkedin');
 updatePlaceholder();
 
 // Tab switching
