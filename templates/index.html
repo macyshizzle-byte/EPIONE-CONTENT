@@ -587,9 +587,9 @@ input[type="text"]:focus { border-color:var(--accent); }
 
     <div class="step-label">Phong cách</div>
     <div class="plat-select" style="margin-bottom:16px;">
-      <button class="style-chip plat-chip selected" data-style="short" onclick="switchContentStyle('short')">Bán hàng</button>
-      <button class="style-chip plat-chip" data-style="story" onclick="switchContentStyle('story')">Kể chuyện</button>
-      <button class="style-chip plat-chip" data-style="fomo" onclick="switchContentStyle('fomo')">FOMO</button>
+      <button type="button" class="style-chip plat-chip selected" data-style="short">Bán hàng</button>
+      <button type="button" class="style-chip plat-chip" data-style="story">Kể chuyện</button>
+      <button type="button" class="style-chip plat-chip" data-style="fomo">FOMO</button>
     </div>
 
     <div id="content-community-fields" style="display:none; margin-bottom:14px;">
@@ -1162,12 +1162,14 @@ document.querySelectorAll('.content-plat-chip').forEach(chip => {
   });
 });
 
-function switchContentStyle(style) {
-  currentContentStyle = style;
-  document.querySelectorAll('.style-chip').forEach(c => c.classList.remove('selected'));
-  document.querySelector('.style-chip[data-style="' + style + '"]').classList.add('selected');
-  currentContentPlat = currentBasePlat + '_' + style;
-}
+document.querySelectorAll('.style-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.style-chip').forEach(c => c.classList.remove('selected'));
+    chip.classList.add('selected');
+    currentContentStyle = chip.dataset.style;
+    currentContentPlat = currentBasePlat + '_' + currentContentStyle;
+  });
+});
 
 // Init default
 currentContentPlat = 'linkedin_short';
