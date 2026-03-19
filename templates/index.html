@@ -572,23 +572,18 @@ input[type="text"]:focus { border-color:var(--accent); }
     <h2>Viết content</h2>
     <p class="desc">Chọn kênh đăng → mô tả yêu cầu → AI viết content phù hợp</p>
 
-    <div style="display:flex; gap:16px; margin-bottom:16px; flex-wrap:wrap;">
-      <div style="flex:1; min-width:140px;">
-        <div class="step-label">Kênh đăng</div>
-        <div class="plat-select" style="margin-bottom:0;">
-          <button class="content-plat-chip plat-chip selected" data-plat="linkedin">LinkedIn</button>
-          <button class="content-plat-chip plat-chip" data-plat="facebook">Facebook</button>
-          <button class="content-plat-chip plat-chip" data-plat="instagram">Instagram</button>
-          <button class="content-plat-chip plat-chip" data-plat="community">Cộng đồng FB</button>
-        </div>
-      </div>
-      <div style="min-width:140px;">
-        <div class="step-label">Phong cách</div>
-        <div class="plat-select" style="margin-bottom:0;">
-          <button class="style-chip plat-chip selected" data-style="short" onclick="switchContentStyle('short')">Ngắn gọn</button>
-          <button class="style-chip plat-chip" data-style="story" onclick="switchContentStyle('story')">Story telling</button>
-        </div>
-      </div>
+    <div class="step-label">Kênh đăng</div>
+    <div class="plat-select" style="margin-bottom:12px;">
+      <button class="content-plat-chip plat-chip selected" data-plat="linkedin">LinkedIn</button>
+      <button class="content-plat-chip plat-chip" data-plat="facebook">Facebook</button>
+      <button class="content-plat-chip plat-chip" data-plat="instagram">Instagram</button>
+      <button class="content-plat-chip plat-chip" data-plat="community">Cộng đồng FB</button>
+    </div>
+
+    <div class="step-label">Phong cách</div>
+    <div class="plat-select" style="margin-bottom:16px;">
+      <button class="style-chip plat-chip selected" data-style="short" onclick="switchContentStyle('short')">Ngắn gọn</button>
+      <button class="style-chip plat-chip" data-style="story" onclick="switchContentStyle('story')">Story telling</button>
     </div>
 
     <div id="content-community-fields" style="display:none; margin-bottom:14px;">
