@@ -47,7 +47,8 @@ def generate():
 
     try:
         role = data.get("role", "sale_b2b")
-        result = agent.generate(content_type, user_input, role=role)
+        gender = data.get("gender", "nam")
+        result = agent.generate(content_type, user_input, role=role, gender=gender)
         return jsonify({"content": result})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -101,12 +102,14 @@ def image_content():
 
     try:
         role = request.form.get("role", "sale_b2b")
+        gender = request.form.get("gender", "nam")
         platform = request.form.get("platform", "linkedin")
         result = agent.generate_from_image(
             image_path=filepath,
             user_request=extra,
             platform=platform,
             role=role,
+            gender=gender,
         )
         return jsonify({
             "content": result,
@@ -128,6 +131,7 @@ def community():
     rules = data.get("rules", "").strip()
     topic = data.get("topic", "").strip()
     role = data.get("role", "sale_b2b")
+    gender = data.get("gender", "nam")
 
     if not topic:
         return jsonify({"error": "Vui lòng nhập chủ đề bài đăng"}), 400
@@ -141,7 +145,7 @@ def community():
     user_msg += f"Chủ đề bài viết: {topic}"
 
     try:
-        result = agent.generate("community", user_msg, role=role)
+        result = agent.generate("community", user_msg, role=role, gender=gender)
         return jsonify({"content": result})
     except Exception as e:
         return jsonify({"error": str(e)}), 500

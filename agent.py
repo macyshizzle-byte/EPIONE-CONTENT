@@ -38,9 +38,9 @@ class EpioneSalesAgent:
         self.conversation_history: list[dict] = []
         self.web_reader = WebReader()
 
-    def generate(self, content_type: str, user_request: str, role: str = "sale_b2b") -> str:
-        """Tạo content dựa trên loại, yêu cầu, và vai trò."""
-        system_prompt = get_prompt(content_type, role)
+    def generate(self, content_type: str, user_request: str, role: str = "sale_b2b", gender: str = "nam") -> str:
+        """Tạo content dựa trên loại, yêu cầu, vai trò và giọng văn."""
+        system_prompt = get_prompt(content_type, role, gender)
 
         self.conversation_history.append({
             "role": "user",
@@ -69,6 +69,7 @@ class EpioneSalesAgent:
         user_request: str = "",
         platform: str = "",
         role: str = "sale_b2b",
+        gender: str = "nam",
     ) -> str:
         """Phân tích ảnh và tạo content + hướng dẫn design.
 
@@ -77,8 +78,9 @@ class EpioneSalesAgent:
             user_request: Yêu cầu bổ sung từ user (tùy chọn)
             platform: Platform cụ thể (linkedin/facebook/instagram)
             role: Vai trò người viết (sale_b2b/sale_b2c/ky_thuat)
+            gender: Giọng văn (nam/nu)
         """
-        system_prompt = get_prompt("image", role)
+        system_prompt = get_prompt("image", role, gender)
         image_data, media_type = _encode_image(image_path)
 
         # Build message content với ảnh + text

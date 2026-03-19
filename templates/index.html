@@ -463,23 +463,44 @@ input[type="text"]:focus { border-color:var(--accent); }
       <circle cx="60" cy="60" r="10" fill="#10069F"/>
     </svg>
     <h1 class="role-screen-title">Chào bạn!</h1>
-    <p class="role-screen-desc">Chọn vai trò để bắt đầu viết content</p>
-    <div class="role-screen-cards">
-      <button class="role-screen-card" data-role="sale_b2b">
-        <div class="role-screen-card-icon">B2B</div>
-        <div class="role-screen-card-title">Sale B2B</div>
-        <div class="role-screen-card-desc">Tiếp cận doanh nghiệp, ngôn ngữ số liệu & logic, tìm Champion trong tổ chức</div>
-      </button>
-      <button class="role-screen-card" data-role="sale_b2c">
-        <div class="role-screen-card-icon">B2C</div>
-        <div class="role-screen-card-title">Sale B2C</div>
-        <div class="role-screen-card-desc">Tiếp cận cá nhân, ngôn ngữ cảm xúc & trải nghiệm, storytelling</div>
-      </button>
-      <button class="role-screen-card" data-role="ky_thuat">
-        <div class="role-screen-card-icon">KT</div>
-        <div class="role-screen-card-title">Kỹ thuật</div>
-        <div class="role-screen-card-desc">Thợ lắp chia sẻ thực chiến, ngôn ngữ chính xác, khách quan</div>
-      </button>
+
+    <!-- Step 1: Gender -->
+    <div id="gender-step">
+      <p class="role-screen-desc">Bạn muốn giọng văn kiểu nào?</p>
+      <div class="role-screen-cards" style="max-width:420px; margin:0 auto;">
+        <button class="role-screen-card" data-gender="nam" onclick="selectGender('nam', this)">
+          <div class="role-screen-card-icon" style="font-size:20px; line-height:48px;">♂</div>
+          <div class="role-screen-card-title">Nam</div>
+          <div class="role-screen-card-desc">Thẳng thắn, logic, đi vào trọng tâm, dùng số liệu</div>
+        </button>
+        <button class="role-screen-card" data-gender="nu" onclick="selectGender('nu', this)">
+          <div class="role-screen-card-icon" style="font-size:20px; line-height:48px;">♀</div>
+          <div class="role-screen-card-title">Nữ</div>
+          <div class="role-screen-card-desc">Tinh tế, kể chuyện, empathy, gần gũi, truyền cảm hứng</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: Role (hidden initially) -->
+    <div id="role-step" style="display:none;">
+      <p class="role-screen-desc">Chọn vai trò để bắt đầu viết content</p>
+      <div class="role-screen-cards">
+        <button class="role-screen-card" data-role="sale_b2b">
+          <div class="role-screen-card-icon">B2B</div>
+          <div class="role-screen-card-title">Sale B2B</div>
+          <div class="role-screen-card-desc">Tiếp cận doanh nghiệp, ngôn ngữ số liệu & logic, tìm Champion trong tổ chức</div>
+        </button>
+        <button class="role-screen-card" data-role="sale_b2c">
+          <div class="role-screen-card-icon">B2C</div>
+          <div class="role-screen-card-title">Sale B2C</div>
+          <div class="role-screen-card-desc">Tiếp cận cá nhân, ngôn ngữ cảm xúc & trải nghiệm, storytelling</div>
+        </button>
+        <button class="role-screen-card" data-role="ky_thuat">
+          <div class="role-screen-card-icon">KT</div>
+          <div class="role-screen-card-title">Kỹ thuật</div>
+          <div class="role-screen-card-desc">Thợ lắp chia sẻ thực chiến, ngôn ngữ chính xác, khách quan</div>
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -501,18 +522,30 @@ input[type="text"]:focus { border-color:var(--accent); }
     <button class="role-dropdown-btn" id="role-dropdown-btn" onclick="toggleRoleDropdown()">
       <span class="role-dropdown-dot"></span>
       <span id="role-dropdown-label">Sale B2B</span>
+      <span id="gender-badge" style="font-size:11px; padding:2px 6px; border-radius:4px; background:rgba(16,6,159,0.08); color:var(--accent); font-weight:600;">♂</span>
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
     </button>
     <div class="role-dropdown-menu" id="role-dropdown-menu">
-      <button class="role-dropdown-item active" data-role="sale_b2b">
+      <div style="padding:8px 14px 6px; font-size:11px; font-weight:700; color:var(--text-secondary); letter-spacing:1px; text-transform:uppercase;">Giọng văn</div>
+      <button class="role-dropdown-item gender-item active" data-gender="nam" onclick="switchGender('nam')">
+        <div class="role-dropdown-item-title">♂ Nam</div>
+        <div class="role-dropdown-item-desc">Thẳng thắn &middot; Logic &middot; Số liệu</div>
+      </button>
+      <button class="role-dropdown-item gender-item" data-gender="nu" onclick="switchGender('nu')">
+        <div class="role-dropdown-item-title">♀ Nữ</div>
+        <div class="role-dropdown-item-desc">Tinh tế &middot; Kể chuyện &middot; Empathy</div>
+      </button>
+      <hr style="border:none; border-top:1px solid var(--border); margin:6px 0;">
+      <div style="padding:8px 14px 6px; font-size:11px; font-weight:700; color:var(--text-secondary); letter-spacing:1px; text-transform:uppercase;">Vai trò</div>
+      <button class="role-dropdown-item role-item active" data-role="sale_b2b">
         <div class="role-dropdown-item-title">Sale B2B</div>
         <div class="role-dropdown-item-desc">Doanh nghiệp &middot; Số liệu &middot; Logic</div>
       </button>
-      <button class="role-dropdown-item" data-role="sale_b2c">
+      <button class="role-dropdown-item role-item" data-role="sale_b2c">
         <div class="role-dropdown-item-title">Sale B2C</div>
         <div class="role-dropdown-item-desc">Cá nhân &middot; Cảm xúc &middot; Trải nghiệm</div>
       </button>
-      <button class="role-dropdown-item" data-role="ky_thuat">
+      <button class="role-dropdown-item role-item" data-role="ky_thuat">
         <div class="role-dropdown-item-title">Kỹ thuật</div>
         <div class="role-dropdown-item-desc">Thợ lắp &middot; Chính xác &middot; Thực chiến</div>
       </button>
@@ -837,6 +870,7 @@ let currentImagePath = '';
 let currentDesignPath = '';
 let currentImageUrl = '';
 let currentRole = 'sale_b2b';
+let currentGender = 'nam';
 let lastGeneratedType = '';
 let lastGeneratedPrompt = '';
 
@@ -1017,14 +1051,48 @@ function updateCharCounter(text) {
   document.getElementById('count-lines').textContent = text.split('\n').filter(l => l.trim()).length;
 }
 
-// Role selection screen
-document.querySelectorAll('.role-screen-card').forEach(card => {
+// Gender selection (step 1 on welcome screen)
+function selectGender(gender, btn) {
+  currentGender = gender;
+  // Highlight selected card
+  document.querySelectorAll('#gender-step .role-screen-card').forEach(c => {
+    c.style.borderColor = c.dataset.gender === gender ? 'var(--accent)' : '';
+    c.style.background = c.dataset.gender === gender ? 'rgba(16,6,159,0.04)' : '';
+  });
+  // Update navbar badge
+  updateGenderBadge();
+  // Update dropdown gender items
+  document.querySelectorAll('.gender-item').forEach(i => {
+    i.classList.toggle('active', i.dataset.gender === gender);
+  });
+  // Show role step after short delay
+  setTimeout(() => {
+    document.getElementById('gender-step').style.display = 'none';
+    document.getElementById('role-step').style.display = 'block';
+  }, 300);
+}
+
+function switchGender(gender) {
+  currentGender = gender;
+  updateGenderBadge();
+  document.querySelectorAll('.gender-item').forEach(i => {
+    i.classList.toggle('active', i.dataset.gender === gender);
+  });
+  toast('Giọng văn: ' + (gender === 'nam' ? 'Nam' : 'Nữ'), 'info', 2000);
+}
+
+function updateGenderBadge() {
+  const badge = document.getElementById('gender-badge');
+  badge.textContent = currentGender === 'nam' ? '♂' : '♀';
+}
+
+// Role selection screen (step 2)
+document.querySelectorAll('#role-step .role-screen-card').forEach(card => {
   card.addEventListener('click', () => {
     currentRole = card.dataset.role;
     const title = card.querySelector('.role-screen-card-title').textContent;
-    // Update dropdown label to match
     document.getElementById('role-dropdown-label').textContent = title;
-    document.querySelectorAll('.role-dropdown-item').forEach(i => {
+    document.querySelectorAll('.role-item').forEach(i => {
       i.classList.toggle('active', i.dataset.role === currentRole);
     });
     renderSuggestions();
@@ -1044,9 +1112,9 @@ document.addEventListener('click', e => {
     document.getElementById('role-dropdown-menu').classList.remove('open');
   }
 });
-document.querySelectorAll('.role-dropdown-item').forEach(item => {
+document.querySelectorAll('.role-item').forEach(item => {
   item.addEventListener('click', () => {
-    document.querySelectorAll('.role-dropdown-item').forEach(i => i.classList.remove('active'));
+    document.querySelectorAll('.role-item').forEach(i => i.classList.remove('active'));
     item.classList.add('active');
     currentRole = item.dataset.role;
     document.getElementById('role-dropdown-label').textContent = item.querySelector('.role-dropdown-item-title').textContent;
@@ -1119,7 +1187,7 @@ async function generate() {
       const res = await fetch('/api/community', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ community: communityName, rules, topic: prompt, role: currentRole })
+        body: JSON.stringify({ community: communityName, rules, topic: prompt, role: currentRole, gender: currentGender })
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
@@ -1130,7 +1198,7 @@ async function generate() {
       const res = await fetch('/api/generate', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ type, prompt, role: currentRole })
+        body: JSON.stringify({ type, prompt, role: currentRole, gender: currentGender })
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
@@ -1159,7 +1227,7 @@ async function generateText() {
     const res = await fetch('/api/generate', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ type: currentType, prompt, role: currentRole })
+      body: JSON.stringify({ type: currentType, prompt, role: currentRole, gender: currentGender })
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
@@ -1214,7 +1282,7 @@ async function generateFromTopic() {
     const res = await fetch('/api/generate', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ type: 'topic', prompt: 'Chủ đề: ' + topic + '\nPlatform: ' + selectedPlat, role: currentRole })
+      body: JSON.stringify({ type: 'topic', prompt: 'Chủ đề: ' + topic + '\nPlatform: ' + selectedPlat, role: currentRole, gender: currentGender })
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
@@ -1439,6 +1507,7 @@ async function analyzeImage() {
   const formData = new FormData();
   formData.append('image', selectedFile);
   formData.append('role', currentRole);
+  formData.append('gender', currentGender);
   formData.append('platform', selectedImagePlat);
 
   let note = document.getElementById('image-note').value;
@@ -1671,7 +1740,7 @@ async function refineContent(instruction) {
       body: JSON.stringify({
         type: type,
         prompt: instruction + '\n\nBài gốc:\n' + currentOutput,
-        role: currentRole
+        role: currentRole, gender: currentGender
       })
     });
     const data = await res.json();
