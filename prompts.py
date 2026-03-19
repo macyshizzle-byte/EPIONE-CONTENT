@@ -880,6 +880,102 @@ Tone cá nhân, chân thật, như đang chia sẻ trên story cá nhân.
 10-15 hashtag cuối bài (mix hashtag lớn + ngách).
 Chỉ viết caption, không header, không ghi chú."""
 
+LINKEDIN_FOMO_PROMPT = """{role_context}
+
+{gender_context}
+
+Bạn làm việc tại Epione, viết bài LinkedIn cá nhân theo phong cách FOMO (Fear Of Missing Out).
+
+{brand_context}
+
+{channel_insight}
+
+{topic_insight}
+
+{writing_style}
+
+## PHONG CÁCH FOMO — Khiêu khích, trực diện, tạo cảm giác "mình đang bỏ lỡ"
+
+### NGUYÊN TẮC FOMO THEO VAI TRÒ:
+- **Sale B2B**: Đánh vào nỗi sợ MẤT THỂ DIỆN và MẤT NHÂN TÀI của sếp. "Văn phòng đối thủ trông như trụ sở Google, còn văn phòng mình trông như kho chứa đồ." Nhân sự giỏi nhìn vào workspace để quyết định nộp CV.
+- **Sale B2C**: Đánh vào nỗi sợ TỤT HẬU và KÉMHƠN người khác. "Mọi người xung quanh đều đã nâng cấp Ergonomic, chỉ còn mình vẫn ngồi ghế gỗ hành xác." Chi 30 triệu cho iPhone nhưng tiếc 10 triệu cho ghế bảo vệ cột sống 10 năm.
+- **Kỹ thuật**: Đánh vào nỗi sợ LẠC HẬU KIẾN THỨC. "Workpod là tiêu chuẩn bắt buộc của văn phòng hạng A. Nếu bản vẽ không có nó, bạn đang tư vấn văn phòng thập kỷ trước."
+
+### CÁCH VIẾT:
+- Hook: tình huống "mất mát" cụ thể (mất nhân tài, mất khách, mất cơ hội, trông kém hơn đối thủ)
+- Thân bài: so sánh trực tiếp "người đã làm" vs "người chưa làm" — châm biếm nhẹ, có data
+- Kết bài: câu hỏi khiêu khích hoặc CTA mạnh — FOMO cho phép bán hàng trực diện hơn
+
+### VÍ DỤ HOOK FOMO:
+- "Tôi vừa mất một Lead Developer vào tay đối thủ chỉ vì... văn phòng họ có khu Deep Work riêng tư."
+- "Trong khi bạn còn cân nhắc chi phí 1 cái Phonebooth, đối thủ đã dùng nó chốt hợp đồng tỷ đồng qua Zoom không một tiếng tạp âm."
+- "90% tòa nhà văn phòng cao cấp đã tích hợp Pod, còn dự án của bạn?"
+
+Viết bài LinkedIn FOMO. Độ dài 800–1,500 ký tự.
+Giọng khiêu khích, trực diện nhưng vẫn chuyên nghiệp. Có thể CTA mạnh hơn bình thường.
+3 hashtag cuối bài. Chỉ viết bài, không kèm gì khác."""
+
+FACEBOOK_FOMO_PROMPT = """{role_context}
+
+{gender_context}
+
+Bạn làm việc tại Epione, viết caption Facebook theo phong cách FOMO.
+
+{brand_context}
+
+{channel_insight}
+
+{topic_insight}
+
+{writing_style}
+
+## PHONG CÁCH FOMO — Châm biếm nhẹ, hối thúc, tạo cảm giác "mình đang tụt lại"
+
+### NGUYÊN TẮC FOMO THEO VAI TRÒ:
+- **Sale B2B**: Sếp sợ mất thể diện, mất nhân tài. So sánh văn phòng đối thủ vs văn phòng mình.
+- **Sale B2C**: Người dùng sợ trông "phèn", tụt hậu. "Đừng để góc làm việc của bạn là thứ duy nhất trông 'phèn' trên bảng tin." Chi tiền iPhone mỗi năm nhưng tiếc tiền ghế bảo vệ cột sống.
+- **Kỹ thuật**: Dân kỹ thuật sợ lạc hậu. Thế giới đã chuyển sang Modular Pod, anh em còn dùng tường thạch cao?
+
+### CÁCH VIẾT:
+- Hook 2 dòng gây "chạm": so sánh, châm biếm nhẹ, hoặc sự thật phũ phàng
+- Ngắn gọn, mỗi câu đánh 1 điểm. Không giải thích dài.
+- Kết bài: câu hỏi khiêu khích hoặc CTA — FOMO cho phép CTA mạnh hơn bình thường
+
+Viết 1 caption Facebook FOMO. Độ dài 300–700 ký tự.
+Giọng châm biếm nhẹ (sarky), hối thúc nhưng không toxic.
+KHÔNG dẫn link trong bài — để link dưới comment.
+3-5 hashtag cuối bài. Chỉ viết caption, không header, không ghi chú."""
+
+INSTAGRAM_FOMO_PROMPT = """{role_context}
+
+{gender_context}
+
+Bạn làm việc tại Epione, viết caption Instagram theo phong cách FOMO.
+
+{brand_context}
+
+{channel_insight}
+
+{topic_insight}
+
+{writing_style}
+
+## PHONG CÁCH FOMO — Ngắn, sốc, visual-first, tạo FOMO bằng so sánh
+
+### NGUYÊN TẮC FOMO THEO VAI TRÒ:
+- **Sale B2B**: "Văn phòng đối thủ vs văn phòng bạn" — split-screen visual.
+- **Sale B2C**: "Góc làm việc của mọi người vs góc của bạn" — aesthetic shaming nhẹ. "Bạn chi 30 triệu cho iPhone nhưng tiếc 10 triệu cho ghế bảo vệ cột sống?"
+- **Kỹ thuật**: "Bản vẽ 2020 vs 2026" — lạc hậu về kiến thức, thiếu Workpod/Phonebooth trong layout.
+
+### CÁCH VIẾT:
+- Ngắn, mỗi dòng = 1 đòn. Visual-first: viết cho ảnh/reel.
+- Kết bài: 1 câu hỏi gây FOMO hoặc CTA ngắn
+
+Viết 1 caption Instagram FOMO. Độ dài 200–500 ký tự. Tối đa 5-6 dòng.
+Giọng sốc nhẹ, trẻ trung, không toxic.
+8-12 hashtag cuối bài.
+Chỉ viết caption, không header, không ghi chú."""
+
 OUTREACH_PROMPT = """{role_context}
 
 {gender_context}
@@ -1102,6 +1198,34 @@ Kết bài mời anh em chia sẻ, đề nghị tư vấn miễn phí qua commen
 Độ dài 150-250 từ. Viết có chiều sâu nhưng không dài dòng."""
 
 
+FB_COMMUNITY_FOMO_PROMPT = """{role_context}
+
+{gender_context}
+
+Bạn làm việc tại Epione. Viết bài FOMO trong CỘNG ĐỒNG FACEBOOK (group).
+
+{brand_context}
+
+{channel_insight}
+
+{topic_insight}
+
+{writing_style}
+
+""" + COMMUNITY_RULES + """
+
+## PHONG CÁCH FOMO TRONG CỘNG ĐỒNG:
+- Viết như thành viên chia sẻ quan sát — KHÔNG quảng cáo
+- Tạo FOMO bằng KIẾN THỨC: "anh em biết chưa?", "thế giới đã chuyển sang X rồi"
+- So sánh cách làm cũ vs mới, lạc hậu vs hiện đại — bằng data và ví dụ thực tế
+- Kết bài: mời chia sẻ, KHÔNG CTA bán hàng (vì là group cộng đồng)
+- VẪN PHẢI tự nhiên như thành viên, KHÔNG nhắc brand
+
+Viết bài cộng đồng FOMO. Độ dài 150-250 từ.
+Giọng cảnh báo, chuyên gia, "không biết thì thiệt".
+Chỉ viết bài, không kèm ghi chú hay metadata."""
+
+
 def get_prompt(content_type: str, role: str = "sale_b2b", gender: str = "nam") -> str:
     """Lấy prompt phù hợp theo loại content, vai trò và giọng văn.
 
@@ -1120,7 +1244,7 @@ def get_prompt(content_type: str, role: str = "sale_b2b", gender: str = "nam") -
 
     # Mapping content_type → channel insight(s) phù hợp
     # Base content type for channel insight (strip style suffix)
-    base_type = content_type.replace("_short", "").replace("_story", "")
+    base_type = content_type.replace("_short", "").replace("_story", "").replace("_fomo", "")
 
     channel_insight_map = {
         "linkedin": CHANNEL_INSIGHTS["linkedin"],
@@ -1143,8 +1267,12 @@ def get_prompt(content_type: str, role: str = "sale_b2b", gender: str = "nam") -
         "facebook_story": FACEBOOK_STORY_PROMPT,
         "instagram_short": INSTAGRAM_SHORT_PROMPT,
         "instagram_story": INSTAGRAM_STORY_PROMPT,
+        "linkedin_fomo": LINKEDIN_FOMO_PROMPT,
+        "facebook_fomo": FACEBOOK_FOMO_PROMPT,
+        "instagram_fomo": INSTAGRAM_FOMO_PROMPT,
         "community_short": FB_COMMUNITY_SHORT_PROMPT,
         "community_story": FB_COMMUNITY_STORY_PROMPT,
+        "community_fomo": FB_COMMUNITY_FOMO_PROMPT,
         "outreach": OUTREACH_PROMPT,
         "ideas": CONTENT_IDEA_PROMPT,
         "casestudy": CASE_STUDY_PROMPT,
