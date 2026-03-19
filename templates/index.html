@@ -575,7 +575,8 @@ input[type="text"]:focus { border-color:var(--accent); }
     <div class="step-label">Kênh đăng</div>
     <div class="plat-select" style="margin-bottom:16px;">
       <button class="content-plat-chip plat-chip selected" data-plat="linkedin">LinkedIn</button>
-      <button class="content-plat-chip plat-chip" data-plat="facebook" style="display:none">Facebook / IG</button>
+      <button class="content-plat-chip plat-chip" data-plat="facebook">Facebook</button>
+      <button class="content-plat-chip plat-chip" data-plat="instagram">Instagram</button>
       <button class="content-plat-chip plat-chip" data-plat="community">Cộng đồng FB</button>
     </div>
 
@@ -647,8 +648,8 @@ input[type="text"]:focus { border-color:var(--accent); }
     <div class="step-label">Platform</div>
     <div class="plat-select">
       <button class="plat-chip selected" data-plat="linkedin">LinkedIn</button>
-      <button class="plat-chip" data-plat="facebook" style="display:none">Facebook</button>
-      <button class="plat-chip" data-plat="instagram" style="display:none">Instagram</button>
+      <button class="plat-chip" data-plat="facebook">Facebook</button>
+      <button class="plat-chip" data-plat="instagram">Instagram</button>
       <button class="plat-chip" data-plat="community">Cộng đồng</button>
     </div>
 
@@ -747,8 +748,8 @@ input[type="text"]:focus { border-color:var(--accent); }
       <div class="step-label">Chọn kênh đăng</div>
       <div class="plat-select">
         <button class="img-plat-chip plat-chip selected" data-plat="linkedin">LinkedIn</button>
-        <button class="img-plat-chip plat-chip" data-plat="facebook" style="display:none">Facebook</button>
-        <button class="img-plat-chip plat-chip" data-plat="instagram" style="display:none">Instagram</button>
+        <button class="img-plat-chip plat-chip" data-plat="facebook">Facebook</button>
+        <button class="img-plat-chip plat-chip" data-plat="instagram">Instagram</button>
         <button class="img-plat-chip plat-chip" data-plat="community">Cộng đồng</button>
       </div>
     </div>
@@ -1033,6 +1034,7 @@ function initDrafts() {
 const CHANNEL_PLACEHOLDERS = {
   linkedin: 'Ví dụ: Chia sẻ góc nhìn về việc đầu tư nội thất ergonomic cho nhân viên, hướng đến HR Manager. Mở bài bằng con số hoặc quan điểm trái chiều.',
   facebook: 'Ví dụ: Viết caption về trải nghiệm setup góc làm việc tại nhà, tone thân thiện. Hook phải hấp dẫn trong 2 dòng đầu.',
+  instagram: 'Ví dụ: Caption cho ảnh booth cách âm trong văn phòng hiện đại. Ngắn gọn, visual-first, kèm hashtag.',
   community: 'Ví dụ: Chia sẻ kinh nghiệm chỉnh ghế ergonomic đúng cách cho group. Viết như thành viên, không quảng cáo.',
 };
 
@@ -1194,7 +1196,7 @@ async function generate() {
       showOutput(data.content);
     } else {
       // LinkedIn / Facebook
-      const type = currentContentPlat === 'facebook' ? 'facebook' : 'linkedin';
+      const type = currentContentPlat; // linkedin, facebook, or instagram
       const res = await fetch('/api/generate', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},

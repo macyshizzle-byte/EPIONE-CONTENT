@@ -679,7 +679,7 @@ FACEBOOK_PROMPT = """{role_context}
 
 {gender_context}
 
-Bạn làm việc tại Epione, viết caption Facebook/Instagram.
+Bạn làm việc tại Epione, viết caption Facebook.
 
 {brand_context}
 
@@ -689,13 +689,30 @@ Bạn làm việc tại Epione, viết caption Facebook/Instagram.
 
 {writing_style}
 
-Viết 2 caption ngắn:
+Viết 1 caption Facebook. Hook đánh vào cảm xúc/tính cấp thiết ngay 2 dòng đầu (trước nút "Xem thêm").
+Kể chuyện ngắn, thân thiện, gần gũi. KHÔNG dẫn link trong bài — để link dưới comment.
+Độ dài 500–1,200 ký tự. Ngắt dòng rõ ràng để dễ đọc mobile.
+3-5 hashtag cuối bài.
+Chỉ viết caption, không header, không ghi chú."""
 
-1. Caption Facebook — Hook đánh vào cảm xúc/tính cấp thiết ngay 2 dòng đầu (trước nút "Xem thêm"). Kể chuyện ngắn, thân thiện. KHÔNG dẫn link trong bài — để link dưới comment.
-2. Caption Instagram — Ngắn hơn, visual-first, đi kèm ảnh. 10-15 hashtag cuối bài (hoặc ẩn dưới comment) để tối ưu SEO.
+INSTAGRAM_PROMPT = """{role_context}
 
-Tách 2 caption bằng dấu ---
+{gender_context}
 
+Bạn làm việc tại Epione, viết caption Instagram.
+
+{brand_context}
+
+{channel_insight}
+
+{topic_insight}
+
+{writing_style}
+
+Viết 1 caption Instagram. Ngắn gọn, visual-first, viết cho ảnh/reel.
+Mở bài thu hút trong 1-2 dòng đầu. Tone trẻ trung, cá nhân.
+Độ dài 300–800 ký tự.
+10-15 hashtag cuối bài để tối ưu SEO (mix hashtag lớn + hashtag ngách).
 Chỉ viết caption, không header, không ghi chú."""
 
 OUTREACH_PROMPT = """{role_context}
@@ -936,7 +953,8 @@ def get_prompt(content_type: str, role: str = "sale_b2b", gender: str = "nam") -
     # Mapping content_type → channel insight(s) phù hợp
     channel_insight_map = {
         "linkedin": CHANNEL_INSIGHTS["linkedin"],
-        "facebook": CHANNEL_INSIGHTS["facebook"] + "\n" + CHANNEL_INSIGHTS["instagram"],
+        "facebook": CHANNEL_INSIGHTS["facebook"],
+        "instagram": CHANNEL_INSIGHTS["instagram"],
         "outreach": CHANNEL_INSIGHTS["outreach"],
         "community": CHANNEL_INSIGHTS["community"],
         "image": CHANNEL_INSIGHTS["facebook"],
@@ -950,6 +968,7 @@ def get_prompt(content_type: str, role: str = "sale_b2b", gender: str = "nam") -
     prompts = {
         "linkedin": LINKEDIN_PROMPT,
         "facebook": FACEBOOK_PROMPT,
+        "instagram": INSTAGRAM_PROMPT,
         "outreach": OUTREACH_PROMPT,
         "ideas": CONTENT_IDEA_PROMPT,
         "casestudy": CASE_STUDY_PROMPT,
