@@ -7,5 +7,7 @@ images/uploads/*
 !images/uploads/.gitkeep
 .DS_Store
 gcp-key.json
+drive-key.json
 quotes/*.json
 plans/
+.vercel

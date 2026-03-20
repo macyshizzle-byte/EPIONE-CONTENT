@@ -817,6 +817,126 @@ input[type="text"]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba
 }
 @keyframes spin { to { transform:rotate(360deg); } }
 
+/* DRIVE BROWSER */
+.drive-breadcrumb {
+  display:flex; align-items:center; gap:4px; flex-wrap:wrap;
+  margin-bottom:12px; font-size:13px;
+}
+.drive-breadcrumb button {
+  color:var(--accent); font-weight:600; font-size:13px;
+  padding:4px 8px; border-radius:6px; transition:background .15s;
+}
+.drive-breadcrumb button:hover { background:var(--accent-light); }
+.drive-breadcrumb .sep { color:var(--text-tertiary); font-size:11px; }
+.drive-breadcrumb .current { color:var(--black); font-weight:700; padding:4px 8px; }
+
+.drive-folders {
+  display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;
+}
+.drive-folder-btn {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:10px 16px; border-radius:var(--radius-sm);
+  border:1.5px solid var(--border); background:var(--white);
+  font-size:13px; font-weight:600; color:var(--black);
+  transition:all .15s;
+}
+.drive-folder-btn:active { background:var(--gray); transform:scale(0.97); }
+.drive-folder-btn svg { width:18px; height:18px; color:var(--accent); flex-shrink:0; }
+
+.drive-grid {
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:8px;
+}
+.drive-item {
+  position:relative; border-radius:var(--radius-sm);
+  overflow:hidden; background:var(--gray-2);
+  aspect-ratio:1; cursor:pointer;
+  transition:transform .15s;
+}
+.drive-item:active { transform:scale(0.97); }
+.drive-item img {
+  width:100%; height:100%; object-fit:cover; display:block;
+}
+.drive-item-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
+  display:flex; align-items:flex-end; padding:8px;
+  opacity:0; transition:opacity .2s;
+}
+.drive-item:hover .drive-item-overlay { opacity:1; }
+.drive-item-name {
+  font-size:10px; color:#fff; font-weight:600;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:100%;
+}
+.drive-item.selected { outline:3px solid var(--accent); outline-offset:-3px; }
+.drive-item.selected::after {
+  content:''; position:absolute; top:6px; right:6px;
+  width:22px; height:22px; border-radius:50%;
+  background:var(--accent);
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  background-size:14px; background-repeat:no-repeat; background-position:center;
+}
+
+.drive-actions {
+  display:flex; gap:8px; align-items:center; margin-top:14px;
+  padding-top:12px; border-top:0.5px solid var(--border);
+}
+.drive-select-count {
+  font-size:13px; color:var(--text-secondary); font-weight:600; flex:1;
+}
+
+.drive-load-more {
+  display:block; width:100%; padding:14px;
+  text-align:center; font-size:14px; font-weight:600;
+  color:var(--accent); background:var(--accent-light);
+  border-radius:var(--radius-sm); margin-top:12px;
+  transition:background .15s;
+}
+.drive-load-more:active { background:var(--accent-glow); }
+
+.drive-empty {
+  text-align:center; padding:40px 20px;
+  color:var(--text-secondary); font-size:14px;
+}
+.drive-empty-icon { font-size:40px; margin-bottom:8px; }
+
+/* DRIVE PREVIEW MODAL */
+.drive-preview-overlay {
+  position:fixed; inset:0; z-index:1100;
+  background:rgba(0,0,0,0.85);
+  display:none; align-items:center; justify-content:center;
+  padding:20px;
+}
+.drive-preview-overlay.open { display:flex; }
+.drive-preview-content {
+  position:relative; max-width:90vw; max-height:85vh;
+}
+.drive-preview-content img {
+  max-width:100%; max-height:80vh; border-radius:8px;
+  object-fit:contain;
+}
+.drive-preview-info {
+  text-align:center; margin-top:12px;
+  color:rgba(255,255,255,0.9); font-size:14px; font-weight:600;
+}
+.drive-preview-close {
+  position:absolute; top:-12px; right:-12px;
+  width:36px; height:36px; border-radius:50%;
+  background:rgba(255,255,255,0.15); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px; backdrop-filter:blur(10px);
+}
+.drive-preview-actions {
+  display:flex; gap:10px; justify-content:center; margin-top:14px;
+}
+.drive-preview-btn {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:12px 24px; border-radius:24px;
+  font-size:14px; font-weight:600; color:#fff;
+  background:var(--accent); transition:all .15s;
+}
+.drive-preview-btn:active { transform:scale(0.97); }
+.drive-preview-btn.outline { background:rgba(255,255,255,0.15); backdrop-filter:blur(10px); }
+
 /* DESKTOP */
 @media (min-width:768px) {
   .main-inner { padding:24px 24px calc(24px + var(--bottomnav-h)); max-width:720px; }
@@ -832,6 +952,7 @@ input[type="text"]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba
   .sheet-overlay.open .sheet { transform:translateX(-50%) translateY(0); }
   .design-form .row { flex-direction:row; }
   .output-actions { flex-wrap:nowrap; }
+  .drive-grid { grid-template-columns:repeat(4, 1fr); gap:10px; }
 }
 
 /* LANDSCAPE PHONE */
@@ -1309,11 +1430,6 @@ input[type="text"]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba
 
           <input type="text" id="image-note" placeholder="Ghi chú thêm (tùy chọn)" style="margin-bottom:14px;">
 
-          <div class="step-label">Lưu vào Drive (tùy chọn)</div>
-          <select id="image-drive-product" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;background:var(--white);color:var(--black);margin-bottom:14px;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%238E8E93%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22/></svg>');background-repeat:no-repeat;background-position:right 12px center;">
-            <option value="">-- Không lưu Drive --</option>
-          </select>
-
           <div class="step-label">Kênh đăng</div>
           <div class="chip-row">
             <button class="img-plat-chip chip chip-sm selected" data-plat="linkedin">LinkedIn</button>
@@ -1493,48 +1609,79 @@ input[type="text"]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba
         </div>
       </div>
 
-      <!-- PAGE: Google Drive Upload -->
+      <!-- PAGE: Drive (Upload + Browse) -->
       <div class="page" id="page-drive">
-        <div class="card">
-          <div class="card-title">Upload ảnh lên Drive</div>
-          <div class="card-desc">Chọn ảnh & sản phẩm, tự động sắp xếp vào thư mục trên Google Drive</div>
+        <!-- Tab switcher -->
+        <div class="chip-row" style="margin-bottom:0;">
+          <button class="chip selected" id="drive-tab-browse" onclick="switchDriveTab('browse')">Kho ảnh</button>
+          <button class="chip" id="drive-tab-upload" onclick="switchDriveTab('upload')">Upload lên Drive</button>
+        </div>
 
-          <div class="step-label">Sản phẩm</div>
-          <select id="drive-product" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;background:var(--white);color:var(--black);margin-bottom:14px;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%238E8E93%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22/></svg>');background-repeat:no-repeat;background-position:right 12px center;">
-            <option value="">-- Chọn sản phẩm --</option>
-          </select>
+        <!-- TAB: Browse/Download -->
+        <div id="drive-panel-browse">
+          <div class="card">
+            <div class="card-title">Kho ảnh Drive</div>
+            <div class="card-desc">Duyệt và tải ảnh từ Google Drive</div>
 
-          <div class="dropzone" id="drive-dropzone" onclick="document.getElementById('drive-file-input').click()">
-            <div class="icon">📁</div>
-            <div class="label">Kéo thả hoặc <strong>chọn ảnh</strong></div>
-            <div class="label" style="font-size:11px;margin-top:4px;color:var(--text-tertiary);">Chọn nhiều ảnh cùng lúc — JPG, PNG, WebP</div>
-          </div>
-          <input type="file" id="drive-file-input" accept="image/*" multiple style="display:none" onchange="handleDriveFiles(this.files)">
+            <div class="drive-breadcrumb" id="drive-breadcrumb"></div>
+            <div class="drive-folders" id="drive-folders"></div>
+            <div class="drive-grid" id="drive-grid"></div>
+            <div class="drive-empty" id="drive-empty" style="display:none;">
+              <div class="drive-empty-icon">📁</div>
+              <div>Folder trống hoặc chưa cấu hình Drive</div>
+            </div>
 
-          <div id="drive-file-list" style="margin:14px 0;display:none;"></div>
-
-          <div class="action-row">
-            <button class="btn-primary" id="btn-drive-upload" onclick="uploadToDrive()" disabled>Upload lên Drive</button>
-            <div class="typing-indicator" id="loading-drive">
+            <div class="typing-indicator" id="drive-loading">
               <div class="typing-dots"><span></span><span></span><span></span></div>
-              <span>Đang upload...</span>
+              <span>Đang tải...</span>
+            </div>
+
+            <button class="drive-load-more" id="drive-load-more" style="display:none;" onclick="loadMoreDriveFiles()">Tải thêm ảnh</button>
+
+            <div class="drive-actions" id="drive-actions" style="display:none;">
+              <div class="drive-select-count" id="drive-select-count">0 ảnh đã chọn</div>
+              <button class="btn-primary" style="padding:10px 20px;font-size:13px;min-height:40px;" onclick="downloadSelectedDrive()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Tải xuống
+              </button>
             </div>
           </div>
         </div>
 
-        <div id="drive-results" style="display:none;">
+        <!-- TAB: Upload -->
+        <div id="drive-panel-upload" style="display:none;">
           <div class="card">
-            <div class="card-title">Đã upload</div>
-            <div id="drive-results-list"></div>
-          </div>
-        </div>
+            <div class="card-title">Upload ảnh lên Drive</div>
+            <div class="card-desc">Chọn ảnh &amp; sản phẩm, tự động sắp xếp vào thư mục trên Google Drive</div>
 
-        <div id="drive-browser" style="display:none;">
-          <div class="card">
-            <div class="card-title">Ảnh trên Drive</div>
-            <div class="card-desc">Chọn thư mục sản phẩm để xem ảnh</div>
-            <div id="drive-folder-list" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;"></div>
-            <div id="drive-file-browser"></div>
+            <div class="step-label">Sản phẩm</div>
+            <select id="drive-product" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;background:var(--white);color:var(--black);margin-bottom:14px;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%238E8E93%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22/></svg>');background-repeat:no-repeat;background-position:right 12px center;">
+              <option value="">-- Chọn sản phẩm --</option>
+            </select>
+
+            <div class="dropzone" id="drive-dropzone" onclick="document.getElementById('drive-file-input').click()">
+              <div class="icon">📁</div>
+              <div class="label">Kéo thả hoặc <strong>chọn ảnh</strong></div>
+              <div class="label" style="font-size:11px;margin-top:4px;color:var(--text-tertiary);">Chọn nhiều ảnh cùng lúc — JPG, PNG, WebP</div>
+            </div>
+            <input type="file" id="drive-file-input" accept="image/*" multiple style="display:none" onchange="handleDriveUploadFiles(this.files)">
+
+            <div id="drive-file-list" style="margin:14px 0;display:none;"></div>
+
+            <div class="action-row">
+              <button class="btn-primary" id="btn-drive-upload" onclick="uploadToDrive()" disabled>Upload lên Drive</button>
+              <div class="typing-indicator" id="loading-drive">
+                <div class="typing-dots"><span></span><span></span><span></span></div>
+                <span>Đang upload...</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="drive-results" style="display:none;">
+            <div class="card">
+              <div class="card-title">Đã upload</div>
+              <div id="drive-results-list"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -1563,24 +1710,44 @@ input[type="text"]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba
 
   <!-- BOTTOM NAV: Kỹ thuật -->
   <nav class="bottomnav" id="nav-kythuat" style="display:none;">
-    <button class="nav-item active" data-page="content" onclick="switchPage('content',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      <span>Viết</span>
-    </button>
-    <button class="nav-item" data-page="image" onclick="switchPage('image',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-      <span>Thiết kế</span>
+    <button class="nav-item active" data-page="catalog" onclick="switchPage('catalog',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+      <span>Catalog</span>
     </button>
     <button class="nav-item" data-page="quote" onclick="switchPage('quote',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
       <span>Báo giá</span>
       <span class="quote-badge" id="quote-badge" style="display:none;">0</span>
     </button>
+    <button class="nav-item" data-page="image" onclick="switchPage('image',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      <span>Thiết kế</span>
+    </button>
+    <button class="nav-item" data-page="content" onclick="switchPage('content',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      <span>AI Content</span>
+    </button>
     <button class="nav-item" data-page="more" onclick="openMoreSheet()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       <span>Thêm</span>
     </button>
   </nav>
+</div>
+
+<!-- DRIVE PREVIEW MODAL -->
+<div class="drive-preview-overlay" id="drive-preview-overlay" onclick="closeDrivePreview()">
+  <div class="drive-preview-content" onclick="event.stopPropagation()">
+    <button class="drive-preview-close" onclick="closeDrivePreview()">&times;</button>
+    <img id="drive-preview-img" src="" alt="">
+    <div class="drive-preview-info" id="drive-preview-info"></div>
+    <div class="drive-preview-actions">
+      <button class="drive-preview-btn" id="drive-preview-dl" onclick="downloadPreviewFile()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Tải xuống
+      </button>
+      <button class="drive-preview-btn outline" onclick="closeDrivePreview()">Đóng</button>
+    </div>
+  </div>
 </div>
 
 <!-- SETTINGS BOTTOM SHEET -->
@@ -1682,17 +1849,17 @@ input[type="text"]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba
         </div>
         <span class="more-item-label">Lịch content</span>
       </button>
+      <button class="more-item" onclick="closeSheet('more-sheet');switchPage('drive',null);initDrivePage();">
+        <div class="more-item-icon" style="color:#34A853;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <span class="more-item-label">Kho ảnh</span>
+      </button>
       <button class="more-item" onclick="closeSheet('more-sheet');switchPage('dashboard',null);renderDashboard();">
         <div class="more-item-icon" style="color:#FF6B35;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15l-2 5l9-11h-5l2-5L7 15z"/></svg>
         </div>
         <span class="more-item-label">Thành tích</span>
-      </button>
-      <button class="more-item" onclick="closeSheet('more-sheet');switchPage('drive',null);initDrivePage();">
-        <div class="more-item-icon" style="color:#34A853;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16l4-5h3l-7 9-7-9h3l4 5z"/><path d="M5.5 11L2 17h20l-3.5-6"/><path d="M15.5 4H8.5L2 17h20L15.5 4z"/></svg>
-        </div>
-        <span class="more-item-label">Google Drive</span>
       </button>
     </div>
   </div>
@@ -2226,7 +2393,7 @@ function switchPage(page, navBtn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
 
   // Show target page
-  const directPages = ['content', 'research', 'image', 'catalog', 'quote', 'drive'];
+  const directPages = ['content', 'research', 'image', 'catalog', 'quote', 'drive', 'dashboard'];
   if (directPages.includes(page)) {
     document.getElementById('page-' + page).classList.add('active');
     currentType = page;
@@ -2309,11 +2476,11 @@ function switchNavForRole(role) {
       switchPage('content', null);
     }
   } else {
-    // Sale & kythuat: Viết, Thiết kế, Báo giá, Thêm
+    // Sale & kythuat: Catalog, Báo giá, AI Content, Thêm
     document.getElementById('nav-sale').style.display = 'none';
     document.getElementById('nav-kythuat').style.display = 'flex';
-    if (['research'].includes(currentType)) {
-      switchPage('content', null);
+    if (['research', 'image'].includes(currentType)) {
+      switchPage('catalog', null);
     }
   }
 }
@@ -2869,11 +3036,10 @@ function handleFile(file) {
 }
 
 async function analyzeImage() {
-  if (!selectedFile) { toast('Chưa chọn ảnh', 'error'); return; }
+  if (!selectedFile) return;
   lastAction = analyzeImage;
   setLoading('loading-image', true);
   document.getElementById('btn-image').disabled = true;
-  toast('Đang phân tích ảnh...', 'info', 5000);
 
   const formData = new FormData();
   formData.append('image', selectedFile);
@@ -2891,10 +3057,6 @@ async function analyzeImage() {
   }
   formData.append('prompt', note);
 
-  // Auto-upload lên Drive nếu chọn sản phẩm
-  const driveProduct = document.getElementById('image-drive-product').value;
-  if (driveProduct) formData.append('product', driveProduct);
-
   try {
     const res = await fetch('/api/image', { method: 'POST', body: formData });
     const data = await res.json();
@@ -2903,13 +3065,6 @@ async function analyzeImage() {
     currentImagePath = data.image_path;
     currentImageUrl = data.image_url || '';
     showOutput(data.content, true);
-
-    // Thông báo upload Drive
-    if (data.drive) {
-      toast('Ảnh đã lưu vào Drive: ' + data.drive.folder, 'success', 3000);
-    } else if (data.drive_error) {
-      toast('Lỗi Drive: ' + data.drive_error, 'error', 3000);
-    }
 
     const hl = data.content.match(/Headline:\s*[""](.+?)[""\u201d]/);
     const st = data.content.match(/Subtext:\s*[""](.+?)[""\u201d]/);
@@ -3147,7 +3302,7 @@ document.getElementById('custom-topic').addEventListener('keydown', e => {
 let touchStartX = 0;
 let touchStartY = 0;
 const salePageOrder = ['content', 'research', 'image'];
-const kythuatPageOrder = ['catalog', 'quote', 'content'];
+const kythuatPageOrder = ['catalog', 'quote', 'image', 'content'];
 
 document.querySelector('.main').addEventListener('touchstart', e => {
   touchStartX = e.touches[0].clientX;
@@ -3509,7 +3664,6 @@ renderStyleChips('linkedin');
 updatePlaceholder();
 initDrafts();
 renderSuggestions();
-loadDriveProducts();
 
 // Restore gender preference
 const savedGender = localStorage.getItem('epione_gender');
@@ -3527,91 +3681,68 @@ if (window.visualViewport) {
   });
 }
 
-// ========== GOOGLE DRIVE UPLOAD ==========
-let driveFiles = [];
-let driveProductsLoaded = false;
+// ========== DRIVE PAGE (tabs + upload) ==========
+let driveUploadFiles = [];
 
 function initDrivePage() {
-  if (!driveProductsLoaded) {
-    loadDriveProducts();
-    loadDriveFolders();
-    driveProductsLoaded = true;
-  }
-}
-
-function loadDriveProducts() {
+  // Load product list for upload select
   fetch('/api/products')
     .then(r => r.json())
     .then(data => {
       const products = data.products || [];
-      // Populate cả 2 dropdown: trang Drive và trang Image
-      ['drive-product', 'image-drive-product'].forEach(selectId => {
-        const select = document.getElementById(selectId);
-        if (!select) return;
-        const defaultText = selectId === 'image-drive-product' ? '-- Không lưu Drive --' : '-- Chọn sản phẩm --';
-        select.innerHTML = '<option value="">' + defaultText + '</option>';
-        products.forEach(p => {
-          const opt = document.createElement('option');
-          opt.value = p.name;
-          opt.textContent = p.name;
-          select.appendChild(opt);
-        });
-        const optGen = document.createElement('option');
-        optGen.value = 'General';
-        optGen.textContent = 'General (khác)';
-        select.appendChild(optGen);
+      ['drive-product'].forEach(selectId => {
+        const sel = document.getElementById(selectId);
+        if (!sel) return;
+        const defaultText = '-- Chọn sản phẩm --';
+        sel.innerHTML = '<option value="">' + defaultText + '</option>' +
+          products.map(p => '<option value="' + p.name + '">' + p.name + '</option>').join('');
       });
-    });
+    })
+    .catch(() => {});
+  // Load browse
+  loadDriveFiles();
 }
 
-function handleDriveFiles(fileList) {
-  driveFiles = Array.from(fileList);
-  renderDriveFileList();
-  updateDriveBtn();
+function switchDriveTab(tab) {
+  document.getElementById('drive-tab-browse').classList.toggle('selected', tab === 'browse');
+  document.getElementById('drive-tab-upload').classList.toggle('selected', tab === 'upload');
+  document.getElementById('drive-panel-browse').style.display = tab === 'browse' ? 'block' : 'none';
+  document.getElementById('drive-panel-upload').style.display = tab === 'upload' ? 'block' : 'none';
 }
 
-function renderDriveFileList() {
+function handleDriveUploadFiles(fileList) {
+  driveUploadFiles = Array.from(fileList);
+  renderDriveUploadFileList();
+  updateDriveUploadBtn();
+}
+
+function renderDriveUploadFileList() {
   const container = document.getElementById('drive-file-list');
-  if (!driveFiles.length) { container.style.display = 'none'; return; }
+  if (!driveUploadFiles.length) { container.style.display = 'none'; return; }
   container.style.display = 'block';
-  container.innerHTML = driveFiles.map((f, i) =>
+  container.innerHTML = driveUploadFiles.map((f, i) =>
     '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);">' +
       '<span style="font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + f.name + '</span>' +
       '<span style="font-size:11px;color:var(--text-secondary);">' + (f.size / 1024 / 1024).toFixed(1) + ' MB</span>' +
-      '<button onclick="removeDriveFile(' + i + ')" style="color:var(--text-secondary);font-size:16px;padding:4px;">✕</button>' +
+      '<button onclick="removeDriveUploadFile(' + i + ')" style="color:var(--text-secondary);font-size:16px;padding:4px;">✕</button>' +
     '</div>'
   ).join('');
 }
 
-function removeDriveFile(index) {
-  driveFiles.splice(index, 1);
-  renderDriveFileList();
-  updateDriveBtn();
+function removeDriveUploadFile(index) {
+  driveUploadFiles.splice(index, 1);
+  renderDriveUploadFileList();
+  updateDriveUploadBtn();
 }
 
-function updateDriveBtn() {
+function updateDriveUploadBtn() {
   const product = document.getElementById('drive-product').value;
-  document.getElementById('btn-drive-upload').disabled = !driveFiles.length || !product;
-}
-
-// Lắng nghe thay đổi sản phẩm
-document.getElementById('drive-product').addEventListener('change', updateDriveBtn);
-
-// Drag & drop cho drive dropzone
-const driveDropzone = document.getElementById('drive-dropzone');
-if (driveDropzone) {
-  driveDropzone.addEventListener('dragover', e => { e.preventDefault(); driveDropzone.style.borderColor = 'var(--accent)'; });
-  driveDropzone.addEventListener('dragleave', () => { driveDropzone.style.borderColor = ''; });
-  driveDropzone.addEventListener('drop', e => {
-    e.preventDefault();
-    driveDropzone.style.borderColor = '';
-    if (e.dataTransfer.files.length) handleDriveFiles(e.dataTransfer.files);
-  });
+  document.getElementById('btn-drive-upload').disabled = !driveUploadFiles.length || !product;
 }
 
 async function uploadToDrive() {
   const product = document.getElementById('drive-product').value;
-  if (!product || !driveFiles.length) return;
+  if (!product || !driveUploadFiles.length) return;
 
   const btn = document.getElementById('btn-drive-upload');
   const loading = document.getElementById('loading-drive');
@@ -3620,7 +3751,7 @@ async function uploadToDrive() {
 
   const formData = new FormData();
   formData.append('product', product);
-  driveFiles.forEach(f => formData.append('image', f));
+  driveUploadFiles.forEach(f => formData.append('image', f));
 
   try {
     const res = await fetch('/api/drive/upload', { method: 'POST', body: formData });
@@ -3631,7 +3762,6 @@ async function uploadToDrive() {
       return;
     }
 
-    // Hiển thị kết quả
     const resultsDiv = document.getElementById('drive-results');
     const listDiv = document.getElementById('drive-results-list');
     resultsDiv.style.display = 'block';
@@ -3650,13 +3780,9 @@ async function uploadToDrive() {
     const okCount = (data.uploaded || []).filter(f => !f.error).length;
     toast('Đã upload ' + okCount + ' ảnh vào ' + product, 'success');
 
-    // Reset
-    driveFiles = [];
-    renderDriveFileList();
+    driveUploadFiles = [];
+    renderDriveUploadFileList();
     document.getElementById('drive-file-input').value = '';
-
-    // Refresh folder browser
-    loadDriveFolders();
   } catch (e) {
     toast('Lỗi upload: ' + e.message, 'error');
   } finally {
@@ -3665,51 +3791,268 @@ async function uploadToDrive() {
   }
 }
 
-function loadDriveFolders() {
-  fetch('/api/drive/folders')
-    .then(r => r.json())
-    .then(data => {
-      if (data.error) return;
-      const container = document.getElementById('drive-folder-list');
-      const browser = document.getElementById('drive-browser');
-      const folders = data.folders || [];
-      if (!folders.length) { browser.style.display = 'none'; return; }
-      browser.style.display = 'block';
-      container.innerHTML = folders.map(f =>
-        '<button class="chip chip-sm" onclick="browseDriveFolder(\'' + f.name.replace(/'/g, "\\'") + '\')" style="font-size:12px;">' + f.name + '</button>'
-      ).join('');
-    })
-    .catch(() => {});
+// Listen for product change
+document.getElementById('drive-product')?.addEventListener('change', updateDriveUploadBtn);
+
+// Drag & drop for drive upload
+const driveUpDropzone = document.getElementById('drive-dropzone');
+if (driveUpDropzone) {
+  driveUpDropzone.addEventListener('dragover', e => { e.preventDefault(); driveUpDropzone.style.borderColor = 'var(--accent)'; });
+  driveUpDropzone.addEventListener('dragleave', () => { driveUpDropzone.style.borderColor = ''; });
+  driveUpDropzone.addEventListener('drop', e => {
+    e.preventDefault();
+    driveUpDropzone.style.borderColor = '';
+    if (e.dataTransfer.files.length) handleDriveUploadFiles(e.dataTransfer.files);
+  });
 }
 
-function browseDriveFolder(folderName) {
-  const container = document.getElementById('drive-file-browser');
-  container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-secondary);font-size:13px;">Đang tải...</div>';
+// ========== DRIVE BROWSER ==========
+let driveBrowseFiles = [];
+let driveNextPageToken = null;
+let driveSelectedIds = new Set();
+let driveFolderStack = []; // [{id, name}]
+let driveCurrentFolder = '';
+let drivePreviewFileId = null;
 
-  // Highlight active chip
-  document.querySelectorAll('#drive-folder-list .chip').forEach(c => c.classList.remove('selected'));
-  event.target.classList.add('selected');
+async function loadDriveFiles(folderId, folderName) {
+  if (folderId) {
+    // Navigating into a subfolder
+    driveCurrentFolder = folderId;
+    driveFolderStack.push({ id: folderId, name: folderName || 'Folder' });
+  } else if (!driveCurrentFolder) {
+    // First load — use root
+    driveCurrentFolder = '';
+    driveFolderStack = [];
+  }
 
-  fetch('/api/drive/files/' + encodeURIComponent(folderName))
-    .then(r => r.json())
-    .then(data => {
-      if (data.error) { container.innerHTML = '<div style="color:#FF3B30;font-size:13px;">' + data.error + '</div>'; return; }
-      const files = data.files || [];
-      if (!files.length) { container.innerHTML = '<div style="padding:16px;text-align:center;color:var(--text-secondary);font-size:13px;">Chưa có ảnh nào</div>'; return; }
-      container.innerHTML = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">' +
-        files.map(f => {
-          const isImage = (f.mimeType || '').startsWith('image/');
-          const thumb = isImage ? 'https://drive.google.com/thumbnail?id=' + f.id + '&sz=w200' : '';
-          return '<a href="' + (f.webViewLink || '#') + '" target="_blank" style="text-decoration:none;border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--border);display:block;">' +
-            (isImage ? '<img src="' + thumb + '" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;" onerror="this.style.display=\'none\'">' : '') +
-            '<div style="padding:8px;font-size:11px;color:var(--black);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + f.name + '</div>' +
-          '</a>';
-        }).join('') +
-      '</div>';
-    })
-    .catch(e => {
-      container.innerHTML = '<div style="color:#FF3B30;font-size:13px;">Lỗi: ' + e.message + '</div>';
-    });
+  driveBrowseFiles = [];
+  driveNextPageToken = null;
+  driveSelectedIds.clear();
+  updateDriveActions();
+
+  document.getElementById('drive-grid').innerHTML = '';
+  document.getElementById('drive-loading').classList.add('show');
+  document.getElementById('drive-empty').style.display = 'none';
+  document.getElementById('drive-load-more').style.display = 'none';
+
+  try {
+    // Load folders + files in parallel
+    const params = driveCurrentFolder ? '?folder=' + driveCurrentFolder : '';
+    const [filesRes, foldersRes] = await Promise.all([
+      fetch('/api/drive/browse' + params),
+      fetch('/api/drive/browse/folders' + params),
+    ]);
+    const filesData = await filesRes.json();
+    const foldersData = await foldersRes.json();
+
+    if (filesData.error) {
+      document.getElementById('drive-empty').style.display = 'block';
+      document.getElementById('drive-empty').querySelector('div:last-child').textContent = filesData.error;
+      document.getElementById('drive-loading').classList.remove('show');
+      return;
+    }
+
+    driveBrowseFiles = filesData.files || [];
+    driveNextPageToken = filesData.nextPageToken;
+
+    renderDriveBreadcrumb();
+    renderDriveFolders(foldersData.folders || []);
+    renderDriveGrid();
+  } catch (e) {
+    document.getElementById('drive-empty').style.display = 'block';
+    document.getElementById('drive-empty').querySelector('div:last-child').textContent = 'Lỗi kết nối: ' + e.message;
+  }
+
+  document.getElementById('drive-loading').classList.remove('show');
+}
+
+async function loadMoreDriveFiles() {
+  if (!driveNextPageToken) return;
+  const btn = document.getElementById('drive-load-more');
+  btn.textContent = 'Đang tải...';
+  btn.disabled = true;
+
+  try {
+    let url = '/api/drive/browse?pageToken=' + driveNextPageToken;
+    if (driveCurrentFolder) url += '&folder=' + driveCurrentFolder;
+    const res = await fetch(url);
+    const data = await res.json();
+
+    driveBrowseFiles = driveBrowseFiles.concat(data.files || []);
+    driveNextPageToken = data.nextPageToken;
+    renderDriveGrid();
+  } catch (e) {
+    toast('Lỗi tải thêm: ' + e.message, 'error');
+  }
+
+  btn.textContent = 'Tải thêm ảnh';
+  btn.disabled = false;
+}
+
+function renderDriveBreadcrumb() {
+  const el = document.getElementById('drive-breadcrumb');
+  let html = '<button onclick="navigateDriveRoot()">Kho ảnh</button>';
+  driveFolderStack.forEach((f, i) => {
+    html += '<span class="sep">/</span>';
+    if (i === driveFolderStack.length - 1) {
+      html += '<span class="current">' + f.name + '</span>';
+    } else {
+      html += '<button onclick="navigateDriveBack(' + i + ')">' + f.name + '</button>';
+    }
+  });
+  el.innerHTML = html;
+}
+
+function renderDriveFolders(folders) {
+  const el = document.getElementById('drive-folders');
+  if (!folders.length) { el.innerHTML = ''; return; }
+  el.innerHTML = folders.map(f =>
+    '<button class="drive-folder-btn" onclick="loadDriveFiles(\'' + f.id + '\',\'' + f.name.replace(/'/g, "\\'") + '\')">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>' +
+      f.name +
+    '</button>'
+  ).join('');
+}
+
+function renderDriveGrid() {
+  const grid = document.getElementById('drive-grid');
+  const empty = document.getElementById('drive-empty');
+  const loadMore = document.getElementById('drive-load-more');
+
+  if (!driveBrowseFiles.length) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    loadMore.style.display = 'none';
+    return;
+  }
+
+  empty.style.display = 'none';
+  loadMore.style.display = driveNextPageToken ? 'block' : 'none';
+
+  grid.innerHTML = driveBrowseFiles.map(f => {
+    const thumb = f.thumbnail || ('/api/drive/preview/' + f.id);
+    const selected = driveSelectedIds.has(f.id) ? ' selected' : '';
+    return '<div class="drive-item' + selected + '" data-id="' + f.id + '" ' +
+      'onclick="toggleDriveSelect(\'' + f.id + '\', event)" ' +
+      'ondblclick="openDrivePreview(\'' + f.id + '\')">' +
+      '<img src="' + thumb + '" alt="' + f.name + '" loading="lazy" onerror="this.src=\'/api/drive/preview/' + f.id + '\'">' +
+      '<div class="drive-item-overlay"><div class="drive-item-name">' + f.name + '</div></div>' +
+    '</div>';
+  }).join('');
+}
+
+function toggleDriveSelect(fileId, event) {
+  // Double-click handled separately
+  if (event && event.detail >= 2) return;
+
+  if (driveSelectedIds.has(fileId)) {
+    driveSelectedIds.delete(fileId);
+  } else {
+    driveSelectedIds.add(fileId);
+  }
+
+  // Update UI
+  document.querySelectorAll('.drive-item').forEach(el => {
+    el.classList.toggle('selected', driveSelectedIds.has(el.dataset.id));
+  });
+  updateDriveActions();
+}
+
+function updateDriveActions() {
+  const count = driveSelectedIds.size;
+  const actions = document.getElementById('drive-actions');
+  actions.style.display = count > 0 ? 'flex' : 'none';
+  document.getElementById('drive-select-count').textContent = count + ' ảnh đã chọn';
+}
+
+function navigateDriveRoot() {
+  driveFolderStack = [];
+  driveCurrentFolder = '';
+  loadDriveFiles();
+}
+
+function navigateDriveBack(index) {
+  driveFolderStack = driveFolderStack.slice(0, index + 1);
+  driveCurrentFolder = driveFolderStack[index].id;
+  driveBrowseFiles = [];
+  driveNextPageToken = null;
+  driveSelectedIds.clear();
+  updateDriveActions();
+  document.getElementById('drive-grid').innerHTML = '';
+  // Re-load without pushing to stack
+  const fId = driveCurrentFolder;
+  driveCurrentFolder = fId;
+  loadDriveFilesForFolder(fId);
+}
+
+async function loadDriveFilesForFolder(folderId) {
+  document.getElementById('drive-loading').classList.add('show');
+  document.getElementById('drive-empty').style.display = 'none';
+  document.getElementById('drive-load-more').style.display = 'none';
+
+  try {
+    const params = '?folder=' + folderId;
+    const [filesRes, foldersRes] = await Promise.all([
+      fetch('/api/drive/browse' + params),
+      fetch('/api/drive/browse/folders' + params),
+    ]);
+    const filesData = await filesRes.json();
+    const foldersData = await foldersRes.json();
+
+    driveBrowseFiles = filesData.files || [];
+    driveNextPageToken = filesData.nextPageToken;
+
+    renderDriveBreadcrumb();
+    renderDriveFolders(foldersData.folders || []);
+    renderDriveGrid();
+  } catch (e) {
+    document.getElementById('drive-empty').style.display = 'block';
+  }
+
+  document.getElementById('drive-loading').classList.remove('show');
+}
+
+// Preview
+function openDrivePreview(fileId) {
+  drivePreviewFileId = fileId;
+  const file = driveBrowseFiles.find(f => f.id === fileId);
+  const overlay = document.getElementById('drive-preview-overlay');
+  const img = document.getElementById('drive-preview-img');
+  const info = document.getElementById('drive-preview-info');
+
+  img.src = '/api/drive/preview/' + fileId;
+  info.textContent = file ? file.name : '';
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDrivePreview() {
+  document.getElementById('drive-preview-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  drivePreviewFileId = null;
+}
+
+function downloadPreviewFile() {
+  if (!drivePreviewFileId) return;
+  triggerDriveDownload(drivePreviewFileId);
+}
+
+function triggerDriveDownload(fileId) {
+  const a = document.createElement('a');
+  a.href = '/api/drive/download/' + fileId;
+  a.download = '';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function downloadSelectedDrive() {
+  if (driveSelectedIds.size === 0) return;
+  // Download each selected file
+  driveSelectedIds.forEach(id => {
+    setTimeout(() => triggerDriveDownload(id), 100);
+  });
+  toast('Đang tải ' + driveSelectedIds.size + ' ảnh...', 'success', 3000);
 }
 
 // Start auth check

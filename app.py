@@ -8,6 +8,7 @@ from flask import Flask, jsonify, render_template, request
 
 from agent import EpioneSalesAgent
 from design_generator import DesignGenerator
+from drive_browser import download_drive_file, list_drive_folders, list_drive_images
 from google_drive import GoogleDriveUploader
 from inventory import estimate_delivery, get_stock
 from quote_manager import create_quote, get_quote, list_quotes
@@ -380,6 +381,74 @@ def drive_files(folder_name):
     try:
         files = drive_uploader.list_files_in_folder(folder_name)
         return jsonify({"files": files, "folder": folder_name})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# ========== DRIVE BROWSER API (download/browse) ==========
+
+DRIVE_BROWSE_FOLDER = os.getenv("DRIVE_FOLDER_ID", "")
+
+
+@app.route("/api/drive/browse")
+def drive_browse_files():
+    """List images in a Drive folder for browsing."""
+    folder_id = request.args.get("folder", DRIVE_BROWSE_FOLDER)
+    if not folder_id:
+        return jsonify({"error": "Chưa cấu hình DRIVE_FOLDER_ID"}), 400
+    page_token = request.args.get("pageToken")
+    try:
+        result = list_drive_images(folder_id, page_token=page_token)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/drive/browse/folders")
+def drive_browse_folders():
+    """List sub-folders for browsing."""
+    folder_id = request.args.get("folder", DRIVE_BROWSE_FOLDER)
+    if not folder_id:
+        return jsonify({"error": "Chưa cấu hình DRIVE_FOLDER_ID"}), 400
+    try:
+        folders = list_drive_folders(folder_id)
+        return jsonify({"folders": folders})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/drive/download/<file_id>")
+def drive_download(file_id):
+    """Download a file from Drive."""
+    from flask import Response
+    try:
+        file_bytes, filename, mime_type = download_drive_file(file_id)
+        return Response(
+            file_bytes,
+            mimetype=mime_type,
+            headers={
+                "Content-Disposition": f'attachment; filename="{filename}"',
+                "Content-Length": str(len(file_bytes)),
+            },
+        )
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/drive/preview/<file_id>")
+def drive_preview(file_id):
+    """Preview (inline) a file from Drive."""
+    from flask import Response
+    try:
+        file_bytes, filename, mime_type = download_drive_file(file_id)
+        return Response(
+            file_bytes,
+            mimetype=mime_type,
+            headers={
+                "Content-Disposition": f'inline; filename="{filename}"',
+                "Cache-Control": "public, max-age=3600",
+            },
+        )
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
