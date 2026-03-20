@@ -2869,10 +2869,11 @@ function handleFile(file) {
 }
 
 async function analyzeImage() {
-  if (!selectedFile) return;
+  if (!selectedFile) { toast('Chưa chọn ảnh', 'error'); return; }
   lastAction = analyzeImage;
   setLoading('loading-image', true);
   document.getElementById('btn-image').disabled = true;
+  toast('Đang phân tích ảnh...', 'info', 5000);
 
   const formData = new FormData();
   formData.append('image', selectedFile);
