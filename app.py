@@ -17,7 +17,11 @@ load_dotenv()
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB max upload
 
-UPLOAD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "images", "uploads")
+# Vercel filesystem is read-only — use /tmp for uploads
+if os.environ.get("VERCEL"):
+    UPLOAD_DIR = "/tmp/uploads"
+else:
+    UPLOAD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "images", "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".webp"}

@@ -5,7 +5,10 @@ import os
 import uuid
 from datetime import datetime, timedelta
 
-QUOTES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "quotes")
+if os.environ.get("VERCEL"):
+    QUOTES_DIR = "/tmp/quotes"
+else:
+    QUOTES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "quotes")
 os.makedirs(QUOTES_DIR, exist_ok=True)
 
 MAX_DISCOUNT_PERCENT = 8  # Technicians can discount up to 8%

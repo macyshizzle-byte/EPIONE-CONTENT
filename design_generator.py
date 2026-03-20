@@ -18,9 +18,11 @@ class DesignGenerator:
         "story": ("1080px", "1920px"),
     }
 
-    OUTPUT_DIR = "designs"
-
     def __init__(self):
+        if os.environ.get("VERCEL"):
+            self.OUTPUT_DIR = "/tmp/designs"
+        else:
+            self.OUTPUT_DIR = "designs"
         os.makedirs(self.OUTPUT_DIR, exist_ok=True)
 
     def create_post(self, image_path: str, design_data: dict) -> str:
