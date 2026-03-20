@@ -8,6 +8,7 @@ from flask import Flask, jsonify, render_template, request
 
 from agent import EpioneSalesAgent
 from design_generator import DesignGenerator
+from google_drive import GoogleDriveUploader
 from inventory import estimate_delivery, get_stock
 from quote_manager import create_quote, get_quote, list_quotes
 
@@ -25,6 +26,15 @@ IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".webp"}
 api_key = os.getenv("ANTHROPIC_API_KEY")
 agent = EpioneSalesAgent(api_key=api_key) if api_key else None
 design_gen = DesignGenerator()
+
+# Init Google Drive uploader
+drive_folder_id = os.getenv("GOOGLE_DRIVE_FOLDER_ID")
+drive_uploader = None
+if drive_folder_id and os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "gcp-key.json")):
+    try:
+        drive_uploader = GoogleDriveUploader(root_folder_id=drive_folder_id)
+    except Exception as e:
+        print(f"⚠️  Google Drive init failed: {e}")
 
 # Load product catalog
 CATALOG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "products", "catalog.json")
@@ -119,11 +129,22 @@ def image_content():
             role=role,
             gender=gender,
         )
-        return jsonify({
+        response = {
             "content": result,
             "image_path": filepath,
             "image_url": f"/images/uploads/{file.filename}",
-        })
+        }
+
+        # Auto-upload lên Google Drive nếu có chọn sản phẩm
+        product_name = request.form.get("product", "")
+        if drive_uploader and product_name:
+            try:
+                drive_result = drive_uploader.upload_file(filepath, product_name)
+                response["drive"] = drive_result
+            except Exception as drive_err:
+                response["drive_error"] = str(drive_err)
+
+        return jsonify(response)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -296,9 +317,76 @@ def quote_page(quote_id):
     return render_template("quote.html", quote=quote)
 
 
+# ========== GOOGLE DRIVE API ==========
+
+@app.route("/api/drive/upload", methods=["POST"])
+def drive_upload():
+    """Upload ảnh lên Google Drive theo thư mục sản phẩm."""
+    if not drive_uploader:
+        return jsonify({"error": "Chưa cấu hình Google Drive"}), 500
+
+    if "image" not in request.files:
+        return jsonify({"error": "Chưa chọn ảnh"}), 400
+
+    product_name = request.form.get("product", "").strip()
+    if not product_name:
+        return jsonify({"error": "Chưa chọn sản phẩm"}), 400
+
+    files = request.files.getlist("image")
+    results = []
+
+    for file in files:
+        if not file.filename:
+            continue
+
+        ext = os.path.splitext(file.filename)[1].lower()
+        if ext not in IMAGE_EXTENSIONS:
+            results.append({"name": file.filename, "error": "Định dạng không hỗ trợ"})
+            continue
+
+        filepath = os.path.join(UPLOAD_DIR, file.filename)
+        file.save(filepath)
+
+        try:
+            drive_result = drive_uploader.upload_file(filepath, product_name)
+            results.append(drive_result)
+        except Exception as e:
+            results.append({"name": file.filename, "error": str(e)})
+
+    return jsonify({"uploaded": results, "folder": product_name})
+
+
+@app.route("/api/drive/folders")
+def drive_folders():
+    """Liệt kê thư mục sản phẩm trên Drive."""
+    if not drive_uploader:
+        return jsonify({"error": "Chưa cấu hình Google Drive"}), 500
+    try:
+        folders = drive_uploader.list_folders()
+        return jsonify({"folders": folders})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/drive/files/<path:folder_name>")
+def drive_files(folder_name):
+    """Liệt kê files trong thư mục sản phẩm."""
+    if not drive_uploader:
+        return jsonify({"error": "Chưa cấu hình Google Drive"}), 500
+    try:
+        files = drive_uploader.list_files_in_folder(folder_name)
+        return jsonify({"files": files, "folder": folder_name})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 if __name__ == "__main__":
     if not api_key:
         print("⚠️  Chưa cấu hình ANTHROPIC_API_KEY! Tạo file .env")
+    if drive_uploader:
+        print("✅ Google Drive đã kết nối")
+    else:
+        print("⚠️  Google Drive chưa cấu hình (thiếu gcp-key.json hoặc GOOGLE_DRIVE_FOLDER_ID)")
     print("🚀 Epione Content Agent đang chạy tại: http://localhost:3000")
     port = int(os.environ.get("PORT", 3000))
     app.run(debug=False, host="0.0.0.0", port=port)

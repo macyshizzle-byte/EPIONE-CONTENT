@@ -1309,6 +1309,11 @@ input[type="text"]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba
 
           <input type="text" id="image-note" placeholder="Ghi chú thêm (tùy chọn)" style="margin-bottom:14px;">
 
+          <div class="step-label">Lưu vào Drive (tùy chọn)</div>
+          <select id="image-drive-product" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;background:var(--white);color:var(--black);margin-bottom:14px;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%238E8E93%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22/></svg>');background-repeat:no-repeat;background-position:right 12px center;">
+            <option value="">-- Không lưu Drive --</option>
+          </select>
+
           <div class="step-label">Kênh đăng</div>
           <div class="chip-row">
             <button class="img-plat-chip chip chip-sm selected" data-plat="linkedin">LinkedIn</button>
@@ -1488,6 +1493,52 @@ input[type="text"]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba
         </div>
       </div>
 
+      <!-- PAGE: Google Drive Upload -->
+      <div class="page" id="page-drive">
+        <div class="card">
+          <div class="card-title">Upload ảnh lên Drive</div>
+          <div class="card-desc">Chọn ảnh & sản phẩm, tự động sắp xếp vào thư mục trên Google Drive</div>
+
+          <div class="step-label">Sản phẩm</div>
+          <select id="drive-product" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;background:var(--white);color:var(--black);margin-bottom:14px;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%238E8E93%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22/></svg>');background-repeat:no-repeat;background-position:right 12px center;">
+            <option value="">-- Chọn sản phẩm --</option>
+          </select>
+
+          <div class="dropzone" id="drive-dropzone" onclick="document.getElementById('drive-file-input').click()">
+            <div class="icon">📁</div>
+            <div class="label">Kéo thả hoặc <strong>chọn ảnh</strong></div>
+            <div class="label" style="font-size:11px;margin-top:4px;color:var(--text-tertiary);">Chọn nhiều ảnh cùng lúc — JPG, PNG, WebP</div>
+          </div>
+          <input type="file" id="drive-file-input" accept="image/*" multiple style="display:none" onchange="handleDriveFiles(this.files)">
+
+          <div id="drive-file-list" style="margin:14px 0;display:none;"></div>
+
+          <div class="action-row">
+            <button class="btn-primary" id="btn-drive-upload" onclick="uploadToDrive()" disabled>Upload lên Drive</button>
+            <div class="typing-indicator" id="loading-drive">
+              <div class="typing-dots"><span></span><span></span><span></span></div>
+              <span>Đang upload...</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="drive-results" style="display:none;">
+          <div class="card">
+            <div class="card-title">Đã upload</div>
+            <div id="drive-results-list"></div>
+          </div>
+        </div>
+
+        <div id="drive-browser" style="display:none;">
+          <div class="card">
+            <div class="card-title">Ảnh trên Drive</div>
+            <div class="card-desc">Chọn thư mục sản phẩm để xem ảnh</div>
+            <div id="drive-folder-list" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;"></div>
+            <div id="drive-file-browser"></div>
+          </div>
+        </div>
+      </div>
+
   </div>
 
   <!-- BOTTOM NAV: Sale -->
@@ -1636,6 +1687,12 @@ input[type="text"]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15l-2 5l9-11h-5l2-5L7 15z"/></svg>
         </div>
         <span class="more-item-label">Thành tích</span>
+      </button>
+      <button class="more-item" onclick="closeSheet('more-sheet');switchPage('drive',null);initDrivePage();">
+        <div class="more-item-icon" style="color:#34A853;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16l4-5h3l-7 9-7-9h3l4 5z"/><path d="M5.5 11L2 17h20l-3.5-6"/><path d="M15.5 4H8.5L2 17h20L15.5 4z"/></svg>
+        </div>
+        <span class="more-item-label">Google Drive</span>
       </button>
     </div>
   </div>
@@ -2169,12 +2226,13 @@ function switchPage(page, navBtn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
 
   // Show target page
-  const directPages = ['content', 'research', 'image', 'catalog', 'quote'];
+  const directPages = ['content', 'research', 'image', 'catalog', 'quote', 'drive'];
   if (directPages.includes(page)) {
     document.getElementById('page-' + page).classList.add('active');
     currentType = page;
     if (page === 'catalog') loadCatalog();
     if (page === 'quote') renderQuoteItems();
+    if (page === 'drive') initDrivePage();
   } else {
     // text modes (outreach, casestudy, ideas)
     document.getElementById('page-text').classList.add('active');
@@ -2832,6 +2890,10 @@ async function analyzeImage() {
   }
   formData.append('prompt', note);
 
+  // Auto-upload lên Drive nếu chọn sản phẩm
+  const driveProduct = document.getElementById('image-drive-product').value;
+  if (driveProduct) formData.append('product', driveProduct);
+
   try {
     const res = await fetch('/api/image', { method: 'POST', body: formData });
     const data = await res.json();
@@ -2840,6 +2902,13 @@ async function analyzeImage() {
     currentImagePath = data.image_path;
     currentImageUrl = data.image_url || '';
     showOutput(data.content, true);
+
+    // Thông báo upload Drive
+    if (data.drive) {
+      toast('Ảnh đã lưu vào Drive: ' + data.drive.folder, 'success', 3000);
+    } else if (data.drive_error) {
+      toast('Lỗi Drive: ' + data.drive_error, 'error', 3000);
+    }
 
     const hl = data.content.match(/Headline:\s*[""](.+?)[""\u201d]/);
     const st = data.content.match(/Subtext:\s*[""](.+?)[""\u201d]/);
@@ -3439,6 +3508,7 @@ renderStyleChips('linkedin');
 updatePlaceholder();
 initDrafts();
 renderSuggestions();
+loadDriveProducts();
 
 // Restore gender preference
 const savedGender = localStorage.getItem('epione_gender');
@@ -3454,6 +3524,191 @@ if (window.visualViewport) {
   window.visualViewport.addEventListener('resize', () => {
     document.documentElement.style.setProperty('--vh', window.visualViewport.height + 'px');
   });
+}
+
+// ========== GOOGLE DRIVE UPLOAD ==========
+let driveFiles = [];
+let driveProductsLoaded = false;
+
+function initDrivePage() {
+  if (!driveProductsLoaded) {
+    loadDriveProducts();
+    loadDriveFolders();
+    driveProductsLoaded = true;
+  }
+}
+
+function loadDriveProducts() {
+  fetch('/api/products')
+    .then(r => r.json())
+    .then(data => {
+      const products = data.products || [];
+      // Populate cả 2 dropdown: trang Drive và trang Image
+      ['drive-product', 'image-drive-product'].forEach(selectId => {
+        const select = document.getElementById(selectId);
+        if (!select) return;
+        const defaultText = selectId === 'image-drive-product' ? '-- Không lưu Drive --' : '-- Chọn sản phẩm --';
+        select.innerHTML = '<option value="">' + defaultText + '</option>';
+        products.forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.name;
+          opt.textContent = p.name;
+          select.appendChild(opt);
+        });
+        const optGen = document.createElement('option');
+        optGen.value = 'General';
+        optGen.textContent = 'General (khác)';
+        select.appendChild(optGen);
+      });
+    });
+}
+
+function handleDriveFiles(fileList) {
+  driveFiles = Array.from(fileList);
+  renderDriveFileList();
+  updateDriveBtn();
+}
+
+function renderDriveFileList() {
+  const container = document.getElementById('drive-file-list');
+  if (!driveFiles.length) { container.style.display = 'none'; return; }
+  container.style.display = 'block';
+  container.innerHTML = driveFiles.map((f, i) =>
+    '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);">' +
+      '<span style="font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + f.name + '</span>' +
+      '<span style="font-size:11px;color:var(--text-secondary);">' + (f.size / 1024 / 1024).toFixed(1) + ' MB</span>' +
+      '<button onclick="removeDriveFile(' + i + ')" style="color:var(--text-secondary);font-size:16px;padding:4px;">✕</button>' +
+    '</div>'
+  ).join('');
+}
+
+function removeDriveFile(index) {
+  driveFiles.splice(index, 1);
+  renderDriveFileList();
+  updateDriveBtn();
+}
+
+function updateDriveBtn() {
+  const product = document.getElementById('drive-product').value;
+  document.getElementById('btn-drive-upload').disabled = !driveFiles.length || !product;
+}
+
+// Lắng nghe thay đổi sản phẩm
+document.getElementById('drive-product').addEventListener('change', updateDriveBtn);
+
+// Drag & drop cho drive dropzone
+const driveDropzone = document.getElementById('drive-dropzone');
+if (driveDropzone) {
+  driveDropzone.addEventListener('dragover', e => { e.preventDefault(); driveDropzone.style.borderColor = 'var(--accent)'; });
+  driveDropzone.addEventListener('dragleave', () => { driveDropzone.style.borderColor = ''; });
+  driveDropzone.addEventListener('drop', e => {
+    e.preventDefault();
+    driveDropzone.style.borderColor = '';
+    if (e.dataTransfer.files.length) handleDriveFiles(e.dataTransfer.files);
+  });
+}
+
+async function uploadToDrive() {
+  const product = document.getElementById('drive-product').value;
+  if (!product || !driveFiles.length) return;
+
+  const btn = document.getElementById('btn-drive-upload');
+  const loading = document.getElementById('loading-drive');
+  btn.disabled = true;
+  loading.style.display = 'flex';
+
+  const formData = new FormData();
+  formData.append('product', product);
+  driveFiles.forEach(f => formData.append('image', f));
+
+  try {
+    const res = await fetch('/api/drive/upload', { method: 'POST', body: formData });
+    const data = await res.json();
+
+    if (data.error) {
+      toast(data.error, 'error');
+      return;
+    }
+
+    // Hiển thị kết quả
+    const resultsDiv = document.getElementById('drive-results');
+    const listDiv = document.getElementById('drive-results-list');
+    resultsDiv.style.display = 'block';
+
+    listDiv.innerHTML = (data.uploaded || []).map(f => {
+      if (f.error) {
+        return '<div style="padding:8px 0;color:#FF3B30;font-size:13px;">' + (f.name||'') + ' — ' + f.error + '</div>';
+      }
+      return '<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);">' +
+        '<div style="width:8px;height:8px;border-radius:50%;background:#34C759;flex-shrink:0;"></div>' +
+        '<span style="font-size:13px;flex:1;">' + f.name + '</span>' +
+        (f.webViewLink ? '<a href="' + f.webViewLink + '" target="_blank" style="font-size:12px;color:var(--accent);text-decoration:none;font-weight:600;">Xem ↗</a>' : '') +
+      '</div>';
+    }).join('');
+
+    const okCount = (data.uploaded || []).filter(f => !f.error).length;
+    toast('Đã upload ' + okCount + ' ảnh vào ' + product, 'success');
+
+    // Reset
+    driveFiles = [];
+    renderDriveFileList();
+    document.getElementById('drive-file-input').value = '';
+
+    // Refresh folder browser
+    loadDriveFolders();
+  } catch (e) {
+    toast('Lỗi upload: ' + e.message, 'error');
+  } finally {
+    loading.style.display = 'none';
+    btn.disabled = false;
+  }
+}
+
+function loadDriveFolders() {
+  fetch('/api/drive/folders')
+    .then(r => r.json())
+    .then(data => {
+      if (data.error) return;
+      const container = document.getElementById('drive-folder-list');
+      const browser = document.getElementById('drive-browser');
+      const folders = data.folders || [];
+      if (!folders.length) { browser.style.display = 'none'; return; }
+      browser.style.display = 'block';
+      container.innerHTML = folders.map(f =>
+        '<button class="chip chip-sm" onclick="browseDriveFolder(\'' + f.name.replace(/'/g, "\\'") + '\')" style="font-size:12px;">' + f.name + '</button>'
+      ).join('');
+    })
+    .catch(() => {});
+}
+
+function browseDriveFolder(folderName) {
+  const container = document.getElementById('drive-file-browser');
+  container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-secondary);font-size:13px;">Đang tải...</div>';
+
+  // Highlight active chip
+  document.querySelectorAll('#drive-folder-list .chip').forEach(c => c.classList.remove('selected'));
+  event.target.classList.add('selected');
+
+  fetch('/api/drive/files/' + encodeURIComponent(folderName))
+    .then(r => r.json())
+    .then(data => {
+      if (data.error) { container.innerHTML = '<div style="color:#FF3B30;font-size:13px;">' + data.error + '</div>'; return; }
+      const files = data.files || [];
+      if (!files.length) { container.innerHTML = '<div style="padding:16px;text-align:center;color:var(--text-secondary);font-size:13px;">Chưa có ảnh nào</div>'; return; }
+      container.innerHTML = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">' +
+        files.map(f => {
+          const isImage = (f.mimeType || '').startsWith('image/');
+          const thumb = isImage ? 'https://drive.google.com/thumbnail?id=' + f.id + '&sz=w200' : '';
+          return '<a href="' + (f.webViewLink || '#') + '" target="_blank" style="text-decoration:none;border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--border);display:block;">' +
+            (isImage ? '<img src="' + thumb + '" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;" onerror="this.style.display=\'none\'">' : '') +
+            '<div style="padding:8px;font-size:11px;color:var(--black);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + f.name + '</div>' +
+          '</a>';
+        }).join('') +
+      '</div>';
+    })
+    .catch(e => {
+      container.innerHTML = '<div style="color:#FF3B30;font-size:13px;">Lỗi: ' + e.message + '</div>';
+    });
 }
 
 // Start auth check
