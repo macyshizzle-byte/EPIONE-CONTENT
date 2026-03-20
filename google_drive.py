@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import mimetypes
 from typing import Optional
@@ -24,9 +25,17 @@ class GoogleDriveUploader:
         self._folder_cache: dict = {}
 
     def _build_service(self):
-        creds = service_account.Credentials.from_service_account_file(
-            KEY_FILE, scopes=SCOPES
-        )
+        # Ưu tiên env var GCP_KEY_JSON (cho Vercel/cloud), fallback sang file
+        key_json = os.getenv("GCP_KEY_JSON")
+        if key_json:
+            info = json.loads(key_json)
+            creds = service_account.Credentials.from_service_account_info(
+                info, scopes=SCOPES
+            )
+        else:
+            creds = service_account.Credentials.from_service_account_file(
+                KEY_FILE, scopes=SCOPES
+            )
         return build("drive", "v3", credentials=creds)
 
     # ------ Folder management ------

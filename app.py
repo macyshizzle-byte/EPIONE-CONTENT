@@ -30,7 +30,7 @@ design_gen = DesignGenerator()
 # Init Google Drive uploader
 drive_folder_id = os.getenv("GOOGLE_DRIVE_FOLDER_ID")
 drive_uploader = None
-if drive_folder_id and os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "gcp-key.json")):
+if drive_folder_id and (os.getenv("GCP_KEY_JSON") or os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "gcp-key.json"))):
     try:
         drive_uploader = GoogleDriveUploader(root_folder_id=drive_folder_id)
     except Exception as e:
