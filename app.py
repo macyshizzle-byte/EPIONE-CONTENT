@@ -344,6 +344,7 @@ def quote_page(quote_id):
 # ========== ORDER API ==========
 
 @app.route("/api/order", methods=["POST"])
+@require_auth
 def create_order_api():
     """Create an order from an existing quote."""
     data = request.json
@@ -360,6 +361,7 @@ def create_order_api():
 
 
 @app.route("/api/order/<order_id>")
+@require_auth
 def get_order_api(order_id):
     """Get order by ID (JSON)."""
     order = get_order(order_id)
@@ -370,12 +372,14 @@ def get_order_api(order_id):
 
 
 @app.route("/api/orders")
+@require_auth
 def list_orders_api():
     """List recent orders."""
     return jsonify(list_orders())
 
 
 @app.route("/api/order/<order_id>/status", methods=["POST"])
+@require_auth
 def update_order_status_api(order_id):
     """Update order status (sale confirms payment, etc.)."""
     data = request.json
