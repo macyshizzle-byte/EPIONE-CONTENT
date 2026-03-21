@@ -1108,6 +1108,10 @@ input[type="text"]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba
           <label>Password</label>
           <input type="password" id="login-password" placeholder="Nhập mật khẩu" required autocomplete="current-password">
         </div>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary);cursor:pointer;padding:2px 0;">
+          <input type="checkbox" id="login-remember" checked style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer;">
+          Ghi nhớ đăng nhập
+        </label>
         <button type="submit" class="login-btn" id="login-btn">Đăng nhập</button>
       </form>
       <div class="login-toggle">
@@ -1998,7 +2002,13 @@ input[type="text"]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba
 // ========== SUPABASE AUTH ==========
 const SUPABASE_URL = 'https://rfipscqzaafmqxkcyxig.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJmaXBzY3F6YWFmbXF4a2N5eGlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3NTg0NTcsImV4cCI6MjA4OTMzNDQ1N30.JYHfYopywvzD89yyhaDORSsbr72ll2TP8akG7Rn3RPI';
-const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    storage: window.localStorage,
+  }
+});
 let currentUser = null; // { email, name, department, job_title, role }
 
 function mapDepartmentToRole(department, jobTitle) {
@@ -2118,6 +2128,7 @@ async function handleLogin(e) {
   e.preventDefault();
   const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-password').value;
+  const remember = document.getElementById('login-remember').checked;
   const btn = document.getElementById('login-btn');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Đang đăng nhập...';
@@ -2132,6 +2143,14 @@ async function handleLogin(e) {
       const msg = error.message.includes('Invalid login') ? 'Email hoặc mật khẩu không đúng' : error.message;
       showLoginError('login-error', msg);
       return;
+    }
+    // Remember login
+    if (remember) {
+      localStorage.setItem('epione_remember', '1');
+      localStorage.setItem('epione_saved_email', email);
+    } else {
+      localStorage.removeItem('epione_remember');
+      localStorage.removeItem('epione_saved_email');
     }
     console.log('Login success, session:', data.session?.user?.email);
     onAuthSuccess(data.session);
@@ -2181,19 +2200,41 @@ async function handleLogout() {
   await _sb.auth.signOut();
   currentUser = null;
   localStorage.removeItem('epione_gender');
+  // Keep saved email if "remember" was checked, clear session only
   // Reload page to show login
   window.location.reload();
 }
 
 // Check session on page load
 async function initAuth() {
+  // Restore saved email
+  if (localStorage.getItem('epione_remember') === '1') {
+    var savedEmail = localStorage.getItem('epione_saved_email');
+    if (savedEmail) {
+      document.getElementById('login-email').value = savedEmail;
+      document.getElementById('login-remember').checked = true;
+    }
+  }
+
+  // Try restore session from storage
   const { data: { session } } = await _sb.auth.getSession();
   if (session) {
     onAuthSuccess(session);
-  } else {
-    // No session — show login screen (already visible by default)
-    document.getElementById('login-screen').style.display = 'flex';
+    return;
   }
+
+  // No valid session — show login screen
+  document.getElementById('login-screen').style.display = 'flex';
+
+  // Listen for auth changes (e.g. token refresh)
+  _sb.auth.onAuthStateChange(function(event, session) {
+    if (event === 'SIGNED_IN' && session) {
+      onAuthSuccess(session);
+    } else if (event === 'SIGNED_OUT') {
+      currentUser = null;
+      document.getElementById('login-screen').style.display = 'flex';
+    }
+  });
 }
 
 // ========== STATE ==========
