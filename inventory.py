@@ -44,6 +44,11 @@ SKU_TO_NHANH = {
     "RNG-PK": "SID-RIN-K3",      # Grayish Pink
     "RNG-BG": "SID-RIN-K2",      # Begie Gray
     "RNG-GR": "SID-RIN-K4",      # Grayish Green
+    # Arms — Essentials Arm & Delight Arm
+    "EA-S-BK": "EPI-AEA-A1v2",    # Essentials Arm Single — All Black
+    "EA-D-BK": "EPI-AEA-A1Sv2",   # Essentials Arm Dual — All Black
+    "EA-D-WH": "EPI-AEA-A2Sv2",   # Essentials Arm Dual — Pure White
+    "DA-BK": "EPI-ADE-A1",        # Delight Arm — All Black
     # Kids — AlphaDesk & AlphaLight
     "ALD-STD": "EPI-DAL-Z1",
     "ALL-STD": "EPI-LAL-Z1",

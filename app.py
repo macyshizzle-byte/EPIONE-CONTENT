@@ -11,6 +11,10 @@ from design_generator import DesignGenerator
 from drive_browser import download_drive_file, list_drive_folders, list_drive_images
 from google_drive import GoogleDriveUploader
 from inventory import estimate_delivery, get_stock
+from order_manager import (
+    create_order_from_quote, generate_qr_url, get_bank_info, get_order,
+    list_orders, update_order_status,
+)
 from quote_manager import create_quote, get_quote, list_quotes
 
 load_dotenv()
@@ -320,6 +324,73 @@ def quote_page(quote_id):
     if not quote:
         return "Báo giá không tồn tại", 404
     return render_template("quote.html", quote=quote)
+
+
+# ========== ORDER API ==========
+
+@app.route("/api/order", methods=["POST"])
+def create_order_api():
+    """Create an order from an existing quote."""
+    data = request.json
+    quote_id = data.get("quote_id", "")
+    payment_option = data.get("payment_option", "full")
+
+    quote = get_quote(quote_id)
+    if not quote:
+        return jsonify({"error": "Bao gia khong ton tai"}), 404
+
+    order = create_order_from_quote(quote, payment_option)
+    order["qr_url"] = generate_qr_url(order)
+    return jsonify(order)
+
+
+@app.route("/api/order/<order_id>")
+def get_order_api(order_id):
+    """Get order by ID (JSON)."""
+    order = get_order(order_id)
+    if not order:
+        return jsonify({"error": "Khong tim thay don hang"}), 404
+    order["qr_url"] = generate_qr_url(order)
+    return jsonify(order)
+
+
+@app.route("/api/orders")
+def list_orders_api():
+    """List recent orders."""
+    return jsonify(list_orders())
+
+
+@app.route("/api/order/<order_id>/status", methods=["POST"])
+def update_order_status_api(order_id):
+    """Update order status (sale confirms payment, etc.)."""
+    data = request.json
+    new_status = data.get("status", "")
+    updated_by = data.get("updated_by", "")
+
+    order = update_order_status(order_id, new_status, updated_by)
+    if not order:
+        return jsonify({"error": "Khong the cap nhat trang thai"}), 400
+    return jsonify(order)
+
+
+@app.route("/pay/<order_id>")
+def payment_page(order_id):
+    """Customer-facing QR payment page."""
+    order = get_order(order_id)
+    if not order:
+        return "Don hang khong ton tai", 404
+    qr_url = generate_qr_url(order)
+    bank = get_bank_info()
+    return render_template("payment.html", order=order, qr_url=qr_url, bank=bank)
+
+
+@app.route("/track/<order_id>")
+def tracking_page(order_id):
+    """Customer-facing order tracking page."""
+    order = get_order(order_id)
+    if not order:
+        return "Don hang khong ton tai", 404
+    return render_template("tracking.html", order=order)
 
 
 # ========== GOOGLE DRIVE API ==========

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:title" content="Theo doi don hang Epione — {{ order.id }}">
+<title>Don hang {{ order.id }} — Epione</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root { --accent:#10069F; --black:#1A1A1A; --gray:#F5F5F7; --border:#E5E5EA; --text-sec:#8E8E93; --green:#2e7d32; }
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito Sans',sans-serif;color:var(--black);background:var(--gray);padding:0;}
+.track-page{max-width:480px;margin:0 auto;background:#fff;min-height:100vh;}
+.header{background:var(--accent);color:#fff;padding:28px 20px;text-align:center;}
+.header svg{margin-bottom:6px;}
+.header h1{font-size:12px;letter-spacing:2px;font-weight:700;opacity:.8;}
+.header .oid{font-size:20px;font-weight:700;margin-top:4px;}
+.header .cust{font-size:13px;opacity:.8;margin-top:4px;}
+.section{padding:20px;}
+.section+.section{border-top:1px solid var(--border);}
+.section-title{font-size:11px;font-weight:700;color:var(--text-sec);letter-spacing:.5px;text-transform:uppercase;margin-bottom:14px;}
+
+/* Timeline */
+.timeline{position:relative;padding-left:28px;}
+.timeline::before{content:'';position:absolute;left:9px;top:4px;bottom:4px;width:2px;background:var(--border);}
+.tl-step{position:relative;padding-bottom:24px;}
+.tl-step:last-child{padding-bottom:0;}
+.tl-dot{position:absolute;left:-28px;top:1px;width:20px;height:20px;border-radius:50%;border:2px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;}
+.tl-dot svg{width:10px;height:10px;color:#fff;display:none;}
+.tl-step.done .tl-dot{background:var(--green);border-color:var(--green);}
+.tl-step.done .tl-dot svg{display:block;}
+.tl-step.active .tl-dot{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 4px rgba(16,6,159,0.15);}
+.tl-step.active .tl-dot svg{display:block;}
+.tl-step.cancelled .tl-dot{background:#c62828;border-color:#c62828;}
+.tl-step.cancelled .tl-dot svg{display:block;}
+.tl-title{font-size:14px;font-weight:700;}
+.tl-step.pending .tl-title{color:var(--text-sec);}
+.tl-time{font-size:11px;color:var(--text-sec);margin-top:2px;}
+
+/* Status banner */
+.status-banner{margin:16px 20px;padding:16px;border-radius:12px;text-align:center;}
+.status-banner.pending_payment{background:#FFF8E1;color:#e65100;}
+.status-banner.paid{background:#E8F5E9;color:var(--green);}
+.status-banner.processing{background:#E3F2FD;color:#1565c0;}
+.status-banner.shipping{background:#F3E5F5;color:#7b1fa2;}
+.status-banner.delivered{background:#E8F5E9;color:var(--green);}
+.status-banner.cancelled{background:#FFEBEE;color:#c62828;}
+.status-banner.confirmed{background:#E8F5E9;color:var(--green);}
+.status-icon{font-size:28px;margin-bottom:4px;}
+.status-text{font-size:15px;font-weight:700;}
+.status-sub{font-size:12px;opacity:.8;margin-top:2px;}
+
+.item{display:flex;justify-content:space-between;padding:8px 0;font-size:13px;border-bottom:0.5px solid var(--border);}
+.item:last-child{border-bottom:none;}
+.item-name{font-weight:600;}
+.item-detail{font-size:11px;color:var(--text-sec);}
+.totals{background:var(--gray);border-radius:10px;padding:14px 16px;margin-top:12px;}
+.total-row{display:flex;justify-content:space-between;padding:4px 0;font-size:13px;}
+.total-row.grand{font-size:16px;font-weight:700;color:var(--accent);border-top:2px solid var(--accent);padding-top:8px;margin-top:6px;}
+.pay-link{display:block;text-align:center;padding:14px;background:var(--accent);color:#fff;border-radius:12px;font-size:14px;font-weight:700;text-decoration:none;margin:0 20px 16px;}
+.pay-link:active{opacity:.8;}
+.footer{text-align:center;padding:20px;font-size:11px;color:var(--text-sec);}
+</style>
+</head>
+<body>
+<div class="track-page">
+  <div class="header">
+    <svg width="32" height="32" viewBox="0 0 120 120" fill="none">
+      <circle cx="60" cy="60" r="52" stroke="#fff" stroke-width="1.5" opacity=".3"/>
+      <circle cx="60" cy="60" r="38" stroke="#fff" stroke-width="2" opacity=".5"/>
+      <circle cx="60" cy="60" r="24" stroke="#fff" stroke-width="2.5" opacity=".7"/>
+      <circle cx="60" cy="60" r="10" fill="#fff"/>
+    </svg>
+    <h1>EPIONE — DON HANG</h1>
+    <div class="oid">{{ order.id }}</div>
+    {% if order.customer.name %}<div class="cust">{{ order.customer.name }}</div>{% endif %}
+  </div>
+
+  {% set status_map = {
+    'confirmed': {'icon': '&#10004;', 'text': 'Don hang da xac nhan', 'sub': 'Dang cho thanh toan'},
+    'pending_payment': {'icon': '&#9203;', 'text': 'Cho thanh toan', 'sub': 'Vui long chuyen khoan de xu ly don'},
+    'paid': {'icon': '&#10004;', 'text': 'Da thanh toan', 'sub': 'Dang chuan bi don hang'},
+    'processing': {'icon': '&#128230;', 'text': 'Dang xu ly', 'sub': 'Don hang dang duoc dong goi'},
+    'shipping': {'icon': '&#128666;', 'text': 'Dang giao hang', 'sub': 'Don hang dang tren duong den ban'},
+    'delivered': {'icon': '&#127881;', 'text': 'Da giao thanh cong', 'sub': 'Cam on ban da mua hang tai Epione!'},
+    'cancelled': {'icon': '&#10060;', 'text': 'Don hang da huy', 'sub': ''}
+  } %}
+
+  <div class="status-banner {{ order.status }}">
+    <div class="status-icon">{{ status_map[order.status].icon }}</div>
+    <div class="status-text">{{ status_map[order.status].text }}</div>
+    {% if status_map[order.status].sub %}<div class="status-sub">{{ status_map[order.status].sub }}</div>{% endif %}
+  </div>
+
+  {% if order.status == 'pending_payment' or order.status == 'confirmed' %}
+  <a class="pay-link" href="/pay/{{ order.id }}">Thanh toan ngay</a>
+  {% endif %}
+
+  <div class="section">
+    <div class="section-title">Tien trinh</div>
+    <div class="timeline">
+      {% set steps = [
+        {'key': 'confirmed', 'label': 'Xac nhan don'},
+        {'key': 'pending_payment', 'label': 'Cho thanh toan'},
+        {'key': 'paid', 'label': 'Da thanh toan'},
+        {'key': 'processing', 'label': 'Dang xu ly'},
+        {'key': 'shipping', 'label': 'Dang giao hang'},
+        {'key': 'delivered', 'label': 'Da giao'}
+      ] %}
+      {% set status_order = ['confirmed', 'pending_payment', 'paid', 'processing', 'shipping', 'delivered'] %}
+      {% set current_idx = status_order.index(order.status) if order.status in status_order else -1 %}
+
+      {% if order.status == 'cancelled' %}
+        {% for entry in order.status_history %}
+        <div class="tl-step {% if entry.status == 'cancelled' %}cancelled{% else %}done{% endif %}">
+          <div class="tl-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="tl-title">{% if entry.status == 'cancelled' %}Da huy{% else %}{{ entry.status }}{% endif %}</div>
+          <div class="tl-time">{{ entry.at }}</div>
+        </div>
+        {% endfor %}
+      {% else %}
+        {% for step in steps %}
+        {% set step_idx = loop.index0 %}
+        {% set history_entry = None %}
+        {% for h in order.status_history if h.status == step.key %}
+          {% set history_entry = h %}
+        {% endfor %}
+        <div class="tl-step {% if step_idx < current_idx %}done{% elif step_idx == current_idx %}active{% else %}pending{% endif %}">
+          <div class="tl-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="tl-title">{{ step.label }}</div>
+          {% if history_entry %}<div class="tl-time">{{ history_entry.at }}</div>{% endif %}
+        </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">San pham</div>
+    {% for item in order.items %}
+    <div class="item">
+      <div>
+        <div class="item-name">{{ item.product_name }}</div>
+        <div class="item-detail">{{ item.variant_name }} &middot; SL: {{ item.quantity }}</div>
+      </div>
+      <div style="font-weight:700;white-space:nowrap;">{{ "{:,.0f}".format(item.subtotal) }}d</div>
+    </div>
+    {% endfor %}
+    <div class="totals">
+      <div class="total-row"><span>Tam tinh</span><span>{{ "{:,.0f}".format(order.subtotal) }}d</span></div>
+      {% if order.discount_percent > 0 %}
+      <div class="total-row" style="color:var(--green);"><span>Chiet khau ({{ order.discount_percent }}%)</span><span>-{{ "{:,.0f}".format(order.discount_amount) }}d</span></div>
+      {% endif %}
+      <div class="total-row grand"><span>Tong cong</span><span>{{ "{:,.0f}".format(order.total) }}d</span></div>
+    </div>
+  </div>
+
+  {% if order.created_by %}
+  <div class="section">
+    <div class="section-title">Nguoi tu van</div>
+    <div style="font-size:14px;font-weight:600;">{{ order.created_by }}</div>
+    <div style="font-size:12px;color:var(--text-sec);">Epione — Noi that Ergonomic</div>
+  </div>
+  {% endif %}
+
+  <div class="footer">
+    Epione — Noi that Ergonomic & Acoustic Solutions<br>
+    epione.vn
+  </div>
+</div>
+</body>
+</html>

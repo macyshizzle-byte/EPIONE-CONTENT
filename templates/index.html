@@ -1037,6 +1037,42 @@ input[type="text"]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba
 .quote-row.discount { color:#2e7d32; }
 .discount-slider { width:100%; margin:8px 0 4px; accent-color:var(--accent); }
 .quote-actions { display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; }
+
+/* ========== PRODUCT WEBSITE LINK ========== */
+.product-web-link { display:flex; align-items:center; gap:8px; padding:10px 14px; background:var(--gray); border-radius:10px; margin-bottom:14px; text-decoration:none; color:var(--accent); font-size:13px; font-weight:600; transition:background .15s; }
+.product-web-link:active { background:var(--accent-light); }
+.product-web-link svg { width:16px; height:16px; flex-shrink:0; }
+.product-web-link .url-text { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:400; color:var(--text-secondary); font-size:12px; }
+.product-web-link .link-actions { display:flex; gap:4px; }
+.link-chip { padding:4px 10px; border-radius:6px; font-size:11px; font-weight:600; border:1px solid var(--accent); color:var(--accent); background:transparent; }
+.link-chip:active { background:var(--accent); color:#fff; }
+.link-chip.filled { background:var(--accent); color:#fff; border-color:var(--accent); }
+.link-chip.filled:active { opacity:.8; }
+
+/* ========== ORDER MANAGEMENT ========== */
+.order-card { background:var(--white); border-radius:var(--radius-sm); padding:14px; margin-bottom:8px; box-shadow:0 0.5px 0 var(--border); }
+.order-card:active { background:var(--gray); }
+.order-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.order-id { font-size:14px; font-weight:700; }
+.order-status { padding:3px 10px; border-radius:10px; font-size:11px; font-weight:700; }
+.order-status.pending_payment { background:#FFF8E1; color:#e65100; }
+.order-status.paid { background:#E8F5E9; color:#2e7d32; }
+.order-status.processing { background:#E3F2FD; color:#1565c0; }
+.order-status.shipping { background:#F3E5F5; color:#7b1fa2; }
+.order-status.delivered { background:#E8F5E9; color:#2e7d32; }
+.order-status.cancelled { background:#FFEBEE; color:#c62828; }
+.order-status.confirmed { background:#E8F5E9; color:#2e7d32; }
+.order-customer { font-size:13px; color:var(--text-secondary); }
+.order-total { font-size:15px; font-weight:700; color:var(--accent); }
+.order-date { font-size:11px; color:var(--text-tertiary); }
+.order-empty { text-align:center; padding:40px 20px; color:var(--text-secondary); }
+.order-detail-actions { display:flex; gap:6px; flex-wrap:wrap; margin-top:12px; }
+.order-detail-actions button { flex:1; min-width:100px; }
+.confirm-option { padding:12px; border-radius:10px; border:1.5px solid var(--border); background:var(--white); text-align:center; cursor:pointer; transition:all .15s; }
+.confirm-option:active, .confirm-option.selected { border-color:var(--accent); background:var(--accent-light); }
+.confirm-option-label { font-size:13px; font-weight:700; }
+.confirm-option-amount { font-size:16px; font-weight:700; color:var(--accent); margin-top:2px; }
+.confirm-option-note { font-size:11px; color:var(--text-secondary); margin-top:2px; }
 .quote-actions .btn-primary { flex:1; min-width:140px; }
 .quote-badge { position:absolute; top:2px; right:50%; transform:translateX(50%); width:16px; height:16px; border-radius:50%; background:#c62828; color:#fff; font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center; }
 </style>
@@ -1510,6 +1546,7 @@ input[type="text"]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba
             <button class="cat-filter active" data-cat="all" onclick="filterCatalog('all',this)">Tất cả</button>
             <button class="cat-filter" data-cat="chair" onclick="filterCatalog('chair',this)">Ghế</button>
             <button class="cat-filter" data-cat="desk" onclick="filterCatalog('desk',this)">Bàn</button>
+            <button class="cat-filter" data-cat="arm" onclick="filterCatalog('arm',this)">Arm</button>
             <button class="cat-filter" data-cat="kids" onclick="filterCatalog('kids',this)">Kids</button>
             <button class="cat-filter" data-cat="booth" onclick="filterCatalog('booth',this)">Booth</button>
           </div>
@@ -1570,7 +1607,8 @@ input[type="text"]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba
             <div style="font-size:18px;font-weight:700;margin-bottom:4px;">Báo giá đã tạo!</div>
             <div style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;" id="quote-result-id"></div>
             <div class="quote-actions" style="justify-content:center;">
-              <button class="btn-primary" id="btn-share-quote" onclick="shareQuote()">Chia sẻ link</button>
+              <button class="btn-primary" onclick="openConfirmOrderSheet()">Chốt đơn</button>
+              <button class="btn-outline" id="btn-share-quote" onclick="shareQuote()">Chia sẻ link</button>
               <button class="btn-outline" onclick="viewQuote()">Xem báo giá</button>
             </div>
           </div>
@@ -1578,6 +1616,17 @@ input[type="text"]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba
       </div>
 
     </div>
+
+      <!-- PAGE: Orders -->
+      <div class="page" id="page-orders">
+        <div class="card">
+          <div class="card-title">Đơn hàng</div>
+          <div class="card-desc">Quản lý đơn hàng, xác nhận thanh toán, theo dõi giao hàng</div>
+          <div id="orders-list">
+            <div class="order-empty" id="orders-empty">Chưa có đơn hàng nào</div>
+          </div>
+        </div>
+      </div>
 
       <!-- DASHBOARD PAGE -->
       <div class="page" id="page-dashboard">
@@ -1855,6 +1904,12 @@ input[type="text"]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba
         </div>
         <span class="more-item-label">Kho ảnh</span>
       </button>
+      <button class="more-item" onclick="closeSheet('more-sheet');switchPage('orders',null);loadOrders();">
+        <div class="more-item-icon" style="color:#e65100;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5a2 2 0 01-2 2h-1"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <span class="more-item-label">Đơn hàng</span>
+      </button>
       <button class="more-item" onclick="closeSheet('more-sheet');switchPage('dashboard',null);renderDashboard();">
         <div class="more-item-icon" style="color:#FF6B35;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15l-2 5l9-11h-5l2-5L7 15z"/></svg>
@@ -1862,6 +1917,57 @@ input[type="text"]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba
         <span class="more-item-label">Thành tích</span>
       </button>
     </div>
+  </div>
+</div>
+
+<!-- CONFIRM ORDER SHEET -->
+<div class="sheet-overlay" id="confirm-order-sheet" onclick="closeSheet('confirm-order-sheet')">
+  <div class="sheet" onclick="event.stopPropagation()" style="max-height:85vh;overflow-y:auto;">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Chốt đơn hàng</div>
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;" id="confirm-order-quote-info"></div>
+
+    <div class="step-label">Hình thức thanh toán</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
+      <div class="confirm-option selected" data-option="full" onclick="selectPaymentOption(this,'full')">
+        <div class="confirm-option-label">Toàn bộ</div>
+        <div class="confirm-option-amount" id="opt-full"></div>
+      </div>
+      <div class="confirm-option" data-option="deposit_50" onclick="selectPaymentOption(this,'deposit_50')">
+        <div class="confirm-option-label">Cọc 50%</div>
+        <div class="confirm-option-amount" id="opt-50"></div>
+      </div>
+      <div class="confirm-option" data-option="deposit_30" onclick="selectPaymentOption(this,'deposit_30')">
+        <div class="confirm-option-label">Cọc 30%</div>
+        <div class="confirm-option-amount" id="opt-30"></div>
+      </div>
+    </div>
+
+    <button class="btn-primary" style="width:100%;" onclick="confirmOrder()">Tạo đơn & Link thanh toán</button>
+    <div style="height:8px;"></div>
+    <button class="btn-outline" style="width:100%;" onclick="closeSheet('confirm-order-sheet')">Hủy</button>
+
+    <div id="confirm-order-result" style="display:none;margin-top:16px;">
+      <div class="card" style="text-align:center;background:var(--gray);">
+        <div style="font-size:32px;margin-bottom:4px;">&#10004;</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:4px;" id="order-result-id"></div>
+        <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">Gửi link thanh toán cho khách</div>
+        <div class="order-detail-actions" style="justify-content:center;">
+          <button class="btn-primary" onclick="sharePaymentLink()">Gửi link QR</button>
+          <button class="btn-outline" onclick="shareTrackingLink()">Link theo dõi</button>
+          <button class="btn-outline" onclick="viewPaymentPage()">Xem QR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER DETAIL SHEET -->
+<div class="sheet-overlay" id="order-detail-sheet" onclick="closeSheet('order-detail-sheet')">
+  <div class="sheet" onclick="event.stopPropagation()" style="max-height:85vh;overflow-y:auto;">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Chi tiết đơn hàng</div>
+    <div id="order-detail-content"></div>
   </div>
 </div>
 
@@ -3369,7 +3475,7 @@ function renderCatalog() {
     const minPrice = Math.min(...p.variants.map(v => v.price));
     const imgHTML = p.image
       ? '<img src="' + p.image + '" alt="' + p.name + '" loading="lazy">'
-      : (p.category === 'chair' ? '🪑' : p.category === 'desk' ? '🖥️' : '👶');
+      : (p.category === 'chair' ? '🪑' : p.category === 'desk' ? '🖥️' : p.category === 'arm' ? '🖥️' : p.category === 'booth' ? '🏢' : '👶');
     return '<div class="product-card" onclick="openProductDetail(\'' + p.id + '\')">' +
       '<div class="product-card-img">' + imgHTML + '</div>' +
       '<div class="product-card-name">' + p.name + '</div>' +
@@ -3395,7 +3501,7 @@ async function openProductDetail(productId) {
 
     const detailImg = p.image
       ? '<img src="' + p.image + '" alt="' + p.name + '">'
-      : (p.category === 'chair' ? '🪑' : p.category === 'desk' ? '🖥️' : '👶');
+      : (p.category === 'chair' ? '🪑' : p.category === 'desk' ? '🖥️' : p.category === 'arm' ? '🖥️' : p.category === 'booth' ? '🏢' : '👶');
     const specs = p.specs ? Object.entries(p.specs).map(function(e) {
       return '<div class="spec-item"><div class="spec-label">' + e[0] + '</div><div class="spec-value">' + e[1] + '</div></div>';
     }).join('') : '';
@@ -3414,6 +3520,18 @@ async function openProductDetail(productId) {
       '</button>';
     }).join('');
 
+    var webLinkHTML = '';
+    if (p.url) {
+      webLinkHTML = '<div class="product-web-link" onclick="event.stopPropagation()">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>' +
+        '<span class="url-text">epione.vn</span>' +
+        '<div class="link-actions">' +
+          '<button class="link-chip" onclick="copyProductLink(\'' + p.url + '\',this)">Copy link</button>' +
+          '<button class="link-chip filled" onclick="shareProductLink(\'' + p.url + '\',\'' + p.name + '\')">Gửi khách</button>' +
+        '</div>' +
+      '</div>';
+    }
+
     container.innerHTML =
       '<div class="product-detail-header">' +
         '<div class="product-detail-img">' + detailImg + '</div>' +
@@ -3423,9 +3541,18 @@ async function openProductDetail(productId) {
           '<div class="product-detail-price" id="pd-price">' + formatPrice(p.variants[0].price) + 'đ</div>' +
         '</div>' +
       '</div>' +
+      webLinkHTML +
       (p.description ? '<div style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin-bottom:12px;">' + p.description + '</div>' : '') +
       (specs ? '<div class="step-label">Thông số</div><div class="spec-grid">' + specs + '</div>' : '') +
       (highlights ? '<div class="step-label">Điểm nổi bật</div><ul class="highlight-list">' + highlights + '</ul>' : '') +
+      (p.warranty ? '<div style="background:#E8F5E9;border-radius:10px;padding:12px 14px;margin-bottom:14px;">' +
+        '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' +
+          '<span style="font-size:14px;font-weight:700;color:#2e7d32;">Bảo hành ' + p.warranty.duration + '</span>' +
+        '</div>' +
+        '<div style="font-size:12px;color:#1b5e20;line-height:1.4;">' + p.warranty.coverage + '</div>' +
+        (p.warranty.note ? '<div style="font-size:11px;color:#388e3c;margin-top:4px;">' + p.warranty.note + '</div>' : '') +
+      '</div>' : '') +
       '<div class="step-label">Phiên bản</div>' +
       '<div class="variant-row" id="pd-variants">' + variants + '</div>' +
       '<div class="step-label">Số lượng</div>' +
@@ -3657,6 +3784,258 @@ function clearQuote() {
   updateQuoteBadge();
   renderQuoteItems();
   toast('Đã xóa báo giá', 'info');
+}
+
+// ========== PRODUCT LINK ==========
+
+function copyProductLink(url, btn) {
+  navigator.clipboard.writeText(url).then(function() {
+    btn.textContent = 'Copied!';
+    setTimeout(function() { btn.textContent = 'Copy link'; }, 1500);
+    toast('Đã copy link sản phẩm', 'success');
+  });
+}
+
+function shareProductLink(url, name) {
+  if (navigator.share) {
+    navigator.share({ title: name + ' — Epione', url: url });
+  } else {
+    navigator.clipboard.writeText(url).then(function() {
+      toast('Đã copy link ' + name, 'success');
+    });
+  }
+}
+
+// ========== ORDER MANAGEMENT ==========
+
+var _selectedPaymentOption = 'full';
+var _lastOrderId = null;
+var _lastOrderData = null;
+
+function openConfirmOrderSheet() {
+  var quoteId = window._lastQuoteId;
+  if (!quoteId) return toast('Chưa có báo giá', 'error');
+
+  // Fetch quote to get total
+  fetch('/api/quote/' + quoteId).then(function(r) { return r.json(); }).then(function(q) {
+    if (q.error) return toast(q.error, 'error');
+
+    var total = q.total;
+    document.getElementById('confirm-order-quote-info').textContent =
+      'Báo giá #' + q.id + ' — ' + q.customer.name + ' — ' + formatPrice(total) + 'đ';
+    document.getElementById('opt-full').textContent = formatPrice(total) + 'đ';
+    document.getElementById('opt-50').textContent = formatPrice(Math.round(total * 0.5)) + 'đ';
+    document.getElementById('opt-30').textContent = formatPrice(Math.round(total * 0.3)) + 'đ';
+
+    _selectedPaymentOption = 'full';
+    document.querySelectorAll('.confirm-option').forEach(function(o) {
+      o.classList.toggle('selected', o.dataset.option === 'full');
+    });
+    document.getElementById('confirm-order-result').style.display = 'none';
+
+    openSheet('confirm-order-sheet');
+  });
+}
+
+function selectPaymentOption(el, option) {
+  _selectedPaymentOption = option;
+  document.querySelectorAll('.confirm-option').forEach(function(o) {
+    o.classList.toggle('selected', o === el);
+  });
+}
+
+async function confirmOrder() {
+  var quoteId = window._lastQuoteId;
+  if (!quoteId) return;
+
+  try {
+    var res = await fetch('/api/order', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        quote_id: quoteId,
+        payment_option: _selectedPaymentOption,
+      })
+    });
+    var data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    _lastOrderId = data.id;
+    _lastOrderData = data;
+    document.getElementById('order-result-id').textContent = data.id + ' — ' + formatPrice(data.payment_amount) + 'đ';
+    document.getElementById('confirm-order-result').style.display = 'block';
+    toast('Đơn hàng ' + data.id + ' đã tạo!', 'success');
+  } catch(e) {
+    toast('Lỗi: ' + friendlyError(e.message), 'error');
+  }
+}
+
+function sharePaymentLink() {
+  if (!_lastOrderId) return;
+  var url = window.location.origin + '/pay/' + _lastOrderId;
+  if (navigator.share) {
+    navigator.share({ title: 'Thanh toán Epione ' + _lastOrderId, url: url });
+  } else {
+    navigator.clipboard.writeText(url).then(function() { toast('Đã copy link thanh toán', 'success'); });
+  }
+}
+
+function shareTrackingLink() {
+  if (!_lastOrderId) return;
+  var url = window.location.origin + '/track/' + _lastOrderId;
+  if (navigator.share) {
+    navigator.share({ title: 'Theo dõi đơn hàng Epione ' + _lastOrderId, url: url });
+  } else {
+    navigator.clipboard.writeText(url).then(function() { toast('Đã copy link theo dõi', 'success'); });
+  }
+}
+
+function viewPaymentPage() {
+  if (_lastOrderId) window.open('/pay/' + _lastOrderId, '_blank');
+}
+
+// ========== ORDERS PAGE ==========
+
+var STATUS_LABELS = {
+  'confirmed': 'Đã xác nhận',
+  'pending_payment': 'Chờ thanh toán',
+  'paid': 'Đã thanh toán',
+  'processing': 'Đang xử lý',
+  'shipping': 'Đang giao',
+  'delivered': 'Đã giao',
+  'cancelled': 'Đã hủy'
+};
+
+async function loadOrders() {
+  var list = document.getElementById('orders-list');
+  list.innerHTML = '<div style="text-align:center;padding:20px;"><div class="spinner" style="margin:0 auto;"></div></div>';
+
+  try {
+    var res = await fetch('/api/orders');
+    var orders = await res.json();
+
+    if (orders.length === 0) {
+      list.innerHTML = '<div class="order-empty">Chưa có đơn hàng nào</div>';
+      return;
+    }
+
+    list.innerHTML = orders.map(function(o) {
+      return '<div class="order-card" onclick="openOrderDetail(\'' + o.id + '\')">' +
+        '<div class="order-header">' +
+          '<div class="order-id">' + o.id + '</div>' +
+          '<span class="order-status ' + o.status + '">' + (STATUS_LABELS[o.status] || o.status) + '</span>' +
+        '</div>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+          '<div>' +
+            '<div class="order-customer">' + (o.customer.name || '—') + '</div>' +
+            '<div class="order-date">' + o.created_at + '</div>' +
+          '</div>' +
+          '<div class="order-total">' + formatPrice(o.total) + 'đ</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  } catch(e) {
+    list.innerHTML = '<div class="order-empty">Lỗi tải đơn hàng</div>';
+  }
+}
+
+async function openOrderDetail(orderId) {
+  openSheet('order-detail-sheet');
+  var container = document.getElementById('order-detail-content');
+  container.innerHTML = '<div style="text-align:center;padding:20px;"><div class="spinner" style="margin:0 auto;"></div></div>';
+
+  try {
+    var res = await fetch('/api/order/' + orderId);
+    var o = await res.json();
+    if (o.error) throw new Error(o.error);
+
+    var itemsHTML = o.items.map(function(item) {
+      return '<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:0.5px solid var(--border);">' +
+        '<div><div style="font-weight:600;">' + item.product_name + '</div><div style="font-size:11px;color:var(--text-secondary);">' + item.variant_name + ' x' + item.quantity + '</div></div>' +
+        '<div style="font-weight:700;white-space:nowrap;">' + formatPrice(item.subtotal) + 'đ</div>' +
+      '</div>';
+    }).join('');
+
+    var statusHTML = '<span class="order-status ' + o.status + '" style="font-size:13px;">' + (STATUS_LABELS[o.status] || o.status) + '</span>';
+
+    var nextActions = '';
+    if (o.status === 'pending_payment') {
+      nextActions = '<button class="btn-primary" onclick="updateOrderStatus(\'' + o.id + '\',\'paid\')">Xác nhận đã thanh toán</button>' +
+        '<button class="btn-outline" onclick="window.open(\'/pay/' + o.id + '\',\'_blank\')">Xem QR</button>' +
+        '<button class="btn-outline" onclick="shareOrderPayLink(\'' + o.id + '\')">Gửi link QR</button>';
+    } else if (o.status === 'paid') {
+      nextActions = '<button class="btn-primary" onclick="updateOrderStatus(\'' + o.id + '\',\'processing\')">Bắt đầu xử lý</button>';
+    } else if (o.status === 'processing') {
+      nextActions = '<button class="btn-primary" onclick="updateOrderStatus(\'' + o.id + '\',\'shipping\')">Đã giao cho GHTK</button>';
+    } else if (o.status === 'shipping') {
+      nextActions = '<button class="btn-primary" onclick="updateOrderStatus(\'' + o.id + '\',\'delivered\')">Đã giao thành công</button>';
+    }
+
+    if (o.status !== 'cancelled' && o.status !== 'delivered') {
+      nextActions += '<button class="btn-outline" style="color:#c62828;border-color:#c62828;" onclick="updateOrderStatus(\'' + o.id + '\',\'cancelled\')">Hủy đơn</button>';
+    }
+
+    container.innerHTML =
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">' +
+        '<div style="font-size:18px;font-weight:700;">' + o.id + '</div>' +
+        statusHTML +
+      '</div>' +
+      '<div style="font-size:13px;color:var(--text-secondary);margin-bottom:4px;">Khách: <strong style="color:var(--black);">' + (o.customer.name || '—') + '</strong>' + (o.customer.phone ? ' · ' + o.customer.phone : '') + '</div>' +
+      '<div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px;">Tạo lúc ' + o.created_at + ' · Báo giá #' + o.quote_id + '</div>' +
+      '<div class="step-label">Sản phẩm</div>' +
+      itemsHTML +
+      '<div style="background:var(--gray);border-radius:10px;padding:12px;margin-top:10px;">' +
+        '<div style="display:flex;justify-content:space-between;font-size:13px;padding:3px 0;"><span>Tổng</span><span style="font-weight:700;">' + formatPrice(o.total) + 'đ</span></div>' +
+        '<div style="display:flex;justify-content:space-between;font-size:13px;padding:3px 0;color:var(--accent);"><span>' + o.payment_label + '</span><span style="font-weight:700;">' + formatPrice(o.payment_amount) + 'đ</span></div>' +
+        (o.payment_remaining > 0 ? '<div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;color:var(--text-secondary);"><span>Còn lại</span><span>' + formatPrice(o.payment_remaining) + 'đ</span></div>' : '') +
+      '</div>' +
+      (nextActions ? '<div class="order-detail-actions">' + nextActions + '</div>' : '') +
+      '<div style="margin-top:16px;">' +
+        '<button class="btn-outline" style="width:100%;font-size:12px;" onclick="window.open(\'/track/' + o.id + '\',\'_blank\')">Xem trang theo dõi khách hàng</button>' +
+      '</div>';
+
+  } catch(e) {
+    container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-secondary);">Lỗi tải đơn hàng</div>';
+  }
+}
+
+async function updateOrderStatus(orderId, newStatus) {
+  var confirmMsg = {
+    'paid': 'Xác nhận khách đã thanh toán?',
+    'processing': 'Bắt đầu xử lý đơn hàng?',
+    'shipping': 'Xác nhận đã gửi hàng?',
+    'delivered': 'Xác nhận đã giao thành công?',
+    'cancelled': 'Hủy đơn hàng này?'
+  };
+  if (!confirm(confirmMsg[newStatus] || 'Cập nhật trạng thái?')) return;
+
+  try {
+    var res = await fetch('/api/order/' + orderId + '/status', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        status: newStatus,
+        updated_by: (currentUser && currentUser.name) || '',
+      })
+    });
+    var data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    toast(STATUS_LABELS[newStatus] || newStatus, 'success');
+    openOrderDetail(orderId);
+    loadOrders();
+  } catch(e) {
+    toast('Lỗi: ' + friendlyError(e.message), 'error');
+  }
+}
+
+function shareOrderPayLink(orderId) {
+  var url = window.location.origin + '/pay/' + orderId;
+  if (navigator.share) {
+    navigator.share({ title: 'Thanh toán Epione ' + orderId, url: url });
+  } else {
+    navigator.clipboard.writeText(url).then(function() { toast('Đã copy link thanh toán', 'success'); });
+  }
 }
 
 // ========== INIT ==========

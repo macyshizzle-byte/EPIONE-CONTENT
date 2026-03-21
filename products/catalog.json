@@ -2,6 +2,7 @@
   "categories": [
     {"id": "chair", "name": "Ghế công thái học", "icon": "chair"},
     {"id": "desk", "name": "Bàn nâng hạ", "icon": "desk"},
+    {"id": "arm", "name": "Arm màn hình", "icon": "arm"},
     {"id": "kids", "name": "Epione Kids", "icon": "kids"},
     {"id": "booth", "name": "Booth cách âm", "icon": "booth"}
   ],
@@ -11,6 +12,7 @@
       "name": "ElysChair",
       "category": "chair",
       "tagline": "Chiếc ghế ergonomic đầu tiên",
+      "url": "https://epione.vn/products/ghe-cong-thai-hoc-epione-elyschair",
       "description": "Ghế công thái học entry-level với hỗ trợ lumbar L4-L5, tựa đầu 3D và đệm ngồi đúc sẵn.",
       "specs": {
         "mesh": "Standard mesh",
@@ -26,6 +28,7 @@
         {"id": "elyschair-z-gray", "name": "Không kê đầu — Cool Gray", "color": "#9E9E9E", "price": 2690000, "sku": "ELYS-Z-GR"}
       ],
       "highlights": ["Hỗ trợ vùng L4-L5", "Tựa đầu 3D", "Đệm đúc sẵn", "Phù hợp người mới"],
+      "warranty": {"duration": "2 năm", "coverage": "Toàn bộ linh kiện ghế", "note": "Cần giữ hóa đơn mua hàng. Gửi ảnh/clip sản phẩm lỗi để xử lý trong 7 ngày làm việc."},
       "image": "https://epione.vn/cdn/shop/files/ghe-cong-thai-hoc-epione-elyschair-125084.webp"
     },
     {
@@ -33,6 +36,7 @@
       "name": "SynoChair",
       "category": "chair",
       "tagline": "Mesh Đức, 2 vùng lumbar độc lập",
+      "url": "https://epione.vn/products/ghe-cong-thai-hoc-epione-synochair",
       "description": "Ghế ergonomic mid-entry với lưới K&R Đức, 2 vùng lưng độc lập điều chỉnh 2D, piston Samhongsa Hàn Quốc Class 4.",
       "specs": {
         "mesh": "K&R German mesh",
@@ -45,6 +49,7 @@
         {"id": "synochair-black", "name": "Black", "color": "#333", "price": 4290000, "sku": "SYNO-BK"}
       ],
       "highlights": ["Lưới K&R Đức", "2 vùng lumbar độc lập", "Piston Samhongsa Hàn", "Tựa đầu tháo rời"],
+      "warranty": {"duration": "2 năm", "coverage": "Toàn bộ linh kiện ghế", "note": "Cần giữ hóa đơn mua hàng."},
       "image": "https://epione.vn/cdn/shop/files/epione-synochair-front.webp"
     },
     {
@@ -52,6 +57,7 @@
       "name": "FortisChair 2.0",
       "category": "chair",
       "tagline": "Vừa vặn cơ thể, bền bỉ hiệu suất",
+      "url": "https://epione.vn/products/ghe-cong-thai-hoc-epione-fortischair",
       "description": "Ghế ergonomic mid-range với hệ thống lumbar thông minh, True Fitting, vận hành êm ái không tiếng ồn.",
       "specs": {
         "mesh": "Premium skin-friendly mesh",
@@ -65,6 +71,7 @@
         {"id": "fortischair-b-black", "name": "Có kê chân — All Black", "color": "#333", "price": 3980000, "sku": "FORT-B-BK"}
       ],
       "highlights": ["True Fitting", "Vận hành êm ái", "Lưới thân thiện da", "Chiều sâu ghế điều chỉnh"],
+      "warranty": {"duration": "2 năm", "coverage": "Toàn bộ linh kiện ghế", "note": "Cần giữ hóa đơn mua hàng."},
       "image": "https://epione.vn/cdn/shop/files/ghe-cong-thai-hoc-epione-fortischair-2-black-base-front.webp"
     },
     {
@@ -72,6 +79,7 @@
       "name": "EasyChair 2.0",
       "category": "chair",
       "tagline": "Điểm tựa chuẩn xác, làm việc nhẹ nhõm",
+      "url": "https://epione.vn/products/ghe-cong-thai-hoc-epione-easychair-2-0",
       "description": "Hệ thống ATLAS lumbar chính xác, cơ chế Donati Italy, tay gấp 90° tiết kiệm không gian, lưới K&R Đức.",
       "specs": {
         "mesh": "K&R German mesh",
@@ -86,6 +94,7 @@
         {"id": "easychair-gray", "name": "Cool Gray", "color": "#9E9E9E", "price": 7290000, "sku": "EASY-GR"}
       ],
       "highlights": ["ATLAS lumbar chính xác", "Donati Italy", "Tay gấp 90°", "4 mức tilt", "Đã kiểm chứng từ 2022"],
+      "warranty": {"duration": "3 năm", "coverage": "Toàn bộ linh kiện ghế", "note": "Cần giữ hóa đơn mua hàng."},
       "accessories": [
         {"name": "Footrest", "price": 1120000, "sku": "EASY-FR"}
       ],
@@ -96,6 +105,7 @@
       "name": "AliusChair",
       "category": "chair",
       "tagline": "Điểm tựa vững chãi, hiệu suất đỉnh cao",
+      "url": "https://epione.vn/products/ghe-cong-thai-hoc-epione-aliuschair",
       "description": "Ghế high-end với Clover-Fit auto-adjust, khung nhôm, lưng PPA tự ôm sống lưng, tay vịn 5D, chịu 150kg.",
       "specs": {
         "mesh": "FlexMesh German (anti-stretch)",
@@ -113,6 +123,7 @@
         {"id": "aliuschair-6d-gray", "name": "6D — Cool Gray", "color": "#9E9E9E", "price": 14990000, "sku": "ALIUS-6D-GR"}
       ],
       "highlights": ["Clover-Fit tự điều chỉnh", "Khung nhôm cao cấp", "5D armrest", "Chịu 150kg", "Tư vấn fitting 1:1"],
+      "warranty": {"duration": "5 năm", "coverage": "Toàn bộ linh kiện ghế", "note": "Flagship — bảo hành dài nhất dòng ghế Epione."},
       "image": "https://epione.vn/cdn/shop/files/ghe-cong-thai-hoc-epione-aliuschair-737047.webp"
     },
     {
@@ -120,6 +131,7 @@
       "name": "SmartDesk Mono",
       "category": "desk",
       "tagline": "Khởi đầu thông minh cho sức khỏe",
+      "url": "https://epione.vn/products/ban-nang-ha-epione-smartdesk-mono",
       "description": "Bàn nâng hạ entry-level 1 motor, mặt bàn 1.2m, cảm biến chống va, 4 vị trí nhớ, kèm footrest và khay dây.",
       "specs": {
         "motor": "Single motor",
@@ -135,6 +147,7 @@
         {"id": "smartdesk-mono-140", "name": "1.4m Extended", "color": "#FFF", "price": 4500000, "sku": "SDM-140"}
       ],
       "highlights": ["Cảm biến chống va", "4 vị trí nhớ", "Kèm footrest", "MFC E1 an toàn"],
+      "warranty": {"duration": "2 năm", "coverage": "Bộ phận máy móc và cơ khí", "note": "Mặt bàn bảo hành 1 năm (đổi 1 lần)."},
       "image": "https://epione.vn/cdn/shop/files/epione-smartdesk-mono-white-corner.webp"
     },
     {
@@ -142,6 +155,7 @@
       "name": "SmartDesk Lite 2.0",
       "category": "desk",
       "tagline": "Dual motor, ổn định mọi tải trọng",
+      "url": "https://epione.vn/products/ban-nang-ha-epione-smartdesk-lite-2-0",
       "description": "Bàn nâng hạ dual motor 25mm/s, tải 100-200kg, phù hợp setup 2 màn hình + PC, chống va chạm.",
       "specs": {
         "motor": "Dual motor",
@@ -156,6 +170,7 @@
         {"id": "smartdesk-lite-140", "name": "1.4m", "color": "#FFF", "price": 6190000, "sku": "SDL-140"}
       ],
       "highlights": ["Dual motor ổn định", "25mm/s", "Tải 200kg", "60-130cm"],
+      "warranty": {"duration": "3 năm", "coverage": "Bộ phận máy móc và cơ khí", "note": "Mặt bàn bảo hành 1 năm (đổi 1 lần)."},
       "image": "https://epione.vn/cdn/shop/files/smartdesk-lite-2.0-corner-black.webp"
     },
     {
@@ -163,6 +178,7 @@
       "name": "SmartDesk Pro 3.0",
       "category": "desk",
       "tagline": "Đỉnh cao vận hành, vững vàng vị thế",
+      "url": "https://epione.vn/products/ban-nang-ha-epione-smartdesk-pro-3-0",
       "description": "Motor BLDC brushless bền gấp 2x, nhanh nhất 40mm/s, khung 3 tầng, tải 125kg động / 300kg tĩnh, BH 5-10 năm.",
       "specs": {
         "motor": "Dual BLDC (brushless)",
@@ -178,6 +194,7 @@
         {"id": "smartdesk-pro-140", "name": "1.4m", "color": "#FFF", "price": 8290000, "sku": "SDP-140"}
       ],
       "highlights": ["BLDC motor êm & bền", "40mm/s nhanh nhất", "Khung 3 tầng", "BH 5-10 năm"],
+      "warranty": {"duration": "5 năm", "coverage": "Bộ phận máy móc và cơ khí (motor BLDC, khung thép, hệ nâng hạ)", "note": "Mặt bàn bảo hành 1 năm (đổi 1 lần). BH dài nhất dòng bàn Epione."},
       "image": "https://epione.vn/cdn/shop/files/epione-white-corner-smart-desk-pro-3.0.jpg"
     },
     {
@@ -185,6 +202,7 @@
       "name": "DelightDesk",
       "category": "desk",
       "tagline": "Giấu dây toàn diện, setup tuyệt đối sạch",
+      "url": "https://epione.vn/products/ban-nang-ha-epione-delight-desk",
       "description": "Flagship với hệ Delight Wire Management giấu dây hoàn toàn, mặt bàn cong ergonomic, thấp nhất 58cm, BLDC 40mm/s.",
       "specs": {
         "motor": "Dual BLDC",
@@ -200,6 +218,7 @@
         {"id": "delightdesk-160", "name": "1.6m Extended", "color": "#FFF", "price": 10990000, "sku": "DD-160"}
       ],
       "highlights": ["Giấu dây Delight System", "Mặt cong ergonomic", "Thấp nhất 58cm", "BLDC 40mm/s"],
+      "warranty": {"duration": "5 năm", "coverage": "Bộ phận máy móc và cơ khí (motor BLDC, khung, hệ nâng hạ, Delight tray)", "note": "Mặt bàn bảo hành 1 năm (đổi 1 lần)."},
       "image": "https://epione.vn/cdn/shop/files/epione-white-corner-delight-desk.jpg"
     },
     {
@@ -207,6 +226,7 @@
       "name": "AnDesk",
       "category": "desk",
       "tagline": "Vững chãi, an toàn cho mọi không gian",
+      "url": "https://epione.vn/products/ban-co-dinh-epione-andesk",
       "description": "Bàn cố định với 2 thanh giằng chéo, chân tròn an toàn, cạnh Rehau cao cấp, tải 60kg.",
       "specs": {
         "type": "Fixed desk",
@@ -221,13 +241,64 @@
         {"id": "andesk-140", "name": "1.4m", "color": "#FFF", "price": 2690000, "sku": "AND-140"}
       ],
       "highlights": ["2 thanh giằng siêu vững", "Chân tròn an toàn", "Cạnh Rehau Đức", "Lắp đặt dễ dàng"],
+      "warranty": {"duration": "1 năm", "coverage": "Khung bàn và linh kiện", "note": "Bàn cố định — bảo hành khung."},
       "image": "https://epione.vn/cdn/shop/files/andesk-corner-front-all-white.webp"
+    },
+    {
+      "id": "essentials-arm",
+      "name": "Essentials Arm",
+      "category": "arm",
+      "tagline": "Arm cơ bản, nâng tầm setup",
+      "url": "https://epione.vn/products/gia-do-man-hinh-epione-essentials-arm",
+      "description": "Giá đỡ màn hình entry-level với kẹp bàn chắc chắn, tương thích VESA 75x75 & 100x100, xoay 360°. Phiên bản đơn và đôi, 2 màu All Black & Pure White.",
+      "specs": {
+        "vesa": "75x75mm & 100x100mm",
+        "rotation": "360°",
+        "mount": "C-Clamp kẹp bàn",
+        "material": "Hợp kim nhôm + thép",
+        "screen_size": "17-32 inch",
+        "load": "2-9kg / arm"
+      },
+      "variants": [
+        {"id": "ess-arm-single-bk", "name": "Đơn — All Black", "color": "#333", "price": 790000, "sku": "EA-S-BK"},
+        {"id": "ess-arm-single-wh", "name": "Đơn — Pure White", "color": "#F5F5F5", "price": 790000, "sku": "EA-S-WH"},
+        {"id": "ess-arm-dual-bk", "name": "Đôi — All Black", "color": "#333", "price": 1390000, "sku": "EA-D-BK"},
+        {"id": "ess-arm-dual-wh", "name": "Đôi — Pure White", "color": "#F5F5F5", "price": 1390000, "sku": "EA-D-WH"}
+      ],
+      "highlights": ["VESA 75x75 & 100x100", "Xoay 360°", "Kẹp bàn C-Clamp", "Hỗ trợ 17-32 inch", "2 màu Black & White"],
+      "warranty": {"duration": "1 năm", "coverage": "Cơ cấu khớp nối, kẹp bàn", "note": "Phụ kiện — bảo hành chuẩn."},
+      "image": "https://epione.vn/cdn/shop/files/epione-essentials-arm-front.webp"
+    },
+    {
+      "id": "delight-arm",
+      "name": "Delight Arm",
+      "category": "arm",
+      "tagline": "Arm cao cấp, giấu dây hoàn hảo",
+      "url": "https://epione.vn/products/gia-do-man-hinh-epione-delight-arm",
+      "description": "Giá đỡ màn hình premium với hệ thống giấu dây tích hợp, gas spring êm ái, khớp nối full-motion, thiết kế đồng bộ DelightDesk.",
+      "specs": {
+        "vesa": "75x75mm & 100x100mm",
+        "spring": "Gas spring (điều chỉnh vô cấp)",
+        "rotation": "360°",
+        "mount": "C-Clamp kẹp bàn",
+        "material": "Hợp kim nhôm cao cấp",
+        "screen_size": "17-34 inch",
+        "load": "2-12kg",
+        "cable": "Cable management tích hợp"
+      },
+      "variants": [
+        {"id": "delight-arm-bk", "name": "All Black", "color": "#333", "price": 1590000, "sku": "DA-BK"}
+      ],
+      "highlights": ["Gas spring êm ái", "Giấu dây tích hợp", "Hỗ trợ 17-34 inch", "Tải 12kg", "Đồng bộ DelightDesk"],
+      "warranty": {"duration": "1 năm", "coverage": "Gas spring, cơ cấu khớp nối, kẹp bàn", "note": "Phụ kiện cao cấp — bảo hành chuẩn."},
+      "image": "https://epione.vn/cdn/shop/files/epione-delight-arm-front.webp"
     },
     {
       "id": "alphadesk",
       "name": "AlphaDesk",
       "category": "kids",
       "tagline": "Bàn gỗ thật, bảo vệ trọn đời",
+      "url": "https://epione.vn/products/ban-hoc-go-that-epione-alpha-desk",
       "description": "Bàn học gỗ cao su thật Paint-Free E0, mặt nghiêng 0-60°, nâng hạ tay quay 64-85cm, tải 100kg, dùng 15+ năm.",
       "specs": {
         "material": "Solid rubber wood, Paint-Free",
@@ -242,6 +313,7 @@
         {"id": "alphadesk-std", "name": "AlphaDesk", "color": "#D4A574", "price": 6990000, "sku": "ALD-STD"}
       ],
       "highlights": ["Gỗ cao su thật Paint-Free", "E0 không formaldehyde", "Nghiêng 0-60°", "Dùng 15+ năm"],
+      "warranty": {"duration": "2 năm", "coverage": "Cơ cấu nâng hạ tay quay, mặt bàn gỗ", "note": "Gỗ cao su thật, bảo hành cong vênh & cơ cấu."},
       "combos": [
         {"name": "Combo Desk + RingoChair + AlphaLight", "price": 9500000, "savings": 2970000, "sku": "ALD-COMBO"}
       ],
@@ -252,6 +324,7 @@
       "name": "RingoChair",
       "category": "kids",
       "tagline": "Ghế chuẩn Hàn, con tập trung vững vàng",
+      "url": "https://epione.vn/products/ghe-hoc-sinh-sidiz-ringo",
       "description": "Ghế SIDIZ #1 Hàn Quốc, KC certified an toàn, G-Lock chống xoay giúp tập trung, điều chỉnh 4 cấp cho trẻ 110-160cm.",
       "specs": {
         "brand": "SIDIZ (Korea #1)",
@@ -268,6 +341,7 @@
         {"id": "ringo-green", "name": "GrayishGreen", "color": "#A0B4A0", "price": 3490000, "sku": "RNG-GR"}
       ],
       "highlights": ["SIDIZ #1 Hàn Quốc", "KC certified an toàn", "G-Lock chống xoay", "Trẻ 110-160cm"],
+      "warranty": {"duration": "5 năm", "coverage": "Toàn bộ linh kiện ghế", "note": "Bảo hành chính hãng SIDIZ — dài nhất phân khúc ghế trẻ em."},
       "image": "https://epione.vn/cdn/shop/files/thumb-ringo-begie-gray-3.webp"
     },
     {
@@ -275,6 +349,7 @@
       "name": "AlphaLight",
       "category": "kids",
       "tagline": "Ánh sáng bảo vệ mắt cho bé",
+      "url": "https://epione.vn/products/den-hoc-epione-alphalight",
       "description": "Đèn học chuyên dụng 4000K, CRI 95.5, ánh sáng tự nhiên giảm mỏi mắt, phù hợp AlphaDesk.",
       "specs": {
         "color_temp": "4000K (warm white)",
@@ -286,6 +361,7 @@
         {"id": "alphalight-std", "name": "Standard", "color": "#FFF", "price": 990000, "sku": "ALL-STD"}
       ],
       "highlights": ["CRI 95.5 siêu cao", "4000K tự nhiên", "Giảm ánh sáng xanh", "Thiết kế cho bàn học"],
+      "warranty": {"duration": "1 năm", "coverage": "Bóng LED và bo mạch", "note": "Phụ kiện — bảo hành chuẩn."},
       "image": "https://epione.vn/cdn/shop/files/alphalight-sku.webp"
     },
     {
@@ -293,12 +369,13 @@
       "name": "Epione WorkPod",
       "category": "booth",
       "tagline": "Không gian riêng tư, tập trung tối đa",
+      "url": "https://epione.vn/products/booth-cach-am-epione-workpod",
       "description": "Booth cách âm 1 người thiết kế modular, cách âm 25-30dB theo ISO 23351-1-2020, lắp đặt 25 phút không khoan tường, thông gió tự động 25L/s.",
       "specs": {
         "capacity": "1 người",
         "acoustic": "ISO 23351-1-2020, 25-30dB",
         "ventilation": "Tự động 25L/s",
-        "desktop": "Gỗ cao su 760×300mm, tải 25kg",
+        "desktop": "Gỗ cao su 760x300mm, tải 25kg",
         "lighting": "LED tích hợp",
         "installation": "25 phút, không khoan tường",
         "warranty": "Lên đến 5 năm"
@@ -308,6 +385,7 @@
         {"id": "workpod-plus", "name": "WorkPod One Plus", "color": "#333", "price": 120000000, "sku": "WPD-PLUS"}
       ],
       "highlights": ["Modular không cần khoan tường", "Lắp 25 phút", "Cách âm ISO 23351-1-2020", "Thông gió tự động 25L/s", "BH đến 5 năm"],
+      "warranty": {"duration": "5 năm", "coverage": "Kết cấu booth, hệ thống thông gió, đèn LED, khóa cửa", "note": "Giao + lắp miễn phí HCM/HN. BH tận nơi."},
       "image": "https://epione.vn/cdn/shop/files/epione-workpod-front.webp"
     },
     {
@@ -315,6 +393,7 @@
       "name": "Epione WorkPod Dual",
       "category": "booth",
       "tagline": "Phòng họp mini 2 người, cách âm hoàn hảo",
+      "url": "https://epione.vn/products/booth-cach-am-epione-workpod-dual",
       "description": "Booth cách âm 2 người cho họp 1:1, gọi video, tư vấn khách. Cùng tiêu chuẩn ISO với WorkPod, không gian rộng hơn cho 2 ghế.",
       "specs": {
         "capacity": "2 người",
@@ -328,6 +407,7 @@
         {"id": "workpod-dual-std", "name": "WorkPod Dual", "color": "#333", "price": 150000000, "sku": "WPD-DUAL"}
       ],
       "highlights": ["2 người thoải mái", "Họp 1:1, video call", "Cách âm ISO tiêu chuẩn", "Modular di chuyển dễ dàng", "Giao + lắp miễn phí HCM/HN"],
+      "warranty": {"duration": "5 năm", "coverage": "Kết cấu booth, hệ thống thông gió, đèn LED, khóa cửa", "note": "Giao + lắp miễn phí HCM/HN. BH tận nơi."},
       "image": "https://epione.vn/cdn/shop/files/8.png"
     },
     {
@@ -335,6 +415,7 @@
       "name": "Epione PhoneBooth One",
       "category": "booth",
       "tagline": "Gọi điện riêng tư trong văn phòng mở",
+      "url": "https://epione.vn/products/booth-cach-am-epione-phonebooth-one",
       "description": "Booth gọi điện nhỏ gọn 1 người, tối ưu cho cuộc gọi ngắn và video call, cách âm hiệu quả trong không gian open-plan.",
       "specs": {
         "capacity": "1 người",
@@ -348,6 +429,7 @@
         {"id": "phonebooth-one-std", "name": "PhoneBooth One", "color": "#333", "price": 80000000, "sku": "PB-ONE"}
       ],
       "highlights": ["Compact cho voice/video call", "Cách âm hiệu quả", "Lắp đặt nhanh", "Phù hợp văn phòng open-plan", "Giao + lắp miễn phí HCM/HN"],
+      "warranty": {"duration": "5 năm", "coverage": "Kết cấu booth, hệ thống thông gió, đèn LED", "note": "Giao + lắp miễn phí HCM/HN. BH tận nơi."},
       "image": "https://epione.vn/cdn/shop/files/epione-workpod-front.webp"
     }
   ]

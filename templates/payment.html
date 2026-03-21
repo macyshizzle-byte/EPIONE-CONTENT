@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:title" content="Thanh toán Epione — {{ order.id }}">
+<meta property="og:description" content="Chuyển khoản cho đơn hàng {{ order.id }}">
+<title>Thanh toán {{ order.id }} — Epione</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root { --accent:#10069F; --black:#1A1A1A; --gray:#F5F5F7; --border:#E5E5EA; --text-sec:#8E8E93; --green:#2e7d32; --orange:#e65100; }
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito Sans',sans-serif;color:var(--black);background:var(--gray);padding:0;}
+.pay-page{max-width:480px;margin:0 auto;background:#fff;min-height:100vh;}
+.header{background:var(--accent);color:#fff;padding:28px 20px;text-align:center;}
+.header svg{margin-bottom:6px;}
+.header h1{font-size:12px;letter-spacing:2px;font-weight:700;opacity:.8;}
+.header .oid{font-size:20px;font-weight:700;margin-top:4px;}
+.header .status-badge{display:inline-block;padding:4px 14px;border-radius:12px;font-size:12px;font-weight:600;margin-top:8px;background:rgba(255,255,255,0.2);}
+.header .status-paid{background:#4caf50;}
+.section{padding:20px;}
+.section+.section{border-top:1px solid var(--border);}
+.section-title{font-size:11px;font-weight:700;color:var(--text-sec);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px;}
+.amount-box{text-align:center;padding:20px;background:var(--gray);border-radius:12px;margin-bottom:16px;}
+.amount-label{font-size:13px;color:var(--text-sec);margin-bottom:4px;}
+.amount-value{font-size:32px;font-weight:700;color:var(--accent);}
+.amount-note{font-size:12px;color:var(--text-sec);margin-top:4px;}
+.qr-container{text-align:center;margin-bottom:16px;}
+.qr-container img{width:280px;max-width:100%;border-radius:12px;border:1px solid var(--border);}
+.qr-note{font-size:12px;color:var(--text-sec);text-align:center;line-height:1.5;}
+.bank-info{background:var(--gray);border-radius:10px;padding:14px 16px;}
+.bank-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:13px;}
+.bank-row .label{color:var(--text-sec);}
+.bank-row .value{font-weight:700;display:flex;align-items:center;gap:6px;}
+.copy-btn{padding:3px 8px;border-radius:6px;background:var(--accent);color:#fff;font-size:10px;font-weight:600;border:none;cursor:pointer;}
+.copy-btn:active{opacity:.7;}
+.item{display:flex;justify-content:space-between;padding:8px 0;font-size:13px;border-bottom:0.5px solid var(--border);}
+.item:last-child{border-bottom:none;}
+.item-name{font-weight:600;}
+.item-detail{font-size:11px;color:var(--text-sec);}
+.totals{background:var(--gray);border-radius:10px;padding:14px 16px;margin-top:12px;}
+.total-row{display:flex;justify-content:space-between;padding:4px 0;font-size:13px;}
+.total-row.grand{font-size:16px;font-weight:700;color:var(--accent);border-top:2px solid var(--accent);padding-top:8px;margin-top:6px;}
+.payment-option-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;}
+.payment-option-row .label{color:var(--text-sec);}
+.payment-option-row .value{font-weight:700;color:var(--green);}
+.footer{text-align:center;padding:20px;font-size:11px;color:var(--text-sec);}
+.track-link{display:block;text-align:center;padding:14px;background:var(--accent);color:#fff;border-radius:12px;font-size:14px;font-weight:700;text-decoration:none;margin:0 20px 16px;}
+.track-link:active{opacity:.8;}
+.paid-banner{background:#e8f5e9;text-align:center;padding:16px;margin:16px 20px;border-radius:12px;}
+.paid-banner-icon{font-size:36px;margin-bottom:4px;}
+.paid-banner-text{font-size:14px;font-weight:700;color:var(--green);}
+</style>
+</head>
+<body>
+<div class="pay-page">
+  <div class="header">
+    <svg width="32" height="32" viewBox="0 0 120 120" fill="none">
+      <circle cx="60" cy="60" r="52" stroke="#fff" stroke-width="1.5" opacity=".3"/>
+      <circle cx="60" cy="60" r="38" stroke="#fff" stroke-width="2" opacity=".5"/>
+      <circle cx="60" cy="60" r="24" stroke="#fff" stroke-width="2.5" opacity=".7"/>
+      <circle cx="60" cy="60" r="10" fill="#fff"/>
+    </svg>
+    <h1>EPIONE — THANH TOAN</h1>
+    <div class="oid">{{ order.id }}</div>
+    {% if order.status == 'paid' or order.status == 'processing' or order.status == 'shipping' or order.status == 'delivered' %}
+    <div class="status-badge status-paid">Da thanh toan</div>
+    {% elif order.status == 'cancelled' %}
+    <div class="status-badge" style="background:#c62828;">Da huy</div>
+    {% else %}
+    <div class="status-badge">Cho thanh toan</div>
+    {% endif %}
+  </div>
+
+  {% if order.status == 'paid' or order.status == 'processing' or order.status == 'shipping' or order.status == 'delivered' %}
+  <div class="paid-banner">
+    <div class="paid-banner-icon">&#10004;</div>
+    <div class="paid-banner-text">Thanh toan da duoc xac nhan!</div>
+  </div>
+  {% endif %}
+
+  {% if order.status == 'pending_payment' %}
+  <div class="section">
+    <div class="amount-box">
+      <div class="amount-label">{{ order.payment_label }}</div>
+      <div class="amount-value">{{ "{:,.0f}".format(order.payment_amount) }}d</div>
+      {% if order.payment_remaining > 0 %}
+      <div class="amount-note">Con lai: {{ "{:,.0f}".format(order.payment_remaining) }}d (thanh toan khi nhan hang)</div>
+      {% endif %}
+    </div>
+
+    {% if qr_url %}
+    <div class="section-title">Quet ma QR de chuyen khoan</div>
+    <div class="qr-container">
+      <img src="{{ qr_url }}" alt="QR thanh toan">
+    </div>
+    <div class="qr-note">Mo app ngan hang &rarr; Quet QR &rarr; Xac nhan chuyen khoan<br>Noi dung: <strong>EPIONE {{ order.id }}</strong></div>
+    {% endif %}
+
+    {% if bank %}
+    <div style="height:16px;"></div>
+    <div class="section-title">Hoac chuyen khoan thu cong</div>
+    <div class="bank-info">
+      <div class="bank-row">
+        <span class="label">Ngan hang</span>
+        <span class="value">{{ bank.bank_id }}</span>
+      </div>
+      <div class="bank-row">
+        <span class="label">So tai khoan</span>
+        <span class="value">{{ bank.account_no }} <button class="copy-btn" onclick="copyText('{{ bank.account_no }}')">Copy</button></span>
+      </div>
+      <div class="bank-row">
+        <span class="label">Ten TK</span>
+        <span class="value">{{ bank.account_name }}</span>
+      </div>
+      <div class="bank-row">
+        <span class="label">So tien</span>
+        <span class="value">{{ "{:,.0f}".format(order.payment_amount) }}d <button class="copy-btn" onclick="copyText('{{ order.payment_amount }}')">Copy</button></span>
+      </div>
+      <div class="bank-row">
+        <span class="label">Noi dung</span>
+        <span class="value">EPIONE {{ order.id }} <button class="copy-btn" onclick="copyText('EPIONE {{ order.id }}')">Copy</button></span>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <div class="section">
+    <div class="section-title">Chi tiet don hang</div>
+    {% for item in order.items %}
+    <div class="item">
+      <div>
+        <div class="item-name">{{ item.product_name }}</div>
+        <div class="item-detail">{{ item.variant_name }} &middot; SL: {{ item.quantity }}</div>
+      </div>
+      <div style="font-weight:700;white-space:nowrap;">{{ "{:,.0f}".format(item.subtotal) }}d</div>
+    </div>
+    {% endfor %}
+    <div class="totals">
+      <div class="total-row"><span>Tam tinh</span><span>{{ "{:,.0f}".format(order.subtotal) }}d</span></div>
+      {% if order.discount_percent > 0 %}
+      <div class="total-row" style="color:var(--green);"><span>Chiet khau ({{ order.discount_percent }}%)</span><span>-{{ "{:,.0f}".format(order.discount_amount) }}d</span></div>
+      {% endif %}
+      <div class="total-row grand"><span>Tong cong</span><span>{{ "{:,.0f}".format(order.total) }}d</span></div>
+    </div>
+    {% if order.payment_option != 'full' %}
+    <div style="margin-top:10px;">
+      <div class="payment-option-row"><span class="label">{{ order.payment_label }}</span><span class="value">{{ "{:,.0f}".format(order.payment_amount) }}d</span></div>
+      <div class="payment-option-row"><span class="label">Con lai khi nhan hang</span><span class="value">{{ "{:,.0f}".format(order.payment_remaining) }}d</span></div>
+    </div>
+    {% endif %}
+  </div>
+
+  {% if order.customer.name %}
+  <div class="section">
+    <div class="section-title">Khach hang</div>
+    <div style="font-size:14px;font-weight:700;">{{ order.customer.name }}</div>
+    {% if order.customer.phone %}<div style="font-size:13px;color:var(--text-sec);">{{ order.customer.phone }}</div>{% endif %}
+    {% if order.customer.company %}<div style="font-size:13px;color:var(--text-sec);">{{ order.customer.company }}</div>{% endif %}
+  </div>
+  {% endif %}
+
+  <a class="track-link" href="/track/{{ order.id }}">Theo doi don hang</a>
+
+  <div class="footer">
+    Epione — Noi that Ergonomic & Acoustic Solutions<br>
+    epione.vn
+  </div>
+</div>
+
+<script>
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(function() {
+    var btn = event.target;
+    btn.textContent = 'OK!';
+    setTimeout(function() { btn.textContent = 'Copy'; }, 1500);
+  });
+}
+</script>
+</body>
+</html>
