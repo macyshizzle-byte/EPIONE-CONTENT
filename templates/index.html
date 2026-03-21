@@ -2237,6 +2237,32 @@ async function initAuth() {
   });
 }
 
+// ========== AUTH FETCH (gửi JWT token với mọi API request) ==========
+async function authFetch(url, options = {}) {
+  const { data: { session } } = await _sb.auth.getSession();
+  if (!session) {
+    window.location.reload();
+    throw new Error('Chưa đăng nhập');
+  }
+  const headers = options.headers instanceof Headers
+    ? options.headers
+    : new Headers(options.headers || {});
+  headers.set('Authorization', 'Bearer ' + session.access_token);
+  return fetch(url, { ...options, headers });
+}
+
+// ========== AUTH IMAGE LOADER (for <img> that need JWT) ==========
+async function loadAuthThumb(imgEl) {
+  const fileId = imgEl.dataset.fileId;
+  if (!fileId) return;
+  imgEl.onerror = null;
+  try {
+    const res = await authFetch('/api/drive/preview/' + fileId);
+    const blob = await res.blob();
+    imgEl.src = URL.createObjectURL(blob);
+  } catch (e) { /* ignore */ }
+}
+
 // ========== STATE ==========
 let currentType = 'content';
 let currentContentPlat = 'linkedin';
@@ -2878,7 +2904,7 @@ async function generate() {
     if (currentBasePlat === 'community') {
       const communityName = document.getElementById('community-name').value.trim();
       const rules = document.getElementById('community-rules').value.trim();
-      const res = await fetch('/api/community', {
+      const res = await authFetch('/api/community', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ community: communityName, rules, topic: prompt, style: currentContentStyle, role: currentRole, gender: currentGender })
@@ -2888,7 +2914,7 @@ async function generate() {
       showOutput(data.content);
     } else {
       const type = currentContentPlat;
-      const res = await fetch('/api/generate', {
+      const res = await authFetch('/api/generate', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ type, prompt, role: currentRole, gender: currentGender })
@@ -2917,7 +2943,7 @@ async function generateText() {
   document.getElementById('btn-generate-text').disabled = true;
 
   try {
-    const res = await fetch('/api/generate', {
+    const res = await authFetch('/api/generate', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ type: currentType, prompt, role: currentRole, gender: currentGender })
@@ -2968,7 +2994,7 @@ async function generateFromTopic() {
   document.getElementById('btn-topic-gen').disabled = true;
 
   try {
-    const res = await fetch('/api/generate', {
+    const res = await authFetch('/api/generate', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ type: 'topic', prompt: 'Chủ đề: ' + topic + '\nPlatform: ' + selectedPlat, role: currentRole, gender: currentGender })
@@ -3037,7 +3063,7 @@ function handleTopicFile(file) {
 
   const formData = new FormData();
   formData.append('image', file);
-  fetch('/api/upload-image', { method: 'POST', body: formData })
+  authFetch('/api/upload-image', { method: 'POST', body: formData })
     .then(r => r.json())
     .then(data => {
       if (data.image_path) {
@@ -3052,7 +3078,7 @@ async function createTopicDesign() {
   setLoading('loading-topic-design', true);
   try {
     const plat = selectedPlat === 'linkedin' ? 'linkedin' : 'instagram';
-    const res = await fetch('/api/design', {
+    const res = await authFetch('/api/design', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -3205,7 +3231,7 @@ async function analyzeImage() {
   formData.append('prompt', note);
 
   try {
-    const res = await fetch('/api/image', { method: 'POST', body: formData });
+    const res = await authFetch('/api/image', { method: 'POST', body: formData });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
 
@@ -3232,7 +3258,7 @@ async function analyzeImage() {
 async function createDesign() {
   setLoading('loading-design', true);
   try {
-    const res = await fetch('/api/design', {
+    const res = await authFetch('/api/design', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -3418,7 +3444,7 @@ async function refineContent(instruction) {
 
   try {
     const type = lastGeneratedType || currentContentPlat || 'linkedin';
-    const res = await fetch('/api/generate', {
+    const res = await authFetch('/api/generate', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -3489,7 +3515,7 @@ async function loadCatalog() {
   const grid = document.getElementById('product-grid');
   grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;"><div class="spinner" style="margin:0 auto;"></div></div>';
   try {
-    const res = await fetch('/api/products');
+    const res = await authFetch('/api/products');
     const data = await res.json();
     catalogProducts = data.products || [];
     catalogLoaded = true;
@@ -3536,7 +3562,7 @@ async function openProductDetail(productId) {
   container.innerHTML = '<div style="text-align:center;padding:40px;"><div class="spinner" style="margin:0 auto;"></div></div>';
 
   try {
-    const res = await fetch('/api/products/' + productId);
+    const res = await authFetch('/api/products/' + productId);
     const p = await res.json();
     if (p.error) throw new Error(p.error);
 
@@ -3638,7 +3664,7 @@ async function checkDelivery() {
   var variant = p.variants[window._selectedVariantIdx];
   var el = document.getElementById('pd-delivery');
   try {
-    var res = await fetch('/api/inventory/delivery', {
+    var res = await authFetch('/api/inventory/delivery', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ sku: variant.sku, quantity: window._selectedQty })
@@ -3766,7 +3792,7 @@ async function submitQuote() {
   var discount = parseFloat(document.getElementById('discount-slider').value) || 0;
 
   try {
-    var res = await fetch('/api/quote', {
+    var res = await authFetch('/api/quote', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -4106,7 +4132,7 @@ let driveUploadFiles = [];
 
 function initDrivePage() {
   // Load product list for upload select
-  fetch('/api/products')
+  authFetch('/api/products')
     .then(r => r.json())
     .then(data => {
       const products = data.products || [];
@@ -4174,7 +4200,7 @@ async function uploadToDrive() {
   driveUploadFiles.forEach(f => formData.append('image', f));
 
   try {
-    const res = await fetch('/api/drive/upload', { method: 'POST', body: formData });
+    const res = await authFetch('/api/drive/upload', { method: 'POST', body: formData });
     const data = await res.json();
 
     if (data.error) {
@@ -4259,8 +4285,8 @@ async function loadDriveFiles(folderId, folderName) {
     // Load folders + files in parallel
     const params = driveCurrentFolder ? '?folder=' + driveCurrentFolder : '';
     const [filesRes, foldersRes] = await Promise.all([
-      fetch('/api/drive/browse' + params),
-      fetch('/api/drive/browse/folders' + params),
+      authFetch('/api/drive/browse' + params),
+      authFetch('/api/drive/browse/folders' + params),
     ]);
     const filesData = await filesRes.json();
     const foldersData = await foldersRes.json();
@@ -4350,12 +4376,12 @@ function renderDriveGrid() {
   loadMore.style.display = driveNextPageToken ? 'block' : 'none';
 
   grid.innerHTML = driveBrowseFiles.map(f => {
-    const thumb = f.thumbnail || ('/api/drive/preview/' + f.id);
+    const thumb = f.thumbnail || '';
     const selected = driveSelectedIds.has(f.id) ? ' selected' : '';
     return '<div class="drive-item' + selected + '" data-id="' + f.id + '" ' +
       'onclick="toggleDriveSelect(\'' + f.id + '\', event)" ' +
       'ondblclick="openDrivePreview(\'' + f.id + '\')">' +
-      '<img src="' + thumb + '" alt="' + f.name + '" loading="lazy" onerror="this.src=\'/api/drive/preview/' + f.id + '\'">' +
+      '<img src="' + thumb + '" alt="' + f.name + '" loading="lazy" data-file-id="' + f.id + '" onerror="loadAuthThumb(this)">' +
       '<div class="drive-item-overlay"><div class="drive-item-name">' + f.name + '</div></div>' +
     '</div>';
   }).join('');
@@ -4413,8 +4439,8 @@ async function loadDriveFilesForFolder(folderId) {
   try {
     const params = '?folder=' + folderId;
     const [filesRes, foldersRes] = await Promise.all([
-      fetch('/api/drive/browse' + params),
-      fetch('/api/drive/browse/folders' + params),
+      authFetch('/api/drive/browse' + params),
+      authFetch('/api/drive/browse/folders' + params),
     ]);
     const filesData = await filesRes.json();
     const foldersData = await foldersRes.json();
@@ -4433,17 +4459,23 @@ async function loadDriveFilesForFolder(folderId) {
 }
 
 // Preview
-function openDrivePreview(fileId) {
+async function openDrivePreview(fileId) {
   drivePreviewFileId = fileId;
   const file = driveBrowseFiles.find(f => f.id === fileId);
   const overlay = document.getElementById('drive-preview-overlay');
   const img = document.getElementById('drive-preview-img');
   const info = document.getElementById('drive-preview-info');
 
-  img.src = '/api/drive/preview/' + fileId;
   info.textContent = file ? file.name : '';
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
+  try {
+    const res = await authFetch('/api/drive/preview/' + fileId);
+    const blob = await res.blob();
+    img.src = URL.createObjectURL(blob);
+  } catch (e) {
+    img.src = '';
+  }
 }
 
 function closeDrivePreview() {
@@ -4457,13 +4489,22 @@ function downloadPreviewFile() {
   triggerDriveDownload(drivePreviewFileId);
 }
 
-function triggerDriveDownload(fileId) {
-  const a = document.createElement('a');
-  a.href = '/api/drive/download/' + fileId;
-  a.download = '';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+async function triggerDriveDownload(fileId) {
+  try {
+    const res = await authFetch('/api/drive/download/' + fileId);
+    const blob = await res.blob();
+    const disposition = res.headers.get('Content-Disposition') || '';
+    const match = disposition.match(/filename="(.+?)"/);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = match ? match[1] : 'download';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+  } catch (e) {
+    toast('Lỗi tải file: ' + e.message, 'error');
+  }
 }
 
 function downloadSelectedDrive() {

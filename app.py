@@ -4,9 +4,13 @@ import json
 import os
 
 from dotenv import load_dotenv
+
+load_dotenv()
+
 from flask import Flask, jsonify, render_template, request
 
 from agent import EpioneSalesAgent
+from auth import require_auth
 from design_generator import DesignGenerator
 from drive_browser import download_drive_file, list_drive_folders, list_drive_images
 from google_drive import GoogleDriveUploader
@@ -16,8 +20,6 @@ from order_manager import (
     list_orders, update_order_status,
 )
 from quote_manager import create_quote, get_quote, list_quotes
-
-load_dotenv()
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB max upload
@@ -57,6 +59,7 @@ def index():
 
 
 @app.route("/api/generate", methods=["POST"])
+@require_auth
 def generate():
     """Tạo content từ text input."""
     if not agent:
@@ -82,6 +85,7 @@ def generate():
 
 
 @app.route("/api/research", methods=["POST"])
+@require_auth
 def research():
     """Đọc bài từ URL và chuyển thể."""
     if not agent:
@@ -103,6 +107,7 @@ def research():
 
 
 @app.route("/api/image", methods=["POST"])
+@require_auth
 def image_content():
     """Phân tích ảnh và tạo content + design."""
     if not agent:
@@ -159,6 +164,7 @@ def image_content():
 
 
 @app.route("/api/community", methods=["POST"])
+@require_auth
 def community():
     """Tạo bài đăng cho cộng đồng Facebook."""
     if not agent:
@@ -192,6 +198,7 @@ def community():
 
 
 @app.route("/api/design", methods=["POST"])
+@require_auth
 def create_design():
     """Tạo design HTML từ ảnh + text."""
     data = request.json
@@ -217,6 +224,7 @@ def create_design():
 
 
 @app.route("/api/upload-image", methods=["POST"])
+@require_auth
 def upload_image():
     """Upload ảnh và trả về đường dẫn (không phân tích)."""
     if "image" not in request.files:
@@ -252,6 +260,7 @@ def serve_upload(filename):
 # ========== PRODUCT CATALOG API ==========
 
 @app.route("/api/products")
+@require_auth
 def products():
     """Return full product catalog with optional category filter."""
     category = request.args.get("category")
@@ -262,6 +271,7 @@ def products():
 
 
 @app.route("/api/products/<product_id>")
+@require_auth
 def product_detail(product_id):
     """Return single product with inventory info."""
     product = next((p for p in CATALOG["products"] if p["id"] == product_id), None)
@@ -276,12 +286,14 @@ def product_detail(product_id):
 
 
 @app.route("/api/inventory/<sku>")
+@require_auth
 def inventory(sku):
     """Get stock info for a SKU."""
     return jsonify(get_stock(sku))
 
 
 @app.route("/api/inventory/delivery", methods=["POST"])
+@require_auth
 def delivery_estimate():
     """Estimate delivery for a SKU + quantity."""
     data = request.json
@@ -293,6 +305,7 @@ def delivery_estimate():
 # ========== QUOTE API ==========
 
 @app.route("/api/quote", methods=["POST"])
+@require_auth
 def create_quote_api():
     """Create a new quote."""
     data = request.json
@@ -303,6 +316,7 @@ def create_quote_api():
 
 
 @app.route("/api/quote/<quote_id>")
+@require_auth
 def get_quote_api(quote_id):
     """Get quote by ID (JSON)."""
     quote = get_quote(quote_id)
@@ -312,6 +326,7 @@ def get_quote_api(quote_id):
 
 
 @app.route("/api/quotes")
+@require_auth
 def list_quotes_api():
     """List recent quotes."""
     return jsonify(list_quotes())
@@ -396,6 +411,7 @@ def tracking_page(order_id):
 # ========== GOOGLE DRIVE API ==========
 
 @app.route("/api/drive/upload", methods=["POST"])
+@require_auth
 def drive_upload():
     """Upload ảnh lên Google Drive theo thư mục sản phẩm."""
     if not drive_uploader:
@@ -433,6 +449,7 @@ def drive_upload():
 
 
 @app.route("/api/drive/folders")
+@require_auth
 def drive_folders():
     """Liệt kê thư mục sản phẩm trên Drive."""
     if not drive_uploader:
@@ -445,6 +462,7 @@ def drive_folders():
 
 
 @app.route("/api/drive/files/<path:folder_name>")
+@require_auth
 def drive_files(folder_name):
     """Liệt kê files trong thư mục sản phẩm."""
     if not drive_uploader:
@@ -462,6 +480,7 @@ DRIVE_BROWSE_FOLDER = os.getenv("DRIVE_FOLDER_ID", "")
 
 
 @app.route("/api/drive/browse")
+@require_auth
 def drive_browse_files():
     """List images in a Drive folder for browsing."""
     folder_id = request.args.get("folder", DRIVE_BROWSE_FOLDER)
@@ -476,6 +495,7 @@ def drive_browse_files():
 
 
 @app.route("/api/drive/browse/folders")
+@require_auth
 def drive_browse_folders():
     """List sub-folders for browsing."""
     folder_id = request.args.get("folder", DRIVE_BROWSE_FOLDER)
@@ -489,6 +509,7 @@ def drive_browse_folders():
 
 
 @app.route("/api/drive/download/<file_id>")
+@require_auth
 def drive_download(file_id):
     """Download a file from Drive."""
     from flask import Response
@@ -507,6 +528,7 @@ def drive_download(file_id):
 
 
 @app.route("/api/drive/preview/<file_id>")
+@require_auth
 def drive_preview(file_id):
     """Preview (inline) a file from Drive."""
     from flask import Response
