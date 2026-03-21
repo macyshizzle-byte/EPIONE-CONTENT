@@ -13,9 +13,9 @@ else:
 os.makedirs(ORDERS_DIR, exist_ok=True)
 
 # Bank config for VietQR — set via environment variables
-BANK_ID = os.environ.get("BANK_ID", "MB")
-BANK_ACCOUNT_NO = os.environ.get("BANK_ACCOUNT_NO", "")
-BANK_ACCOUNT_NAME = os.environ.get("BANK_ACCOUNT_NAME", "EPIONE")
+BANK_ID = os.environ.get("BANK_ID", "ACB")
+BANK_ACCOUNT_NO = os.environ.get("BANK_ACCOUNT_NO", "16443407")
+BANK_ACCOUNT_NAME = os.environ.get("BANK_ACCOUNT_NAME", "CTY CO PHAN SILICONZ")
 
 ORDER_STATUSES = [
     "confirmed",
